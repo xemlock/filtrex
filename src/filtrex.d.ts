@@ -30,6 +30,7 @@
  *  * `x <= y` Less than or equal to
  *  * `x > y` Greater than
  *  * `x >= y` Greater than or equal to
+ *  * `x of y` Get property x of object y
  *  * `x in (a, b, c)` Equivalent to `(x == a or x == b or x == c)`
  *  * `x not in (a, b, c)` Equivalent to `(x != a and x != b and x != c)`
  *  * `x or y` Boolean or
@@ -37,6 +38,7 @@
  *  * `not x` Boolean not
  *  * `x ? y : z` If boolean x, value y, else z
  *  * `( x )` Explicity operator precedence
+ *  * `( x, y, z )` Array of elements x, y and z
  *  * `abs(x)` Absolute value
  *  * `ceil(x)` Round floating point up
  *  * `floor(x)` Round floating point down

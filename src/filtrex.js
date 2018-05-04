@@ -100,6 +100,7 @@ function filtrexParser() {
                 ['or[^\\w]' , 'return "or";'],
                 ['not[^\\w]', 'return "not";'],
                 ['in[^\\w]', 'return "in";'],
+                ['of[^\\w]', 'return "of";'],
 
                 ['\\s+',  ''], // skip whitespace
                 ['[0-9]+(?:\\.[0-9]+)?\\b', 'return "NUMBER";'], // 212.321
@@ -128,6 +129,7 @@ function filtrexParser() {
             ['left', '^'],
             ['left', 'not'],
             ['left', 'UMINUS'],
+            ['left', 'of'],
         ],
         // Grammar
         bnf: {
@@ -154,9 +156,11 @@ function filtrexParser() {
                 ['e >= e' , code(['Number(', 1, '>=', 3, ')'])],
                 ['e ? e : e', code([1, '?', 3, ':', 5])],
                 ['( e )'  , code([2])],
+                ['( array , e )', code(['[', 2, ',', 4, ']'])],
                 ['NUMBER' , code([1])],
                 ['STRING' , code(['"', 1, '"'])],
                 ['SYMBOL' , code(['data["', 1, '"]'])],
+                ['SYMBOL of e', code(['Object.prototype.hasOwnProperty.call(', 3, '||{},"', 1, '") ?', 3, '["', 1, '"]:undefined'])],
                 ['SYMBOL ( )', code(['(functions.hasOwnProperty("', 1, '") ? functions.', 1, '() : unknown("', 1, '"))'])],
                 ['SYMBOL ( argsList )', code(['(functions.hasOwnProperty("', 1, '") ? functions.', 1, '(', 3, ') : unknown("', 1, '"))'])],
                 ['e in ( inSet )', code([1, ' in (function(o) { ', 4, 'return o; })({})'])],
@@ -169,6 +173,10 @@ function filtrexParser() {
             inSet: [
                 ['e', code(['o[', 1, '] = true; '], true)],
                 ['inSet , e', code([1, 'o[', 3, '] = true; '], true)],
+            ],
+            array: [
+                ['e', code([1])],
+                ['array , e', code([1, ',', 3], true)],
             ],
         }
     };
