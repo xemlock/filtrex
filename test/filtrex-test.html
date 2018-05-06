@@ -15,7 +15,7 @@ tests({
     },
 
     'bind to data': function() {
-        var something = compileExpression('1 + foo * bar');
+        let something = compileExpression('1 + foo * bar');
         eq(11, something({foo:5, bar:2})); 
         eq(3, something({foo:2, bar:1})); 
     },
@@ -131,16 +131,30 @@ tests({
         eq(123, compileExpression('\'order+goo*and#stuff\'')({'order+goo*and#stuff': 123}));
     },
 
+    'object property accessors': function() {
+        eq("epic", compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`))(
+            {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}
+        );
+
+        eq(undefined, compileExpression('something of nothing')({}));
+        eq(undefined, compileExpression('toString of something')({ something: {}}));
+    },
+
     'custom functions': function() {
         function triple(x) { return x * 3; };
         eq(21, compileExpression('triple(v)', {triple:triple})({v:7}));
     },
 
+    'cannot access prototype symbols of data': function() {
+        eq(undefined, compileExpression('toString')({}));
+    },
+
     'cannot call prototype methods on function table': function() {
         // Credit to @emilvirkki for finding this
         window.p0wned = false;
-        var evil = compileExpression(
-            'constructor.constructor.name.replace("",constructor.constructor("window.p0wned=true"))');
+        let evil = compileExpression(
+            'constructor.constructor.name.replace("",constructor.constructor("window.p0wned=true"))'
+        );
         try {
             evil();
             fail('Exception should have been thrown');
