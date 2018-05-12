@@ -54,8 +54,6 @@ function compileExpression(expression, extraFunctions /* optional */) {
         return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
     }
 
-    console.log(js.join(''));
-
     var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
 
     return function(data) {
@@ -108,6 +106,7 @@ function filtrexParser() {
                 ['or[^\\w]' , 'return "or";'],
                 ['not[^\\w]', 'return "not";'],
                 ['in[^\\w]', 'return "in";'],
+                ['of[^\\w]', 'return "of";'],
 
                 ['\\s+',  ''], // skip whitespace
                 ['[0-9]+(?:\\.[0-9]+)?\\b', 'return "NUMBER";'], // 212.321
@@ -152,6 +151,7 @@ function filtrexParser() {
             ['left', '^'],
             ['left', 'not'],
             ['left', 'UMINUS'],
+            ['left', 'of'],
         ],
         // Grammar
         bnf: {
