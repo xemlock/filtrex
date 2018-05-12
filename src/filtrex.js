@@ -54,8 +54,6 @@ function compileExpression(expression, extraFunctions /* optional */) {
         return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
     }
 
-    console.log(js.join(''));
-
     var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
 
     return function(data) {
@@ -195,6 +193,10 @@ function filtrexParser() {
             inSet: [
                 ['e', code(['o ==', 1], true)],
                 ['inSet , e', code([1, '|| o ==', 3], true)],
+            ],
+            array: [
+                ['e', code([1])],
+                ['array , e', code([1, ',', 3], true)],
             ],
         }
     };
