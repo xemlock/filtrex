@@ -1,0 +1,27 @@
+{
+  "name": "filtrex",
+  "version": "1.0.0",
+  "description": "A simple, safe, JavaScript Filter Expression compiler for end-users",
+  "main": "src/filtrex.js",
+  "repository": "git@github.com:m93a/filtrex.git",
+  "author": "m93a <m93a.cz@gmail.com>",
+  "contributors": [
+    "joewalnes",
+    "msantos"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test"
+  },
+  "dependencies": {
+    "jison": "^0.4.18"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/chai-arrays": "^1.0.2",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "chai-arrays": "^2.0.0",
+    "mocha": "^6.0.2"
+  }
+}

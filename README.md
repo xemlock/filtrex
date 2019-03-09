@@ -98,6 +98,11 @@ not x | Boolean not
 x ? y : z | If boolean x, value y, else z
 ( x ) | Explicity operator precedence
 
+Objects and arrays | Description
+--- | ---
+(a, b, c) | Array
+x of y | Property x of object y
+
 Built-in functions | Description
 --- | ---
 abs(x) | Absolute value
@@ -160,9 +165,8 @@ Contributors
 ------------
 
 * [@joewalnes](https://github.com/joewalnes) Joe Walnes – the author of this repository
+* [@m93a](https://github.com/m93a) Michal Grňo – fixes of security exploits, arrays, property access operator
 * [@msantos](https://github.com/msantos) Michael Santos – quoted symbols, regex matches and numerous fixes
-* [@alexgorbatchev](https://github.com/alexgorbatchev) Alex Gorbatchev – NPM package and housekeeping
-* [@m93a](https://github.com/m93a) Michal Grňo – critical fixes of security bug
 
 
 Like this? Want other thingies?

@@ -1,3 +1,5 @@
+const Jison = require("jison").Jison;
+
 /**
  * Filtrex provides compileExpression() to compile user expressions to JavaScript.
  *
@@ -8,6 +10,7 @@
  *
  * -Joe Walnes
  */
+exports.compileExpression =
 function compileExpression(expression, extraFunctions /* optional */) {
     var functions = {
         abs: Math.abs,
@@ -66,9 +69,6 @@ function filtrexParser() {
     // Language parser powered by Jison <http://zaach.github.com/jison/>,
     // which is a pure JavaScript implementation of
     // Bison <http://www.gnu.org/software/bison/>.
-
-    var Jison = require('jison'),
-    bnf = require('jison/bnf');
 
     function code(args, skipParentheses) {
         var argsJs = args.map(function(a) {
@@ -171,7 +171,7 @@ function filtrexParser() {
                 ['not e'  , code(['Number(!', 2, ')'])],
                 ['e == e' , code(['Number(', 1, '==', 3, ')'])],
                 ['e != e' , code(['Number(', 1, '!=', 3, ')'])],
-                ['e ~= e' , code(['RegExp(', 3, ').test(', 1, ')'])],
+                ['e ~= e' , code(['Number(RegExp(', 3, ').test(', 1, '))'])],
                 ['e < e'  , code(['Number(', 1, '<' , 3, ')'])],
                 ['e <= e' , code(['Number(', 1, '<=', 3, ')'])],
                 ['e > e'  , code(['Number(', 1, '> ', 3, ')'])],
@@ -185,8 +185,8 @@ function filtrexParser() {
                 ['SYMBOL of e', code(['prop(', 3, ',', 1, ')'])],
                 ['SYMBOL ( )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, ']() : unknown(', 1, '))'])],
                 ['SYMBOL ( argsList )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, '](', 3, ') : unknown(', 1, '))'])],
-                ['e in ( inSet )', code(['(function(o) { return ', 4, '; })(', 1, ')'])],
-                ['e not in ( inSet )', code(['!(function(o) { return ', 5, '; })(', 1, ')'])],
+                ['e in ( inSet )', code(['+(function(o) { return ', 4, '; })(', 1, ')'])],
+                ['e not in ( inSet )', code(['+!(function(o) { return ', 5, '; })(', 1, ')'])],
             ],
             argsList: [
                 ['e', code([1], true)],
@@ -204,7 +204,3 @@ function filtrexParser() {
     };
     return new Jison.Parser(grammar);
 }
-
-// ---------------------------------------------------
-// Jison will be appended after this point by Makefile
-// ---------------------------------------------------
