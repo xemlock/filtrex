@@ -64,5 +64,15 @@ describe('Various other things', () => {
         expect( compileExpression('triple(v)', {triple})({v:7}) ).equals(21);
     });
 
+    it('custom property function', () => {
+        var textToSearch = "able was i ere I saw elba\nthe Rain in spain falls MAINLY on the plain";
+        function doesTextMatch(obj, name) { return textToSearch.indexOf(name) != -1; };
+        expect( compileExpression('able and was and i', undefined, doesTextMatch)() ).equals(1);
+        expect( compileExpression('able and was and dog', undefined, doesTextMatch)() ).equals(0);
+        expect( compileExpression('able or dog', undefined, doesTextMatch)() ).equals(1);
+        expect( compileExpression('able', undefined, doesTextMatch)() ).equals(true);
+        expect( compileExpression('Rain and (missing or MAINLY)', undefined, doesTextMatch)() ).equals(1);
+        expect( compileExpression('NotThere or (missing or (falls and plain))', undefined, doesTextMatch)() ).equals(1);
+    });
 
 });
