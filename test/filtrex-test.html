@@ -144,6 +144,14 @@ tests({
         eq(123, compileExpression('\'hello-world-foo\'')({'hello-world-foo': 123}));
         eq(123, compileExpression('\'order+goo*and#stuff\'')({'order+goo*and#stuff': 123}));
     },
+    
+    'object property accessors': function() {
+        eq("epic", compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(
+            {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}
+        ));
+        eq(undefined, compileExpression('something of nothing')({}));
+        eq(undefined, compileExpression('toString of something')({ something: {}}));
+    },
 
     'object property accessors': function() {
         eq("epic", compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(
