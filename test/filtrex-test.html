@@ -116,6 +116,14 @@ tests({
         eq(0, compileExpression('foo ~= "^[hH]ello"')({foo:'bye'}));
     },
 
+    'array test': function() {
+        var arr = compileExpression('(42, "fifty", pi)')({pi: Math.PI});
+        eq(true, Array.isArray(arr));
+        eq(42, arr[0]);
+        eq('fifty', arr[1]);
+        eq(Math.PI, arr[2]);
+    },
+
     'a ? b : c': function() {
         eq(4, compileExpression('1 > 2 ? 3 : 4')());
         eq(3, compileExpression('1 < 2 ? 3 : 4')());
