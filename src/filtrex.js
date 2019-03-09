@@ -11,7 +11,7 @@ const Jison = require("jison").Jison;
  * -Joe Walnes
  */
 exports.compileExpression =
-function compileExpression(expression, extraFunctions /* optional */) {
+function compileExpression(expression, extraFunctions, customProp) {
     var functions = {
         abs: Math.abs,
         ceil: Math.ceil,
@@ -56,6 +56,8 @@ function compileExpression(expression, extraFunctions /* optional */) {
     function prop(obj, name) {
         return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
     }
+
+    if (typeof customProp === 'function') prop = customProp;
 
     var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
 
