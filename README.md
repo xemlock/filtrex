@@ -1,5 +1,6 @@
 Filtrex
 =======
+[![Build Status](https://travis-ci.com/m93a/filtrex.svg?branch=master)](https://travis-ci.com/m93a/filtrex)
 
 A simple, safe, JavaScript expression engine, allowing end-users to enter arbitrary expressions without p0wning you.
 
