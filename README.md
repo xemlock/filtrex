@@ -201,17 +201,17 @@ Contributors
 ------------
 
 * [@joewalnes](https://github.com/joewalnes) Joe Walnes – the author of this repository
-* [@m93a](https://github.com/m93a) Michal Grňo – fixes of security exploits, arrays, property access operator
+* [@m93a](https://github.com/m93a) Michal Grňo – maintainer of the NPM package and the current main developer
 * [@msantos](https://github.com/msantos) Michael Santos – quoted symbols, regex matches and numerous fixes
+* [@bradparks](https://github.com/bradparks) Brad Parks – extensible prop function
+* [@alexgorbatchev](https://github.com/alexgorbatchev) Alex Gorbatchev – the original maintainer of the NPM package
 
 
 Like this? Want other thingies?
 -------------------------------
 
+*   [meta-utils](https://github.com/meta-utils) – Various useful utilities for TypeScript and JavaScript development
 *   [websocketd](https://github.com/joewalnes/websocketd) – Turn any program that uses STDIN/STDOUT into a WebSocket server. Like inetd, but for WebSockets.
 *   [ReconnectingWebSocket](https://github.com/joewalnes/reconnecting-websocket) – Simplest way to add some robustness to your WebSocket connections.
 *   [Smoothie Charts](http://smoothiecharts.org/) – JavaScript charts for streaming data.
 *   Visit [The Igloo Lab](http://theigloolab.com/) to see and subscribe to other thingies I make.
-
-And **[follow @joewalnes](https://twitter.com/joewalnes)**!
-
