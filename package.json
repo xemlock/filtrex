@@ -13,7 +13,6 @@
   "scripts": {
     "test":  "./node_modules/mocha/bin/mocha test",
     "debug": "./node_modules/mocha/bin/mocha test --inspect-brk"
-
   },
   "dependencies": {
     "jison": "^0.4.18"
