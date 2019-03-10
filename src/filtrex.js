@@ -11,7 +11,7 @@ const Jison = require("jison").Jison;
  * -Joe Walnes
  */
 exports.compileExpression =
-function compileExpression(expression, extraFunctions /* optional */) {
+function compileExpression(expression, extraFunctions, customProp) {
     var functions = {
         abs: Math.abs,
         ceil: Math.ceil,
@@ -53,8 +53,25 @@ function compileExpression(expression, extraFunctions /* optional */) {
         throw 'Unknown function: ' + funcName + '()';
     }
 
-    function prop(obj, name) {
+    function coerceBoolean(value) {
+        if (typeof value === 'boolean')
+            return +value;
+        else
+            return value;
+    }
+
+    function prop(name, obj) {
         return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+    }
+
+    function safeGetter(obj) {
+        return function get(name) {
+            return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+        }
+    }
+
+    if (typeof customProp === 'function') {
+        prop = (name, obj) => coerceBoolean(customProp(name, safeGetter(obj), obj));
     }
 
     var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
@@ -181,8 +198,8 @@ function filtrexParser() {
                 ['( array , e )', code(['[', 2, ',', 4, ']'])],
                 ['NUMBER' , code([1])],
                 ['STRING' , code([1])],
-                ['SYMBOL' , code(['prop(data, ', 1, ')'])],
-                ['SYMBOL of e', code(['prop(', 3, ',', 1, ')'])],
+                ['SYMBOL' , code(['prop(', 1, ', data)'])],
+                ['SYMBOL of e', code(['prop(', 1, ',', 3, ')'])],
                 ['SYMBOL ( )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, ']() : unknown(', 1, '))'])],
                 ['SYMBOL ( argsList )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, '](', 3, ') : unknown(', 1, '))'])],
                 ['e in ( inSet )', code(['+(function(o) { return ', 4, '; })(', 1, ')'])],

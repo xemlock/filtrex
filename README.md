@@ -65,6 +65,8 @@ Expressions
 
 There are only 2 types: numbers and strings. Numbers may be floating point or integers. Boolean logic is applied on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
 
+Okay, I lied to you, there are also objects whose properties can be accessed by the `of` operator. And there's undefined. But everything else is just numbers and strings!
+
 Values | Description
 --- | ---
 43, -1.234 | Numbers
@@ -131,12 +133,45 @@ function strlen(s) {
 
 // Compile expression to executable function
 var myfilter = compileExpression(
-                    'strlen(firstname) > 5',
-                    {strlen:strlen}); // custom functions
+  'strlen(firstname) > 5',
+  { strlen } // custom functions
+);
 
 myfilter({firstname:'Joe'});    // returns 0
 myfilter({firstname:'Joseph'}); // returns 1
 ```
+
+Custom property function
+------------------------
+
+If you want to do some more magic with your expression, you can supply a custom function that will resolve the identifiers used in the expression and assign them a value yourself. The so-called property function is passed as the third argument to `compileExpression` and has the following signature:
+
+```typescript
+function propFunction(
+  propertyName: string, // name of the property being accessed
+  get: (name: string) => obj[name], // safe getter that retrieves the property from obj
+  obj: any // the object passed to compiled expression
+)
+```
+
+For example, this can be useful when you're filtering based on whether a string contains some words or not:
+
+```javascript
+function containsWord(string, word) {
+  // your optimized code
+}
+
+let myfilter = compileExpression(
+  'Bob and Alice or Cecil', {},
+  (word, _, string) => containsWord(string, word)
+);
+
+myfilter("Bob is boring"); // returns 0
+myfilter("Bob met Alice"); // returns 1
+myfilter("Cecil is cool"); // returns 1
+```
+
+**Safety note:** The `get` function returns `undefined` for properties that are defined on the object's prototype, not on the object itself. This is important, because otherwise the user could access things like `toString.constructor` and maybe do some nasty things with it. Bear this in mind if you decide not to use `get` and access the properties yourself.
 
 FAQ
 ---

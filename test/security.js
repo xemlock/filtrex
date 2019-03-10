@@ -56,6 +56,7 @@ describe('Security', () => {
         expect( global.p0wned ).equals(false);
     });
 
+
     it('does backslash escaping', () =>
         expect( compileExpression(`"\\" + '\\'`)({'\\':'good'}) ).equals('\\good')
     );
@@ -66,5 +67,13 @@ describe('Security', () => {
         expect( compileExpression('"aa" in ("bb", "cc")')() ).equals(0);
         delete Object.prototype.aa;
     });
+
+
+    it('blocks prototype access in custom property function', () => {
+        expect(
+            compileExpression('a', {}, (name, get) => get(name))
+            (Object.create({ a:1 }))
+        ).equals(undefined);
+    })
 
 });

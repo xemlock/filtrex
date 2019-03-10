@@ -58,5 +58,10 @@ export function compileExpression(
     expression: string,
     extraFunctions?: {
         [T: string]: Function
-    }
-): (obj: {}) => any
+    },
+    customProp?: (
+        name: string,
+        get: (name: string) => any,
+        object: any
+    ) => any
+): (obj: any) => any
