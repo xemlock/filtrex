@@ -85,6 +85,7 @@ x ^ y | Power
 Comparisons | Description
 --- | ---
 x == y | Equals
+x != y | Does not equal
 x < y | Less than
 x <= y | Less than or equal to
 x > y | Greater than
