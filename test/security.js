@@ -57,9 +57,10 @@ describe('Security', () => {
     });
 
 
-    it('does backslash escaping', () =>
-        expect( compileExpression(`"\\" + '\\'`)({'\\':'good'}) ).equals('\\good')
-    );
+    it('does backslash escaping', () => {
+        expect( compileExpression(`"\\\\" + '\\'`)({'\\':'good'}) ).equals('\\good');
+        expect( compileExpression(`"\\\\" + '\\\\'`)({'\\\\':'good'}) ).equals('\\good');
+    });
 
 
     it('in() is not vulnerable to Object.prototype extensions ', () => {
@@ -76,4 +77,8 @@ describe('Security', () => {
         ).equals(undefined);
     })
 
+
+    it('supports double quotes inside strings', () => {
+        expect( compileExpression('"\\"test\\""')({}) ).equals('"test"');
+    });
 });
