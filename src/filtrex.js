@@ -140,7 +140,7 @@ function filtrexParser() {
                   return "SYMBOL";`
                 ], // 'some-symbol'
 
-                ['"(?:\\\\"|[^"])*"', 'return "STRING";'], // "foo"
+                ['"(?:\\\\"|\\\\\\\\|[^"\\\\])*"', 'return "STRING";'], // "foo"
 
                 // End
                 ['$', 'return "EOF";'],
