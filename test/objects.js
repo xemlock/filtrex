@@ -24,6 +24,15 @@ describe('Object support', () => {
         expect( compileExpression('\'hello-world-foo\''    )({'hello-world-foo':     123}) ).equals(123);
         expect( compileExpression('\'order+goo*and#stuff\'')({'order+goo*and#stuff': 123}) ).equals(123);
     });
+
+    it('includes symbols with $ and _', () => {
+        expect( compileExpression('$_.0$$')({'$_.0$$': 123}) ).equals(123);
+    });
+
+    it('disallows symbols starting with numerals', () => {
+        expect( () => compileExpression('0hey') ).throws();
+        expect( () => compileExpression('123.456hey') ).throws();
+    })
     
     it('includes object property accessors', () => {
         expect(compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(

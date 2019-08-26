@@ -128,7 +128,7 @@ function filtrexParser() {
                 ['\\s+',  ''], // skip whitespace
                 ['[0-9]+(?:\\.[0-9]+)?\\b', 'return "NUMBER";'], // 212.321
 
-                ['[a-zA-Z][\\.a-zA-Z0-9_]*',
+                ['[a-zA-Z$_][\\.a-zA-Z0-9$_]*',
                  `yytext = JSON.stringify(yytext);
                   return "SYMBOL";`
                 ], // some.Symbol22
