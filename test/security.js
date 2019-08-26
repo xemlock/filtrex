@@ -26,7 +26,7 @@ describe('Security', () => {
             'constructor.constructor.name.replace("",constructor.constructor("global.p0wned=true"))'
         );
 
-        expect( evil ).throws();
+        expect( evil() ).is.instanceOf(Error);
         
         expect( global.p0wned ).equals(false);
     });
@@ -89,10 +89,17 @@ describe('Security', () => {
             compileExpression('a', {}, (name, get) => get(name))
             (Object.create({ a:1 }))
         ).equals(undefined);
-    })
+    });
 
 
     it('supports double quotes inside strings', () => {
         expect( compileExpression('"\\"test\\""')({}) ).equals('"test"');
+    });
+
+
+    it('cannot throw an error', () => {
+        let f = compileExpression('throw()', { throw: () => {throw new Error;} });
+        expect( f ).does.not.throw();
+        expect( f() ).is.instanceOf(Error);
     });
 });

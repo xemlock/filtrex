@@ -50,7 +50,7 @@ function compileExpression(expression, extraFunctions, customProp) {
     js.push(';');
 
     function unknown(funcName) {
-        throw 'Unknown function: ' + funcName + '()';
+        throw ReferenceError('Unknown function: ' + funcName + '()');
     }
 
     function coerceBoolean(value) {
@@ -77,7 +77,13 @@ function compileExpression(expression, extraFunctions, customProp) {
     var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
 
     return function(data) {
-        return func(functions, data, unknown, prop);
+        try {
+            return func(functions, data, unknown, prop);
+        }
+        catch (e)
+        {
+            return e;
+        }
     };
 }
 
