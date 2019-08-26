@@ -140,12 +140,10 @@ function filtrexParser() {
                   return "SYMBOL";`
                 ], // 'some-symbol'
 
-                ['"(?:[^"])*"',
-                 `yytext = JSON.stringify(
-                     yytext.substr(1, yyleng-2)
-                  );
+                [`"(?:\\\\"|\\\\\\\\|[^"\\\\])*"`,
+                 `yytext = JSON.stringify(""+JSON.parse(yytext));
                   return "STRING";`
-                ], // "foo"
+                ], // "any \"escaped\" string"
 
                 // End
                 ['$', 'return "EOF";'],
