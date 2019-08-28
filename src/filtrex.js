@@ -11,7 +11,18 @@ const Jison = require("./lib/jison").Jison;
  * -Joe Walnes
  */
 exports.compileExpression =
-function compileExpression(expression, extraFunctions, customProp) {
+function compileExpression(expression, options) {
+
+    if (arguments.length > 2) throw new TypeError('Too many arguments.');
+
+    options = typeof options === "object" ? options : {};
+    let {extraFunctions, customProp} = options;
+    for (let key of Object.getOwnPropertyNames(options))
+    {
+        if (key !== "extraFunctions" && key !== "customProp") throw new TypeError(`Unknown option: ${key}`);
+    }
+
+
     var functions = {
         abs: Math.abs,
         ceil: Math.ceil,

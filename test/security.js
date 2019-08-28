@@ -48,8 +48,8 @@ describe('Security', () => {
 
         expect(
             compileExpression(
-                "'undefined:(global.p0wned=true)));((true?(x=>x)'()",
-                {'undefined:(global.p0wned=true)));((true?(x=>x)': ()=>42}
+                "'undefined:(global.p0wned=true)));((true?(x=>x)'()", { extraFunctions:
+                {'undefined:(global.p0wned=true)));((true?(x=>x)': ()=>42} }
             )()
         ).equals(42);
         
@@ -86,7 +86,7 @@ describe('Security', () => {
 
     it('blocks prototype access in custom property function', () => {
         expect(
-            compileExpression('a', {}, (name, get) => get(name))
+            compileExpression('a', { customProp: (name, get) => get(name) })
             (Object.create({ a:1 }))
         ).equals(undefined);
     });
@@ -98,7 +98,8 @@ describe('Security', () => {
 
 
     it('cannot throw an error', () => {
-        let f = compileExpression('throw()', { throw: () => {throw new Error;} });
+        let options = { extraFunctions: {throw: () => {throw new Error;}} };
+        let f = compileExpression('throw()', options);
         expect( f ).does.not.throw();
         expect( f() ).is.instanceOf(Error);
     });

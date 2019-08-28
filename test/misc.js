@@ -61,37 +61,38 @@ describe('Various other things', () => {
 
     it('custom functions', () => {
         let triple = x => x * 3;
-        expect( compileExpression('triple(v)', {triple})({v:7}) ).equals(21);
+        let options = { extraFunctions: {triple} };
+        expect( compileExpression('triple(v)', options)({v:7}) ).equals(21);
     });
 
     it('custom property function basics', () => {
         expect(
-            compileExpression('a', {}, name => name === 'a')()
+            compileExpression('a', { customProp: name => name === 'a' })()
         ).equals(1);
 
         expect(
-            compileExpression('a + bb + ccc', {}, name => name.length)()
+            compileExpression('a + bb + ccc', { customProp: name => name.length })()
         ).equals(6);
 
         expect(
-            compileExpression('a + b * c', {}, (name, get) => get(name))
+            compileExpression('a + b * c', { customProp: (name, get) => get(name) })
             ({ a:1, b:2, c:3 })
         ).equals(7);
 
         expect(
-            compileExpression('a', {}, (name, get) => get(name))({ a:true })
+            compileExpression('a', { customProp: (name, get) => get(name) })({ a:true })
         ).equals(1);
 
         let object = {a:1};
         expect(
-            compileExpression('a', {}, (_,__,obj) => obj === object)(object)
+            compileExpression('a', { customProp: (_,__,obj) => obj === object })(object)
         ).equals(1);
     });
 
     it('custom property function text search', () => {
         let textToSearch = "able was i ere I saw elba\nthe Rain in spain falls MAINLY on the plain";
         let doesTextMatch = name =>  textToSearch.indexOf(name) !== -1;
-        let evalProp = exp => compileExpression(exp, undefined, doesTextMatch)();
+        let evalProp = exp => compileExpression(exp, { customProp: doesTextMatch })();
         
 
         expect( evalProp('able and was and i') ).equals(1);
@@ -107,11 +108,20 @@ describe('Various other things', () => {
         let tripleName = str => prefixedName(str, 'triple_');
 
         let proxy = (name, get) => tripleName(name) ? 3 * get(tripleName(name)) : get(name);
-        let evalProp = exp => compileExpression(exp, {}, proxy)({ a:1, b:2, c:3 });
+        let evalProp = exp => compileExpression(exp, {customProp: proxy})({ a:1, b:2, c:3 });
 
         expect( evalProp('a') ).equals(1);
         expect( evalProp('triple_a') ).equals(3);
         expect( evalProp('a + triple_b * c') ).equals(19);
+    });
+
+    it('throws when using old API', () => {
+        let extraFunctions = { myCustomFunc: n => n*n };
+        let customProp = () => 'foo';
+
+        expect( () => compileExpression('', extraFunctions) ).throws();
+        expect( () => compileExpression('', {}, customProp) ).throws();
+        expect( () => compileExpression('', extraFunctions, customProp) ).throws();
     });
 
 });

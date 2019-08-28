@@ -48,20 +48,54 @@
  *  * `random()` Random floating point from 0.0 to 1.0
  *  * `round(x)` Round floating point
  *  * `sqrt(x)` Square root
- *  * `myFooBarFunction(x)` Custom function defined in `extraFunctions`
- *
- * @param extraFunctions
- * When integrating in to your application, you can add your own custom functions.
- * These functions will be available in the expression in the same way as `sqrt(x)` and `round(x)`.
+ *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
  */
 export function compileExpression(
     expression: string,
+    options: Options
+): (obj: any) => any
+
+
+export interface Options
+{
+    /**
+     * When integrating in to your application, you can add your own custom functions.
+     * These functions will be available in the expression in the same way as `sqrt(x)` and `round(x)`.
+     */
     extraFunctions?: {
         [T: string]: Function
     },
+
+    /**
+     * If you want to do some more magic with your expression, you can supply a custom function
+     * that will resolve the identifiers used in the expression and assign them a value yourself.
+     *
+     * **Safety note**: The `get` function returns `undefined` for properties that are defined on
+     * the object's prototype, not on the object itself. This is important, because otherwise the user
+     * could access things like `toString.constructor` and maybe do some nasty things with it. Bear
+     * this in mind if you decide not to use `get` and access the properties yourself.
+     *
+     * @param name - name of the property being accessed
+     * @param get - safe getter that retrieves the property from obj
+     * @param obj - the object passed to compiled expression
+     *
+     * @example
+     * function containsWord(string, word) {
+     *   // your optimized code
+     * }
+     *
+     * let myfilter = compileExpression(
+     *   'Bob and Alice or Cecil', {},
+     *   (word, _, string) => containsWord(string, word)
+     * );
+     *
+     * myfilter("Bob is boring"); // returns 0
+     * myfilter("Bob met Alice"); // returns 1
+     * myfilter("Cecil is cool"); // returns 1
+     */
     customProp?: (
         name: string,
         get: (name: string) => any,
         object: any
     ) => any
-): (obj: any) => any
+}
