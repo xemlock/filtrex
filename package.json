@@ -14,9 +14,6 @@
     "test":  "./node_modules/mocha/bin/mocha test",
     "debug": "./node_modules/mocha/bin/mocha test --inspect-brk"
   },
-  "dependencies": {
-    "jison": "^0.4.18"
-  },
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/chai-arrays": "^1.0.2",

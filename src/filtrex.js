@@ -1,4 +1,4 @@
-const Jison = require("jison").Jison;
+const Jison = require("./lib/jison").Jison;
 
 /**
  * Filtrex provides compileExpression() to compile user expressions to JavaScript.
