@@ -124,4 +124,16 @@ describe('Various other things', () => {
         expect( () => compileExpression('', extraFunctions, customProp) ).throws();
     });
 
+    it('doesn\'t recognise non-callable values as extra functions', () => {
+        let options = { extraFunctions: { sqrt: undefined, a: 42, b: {} } };
+        let eval = str => compileExpression(str, options)();
+
+        expect(eval('a()')).is.instanceOf(ReferenceError);
+        expect(eval('b()')).is.instanceOf(ReferenceError);
+
+        let err = eval('sqrt(4)');
+        expect(err).is.instanceOf(ReferenceError);
+        expect(err.message).equals("Unknown function: sqrt()");
+    });
+
 });

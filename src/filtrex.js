@@ -60,6 +60,10 @@ function compileExpression(expression, options) {
     tree.forEach(toJs);
     js.push(';');
 
+    function isfn(funcName) {
+        return functions.hasOwnProperty(funcName) && typeof functions[funcName] === "function";
+    }
+
     function unknown(funcName) {
         throw ReferenceError('Unknown function: ' + funcName + '()');
     }
@@ -85,11 +89,11 @@ function compileExpression(expression, options) {
         prop = (name, obj) => coerceBoolean(customProp(name, safeGetter(obj), obj));
     }
 
-    var func = new Function('functions', 'data', 'unknown', 'prop', js.join(''));
+    var func = new Function('functions', 'data', 'unknown', 'prop', 'isfn', js.join(''));
 
     return function(data) {
         try {
-            return func(functions, data, unknown, prop);
+            return func(functions, data, unknown, prop, isfn);
         }
         catch (e)
         {
@@ -215,8 +219,8 @@ function filtrexParser() {
                 ['STRING' , code([1])],
                 ['SYMBOL' , code(['prop(', 1, ', data)'])],
                 ['SYMBOL of e', code(['prop(', 1, ',', 3, ')'])],
-                ['SYMBOL ( )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, ']() : unknown(', 1, '))'])],
-                ['SYMBOL ( argsList )', code(['(functions.hasOwnProperty(', 1, ') ? functions[', 1, '](', 3, ') : unknown(', 1, '))'])],
+                ['SYMBOL ( )', code(['(isfn(', 1, ') ? functions[', 1, ']() : unknown(', 1, '))'])],
+                ['SYMBOL ( argsList )', code(['(isfn(', 1, ') ? functions[', 1, '](', 3, ') : unknown(', 1, '))'])],
                 ['e in ( inSet )', code(['+(function(o) { return ', 4, '; })(', 1, ')'])],
                 ['e not in ( inSet )', code(['+!(function(o) { return ', 5, '; })(', 1, ')'])],
             ],
