@@ -19,10 +19,25 @@ describe('Various other things', () => {
 
 
     it('in / not in', () => {
+        // value in array
         expect( eval('5 in (1, 2, 3, 4)') ).equals(0);
         expect( eval('3 in (1, 2, 3, 4)') ).equals(1);
         expect( eval('5 not in (1, 2, 3, 4)') ).equals(1);
         expect( eval('3 not in (1, 2, 3, 4)') ).equals(0);
+
+        // array in array
+        expect( eval('(1, 2) in (1, 2, 3)') ).equals(1);
+        expect( eval('(1, 2) in (2, 3, 1)') ).equals(1);
+        expect( eval('(3, 4) in (1, 2, 3)') ).equals(0);
+        expect( eval('(1, 2) not in (1, 2, 3)') ).equals(0);
+        expect( eval('(1, 2) not in (2, 3, 1)') ).equals(0);
+        expect( eval('(3, 4) not in (1, 2, 3)') ).equals(1);
+
+        // other edge cases
+        expect( eval('(1, 2) in 1'    ) ).equals(0);
+        expect( eval('1 in 1'         ) ).equals(1);
+        expect( eval('(1, 2) not in 1') ).equals(1);
+        expect( eval('1 not in 1'     ) ).equals(0);
     });
 
     it('string support', () => {
