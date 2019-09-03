@@ -52,7 +52,7 @@
  */
 export function compileExpression(
     expression: string,
-    options: Options
+    options?: Options
 ): (obj: any) => any
 
 
