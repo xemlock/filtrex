@@ -63,14 +63,15 @@ function(item) {
 Expressions
 -----------
 
-There are only 2 types: numbers and strings. Numbers may be floating point or integers. Boolean logic is applied on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
+There are only 3 types: numbers, strings and arrays of these. Numbers may be floating point or integers. Boolean logic is applied on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
 
-Okay, I lied to you, there are also objects whose properties can be accessed by the `of` operator. And there's undefined. But everything else is just numbers and strings!
+Okay, I lied to you, there are also objects whose properties can be accessed by the `of` operator. And there's undefined. But everything else is just numbers, strings and arrays!
 
 Values | Description
 --- | ---
 43, -1.234 | Numbers
 "hello" | String
+" \\" \\\\ " | Escaping of double-quotes and blackslash in string
 foo, a.b.c, 'foo-bar' | External data variable defined by application (may be numbers or strings)
 
 Numeric arithmetic | Description
@@ -105,6 +106,7 @@ x ? y : z | If boolean x, value y, else z
 Objects and arrays | Description
 --- | ---
 (a, b, c) | Array
+a in b | Array a is a subset of array b
 x of y | Property x of object y
 
 Built-in functions | Description
@@ -132,11 +134,12 @@ function strlen(s) {
   return s.length;
 }
 
+let options = {
+  extraFunctions: { strlen }
+};
+
 // Compile expression to executable function
-var myfilter = compileExpression(
-  'strlen(firstname) > 5',
-  { strlen } // custom functions
-);
+let myfilter = compileExpression('strlen(firstname) > 5', options);
 
 myfilter({firstname:'Joe'});    // returns 0
 myfilter({firstname:'Joseph'}); // returns 1
@@ -145,7 +148,7 @@ myfilter({firstname:'Joseph'}); // returns 1
 Custom property function
 ------------------------
 
-If you want to do some more magic with your expression, you can supply a custom function that will resolve the identifiers used in the expression and assign them a value yourself. The so-called property function is passed as the third argument to `compileExpression` and has the following signature:
+If you want to do some more magic with your filtrex, you can supply a custom function that will resolve the identifiers used in expressions and assign them a value yourself. This is called a _property function_ and has the following signature:
 
 ```typescript
 function propFunction(
@@ -162,10 +165,11 @@ function containsWord(string, word) {
   // your optimized code
 }
 
-let myfilter = compileExpression(
-  'Bob and Alice or Cecil', {},
-  (word, _, string) => containsWord(string, word)
-);
+let options = {
+  customProp: (word, _, string) => containsWord(string, word)
+};
+
+let myfilter = compileExpression('Bob and Alice or Cecil', options);
 
 myfilter("Bob is boring"); // returns 0
 myfilter("Bob met Alice"); // returns 1
