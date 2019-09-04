@@ -1,5 +1,72 @@
 const Jison = require("./lib/jison").Jison;
 
+
+// Shared utility functions
+const std =
+{
+
+    isfn: function(fns, funcName) {
+        return fns.hasOwnProperty(funcName) && typeof fns[funcName] === "function";
+    },
+
+    unknown: function(funcName) {
+        throw ReferenceError('Unknown function: ' + funcName + '()');
+    },
+
+    coerceArray: function(value) {
+        if (Array.isArray(value))
+            return value;
+        else
+            return [value];
+    },
+
+    coerceBoolean: function(value) {
+        if (typeof value === 'boolean')
+            return +value;
+        else
+            return value;
+    },
+
+    isSubset: function(a, b) {
+        const A = std.coerceArray(a);
+        const B = std.coerceArray(b);
+        return +A.every( val => B.includes(val) );
+    },
+
+    buildString: function(quote, literal)
+    {
+        quote = String(quote)[0];
+        literal = String(literal);
+        let built = '';
+
+        if (literal[0] !== quote || literal[literal.length-1] !== quote)
+            throw new Error(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`);
+
+        for (let i = 1; i < literal.length - 1; i++)
+        {
+            if (literal[i] === "\\")
+            {
+                i++;
+                if (i >= literal.length - 1) throw new Error(`Unexpected internal error: Unescaped backslash at the end of string literal.`);
+                
+                if (literal[i] === "\\") built += '\\';
+                else if (literal[i] === quote) built += quote;
+                else throw new Error(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`);
+            }
+            else if (literal[i] === quote)
+            {
+                throw new Error(`Unexpected internal error: String literal contains unescaped quotation mark.`);
+            }
+            else
+            {
+                built += literal[i];
+            }
+        }
+
+        return JSON.stringify(built);
+    }
+};
+
 /**
  * Filtrex provides compileExpression() to compile user expressions to JavaScript.
  *
@@ -13,6 +80,8 @@ const Jison = require("./lib/jison").Jison;
 exports.compileExpression =
 function compileExpression(expression, options) {
 
+    // Check and coerce arguments
+
     if (arguments.length > 2) throw new TypeError('Too many arguments.');
 
     options = typeof options === "object" ? options : {};
@@ -23,7 +92,10 @@ function compileExpression(expression, options) {
     }
 
 
-    var functions = {
+
+    // Functions available to the expression
+
+    let functions = {
         abs: Math.abs,
         ceil: Math.ceil,
         floor: Math.floor,
@@ -34,6 +106,7 @@ function compileExpression(expression, options) {
         round: Math.round,
         sqrt: Math.sqrt,
     };
+
     if (extraFunctions) {
         for (var name in extraFunctions) {
             if (extraFunctions.hasOwnProperty(name)) {
@@ -41,14 +114,25 @@ function compileExpression(expression, options) {
             }
         }
     }
+
+
+
+    // Compile the parser
+
     if (!compileExpression.parser) {
         // Building the original parser is the heaviest part. Do it
         // once and cache the result in our own function.
         compileExpression.parser = filtrexParser();
+        compileExpression.parser.yy = Object.create(std);
     }
-    var tree = compileExpression.parser.parse(expression);
 
-    var js = [];
+
+
+    // Compile the expression
+
+    let tree = compileExpression.parser.parse(expression);
+
+    let js = [];
     js.push('return ');
     function toJs(node) {
         if (Array.isArray(node)) {
@@ -60,27 +144,9 @@ function compileExpression(expression, options) {
     tree.forEach(toJs);
     js.push(';');
 
-    function isfn(funcName) {
-        return functions.hasOwnProperty(funcName) && typeof functions[funcName] === "function";
-    }
 
-    function unknown(funcName) {
-        throw ReferenceError('Unknown function: ' + funcName + '()');
-    }
 
-    function coerceArray(value) {
-        if (Array.isArray(value))
-            return value;
-        else
-            return [value];
-    }
-
-    function coerceBoolean(value) {
-        if (typeof value === 'boolean')
-            return +value;
-        else
-            return value;
-    }
+    // Metaprogramming functions
 
     function prop(name, obj) {
         return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
@@ -92,22 +158,19 @@ function compileExpression(expression, options) {
         }
     }
 
-    function isSubset(a, b) {
-        const A = coerceArray(a);
-        const B = coerceArray(b);
-        return +A.every( val => B.includes(val) );
-    }
-
     if (typeof customProp === 'function') {
-        prop = (name, obj) => coerceBoolean(customProp(name, safeGetter(obj), obj));
+        prop = (name, obj) => std.coerceBoolean(customProp(name, safeGetter(obj), obj));
     }
 
-    let func = new Function('functions', 'data', 'std', js.join(''));
-    let std = { unknown, prop, isfn, isSubset };
+
+
+    // Patch together and return
+
+    let func = new Function('fns', 'std', 'prop', 'data', js.join(''));
 
     return function(data) {
         try {
-            return func(functions, data, std);
+            return func(functions, std, prop, data);
         }
         catch (e)
         {
@@ -115,6 +178,8 @@ function compileExpression(expression, options) {
         }
     };
 }
+
+
 
 function filtrexParser() {
 
@@ -168,15 +233,13 @@ function filtrexParser() {
                   return "SYMBOL";`
                 ], // some.Symbol22
 
-                [`'(?:[^\'])*'`,
-                 `yytext = JSON.stringify(
-                     yytext.substr(1, yyleng-2)
-                  );
+                [`'(?:\\\\'|\\\\\\\\|[^'\\\\])*'`,
+                 `yytext = yy.buildString("'", yytext);
                   return "SYMBOL";`
-                ], // 'some-symbol'
+                ], // 'any \'escaped\' symbol'
 
                 [`"(?:\\\\"|\\\\\\\\|[^"\\\\])*"`,
-                 `yytext = JSON.stringify(""+JSON.parse(yytext));
+                 `yytext = yy.buildString('"', yytext);
                   return "STRING";`
                 ], // "any \"escaped\" string"
 
@@ -231,10 +294,10 @@ function filtrexParser() {
                 ['( array , e )', code(['[', 2, ',', 4, ']'])],
                 ['NUMBER' , code([1])],
                 ['STRING' , code([1])],
-                ['SYMBOL' , code(['std.prop(', 1, ', data)'])],
-                ['SYMBOL of e', code(['std.prop(', 1, ',', 3, ')'])],
-                ['SYMBOL ( )', code(['(std.isfn(', 1, ') ? functions[', 1, ']() : std.unknown(', 1, '))'])],
-                ['SYMBOL ( argsList )', code(['(std.isfn(', 1, ') ? functions[', 1, '](', 3, ') : std.unknown(', 1, '))'])],
+                ['SYMBOL' , code(['prop(', 1, ', data)'])],
+                ['SYMBOL of e', code(['prop(', 1, ',', 3, ')'])],
+                ['SYMBOL ( )', code(['(std.isfn(fns, ', 1, ') ? fns[', 1, ']() : std.unknown(', 1, '))'])],
+                ['SYMBOL ( argsList )', code(['(std.isfn(fns, ', 1, ') ? fns[', 1, '](', 3, ') : std.unknown(', 1, '))'])],
                 ['e in e', code(['std.isSubset(', 1, ', ', 3, ')'])],
                 ['e not in e', code(['+!std.isSubset(', 1, ', ', 4, ')'])],
             ],

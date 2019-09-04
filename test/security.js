@@ -57,21 +57,22 @@ describe('Security', () => {
     });
 
 
-    it('does backslash escaping', () => {
-        expect( compileExpression('"\\\\"')({}) ).equals('\\');
-        expect( compileExpression(`"\\\\" + '\\'`)({'\\':'good'}) ).equals('\\good');
-        expect( compileExpression(`"\\\\" + '\\\\'`)({'\\\\':'good'}) ).equals('\\good');
+    it('does backslash and quote escaping', () => {
+        expect( compileExpression(`"\\\\"`)({}) ).equals(`\\`);
+        expect( compileExpression(`"\\\\" + '\\\\'`)({'\\':'good'}) ).equals(`\\good`);
+        expect( compileExpression(`"\\"\\\\" + '\\'\\\\'`)({"'\\": 'good'}) ).equals(`"\\good`);
 
         // Invalid escape sequences:
-        expect( () => compileExpression('"\\"') ).throws(); 
-        expect( () => compileExpression('"a\\"') ).throws();
-        expect( () => compileExpression('"a\\" == "; global.p0wned = true; //"') ).throws();
+        expect( () => compileExpression(`'\\'`) ).throws();
+        expect( () => compileExpression(`"\\"`) ).throws(); 
+        expect( () => compileExpression(`"a\\"`) ).throws();
+        expect( () => compileExpression(`"a\\" == "; global.p0wned = true; //"`) ).throws();
 
         // JS escape sequences other than \" and \\ are not allowed in Filtrex strings:
-        expect( () => compileExpression('"\\r"') ).throws(); 
-        expect( () => compileExpression('"\\n"') ).throws(); 
-        expect( () => compileExpression('"\\x13"') ).throws(); 
-        expect( () => compileExpression('"\\u0013"') ).throws(); 
+        expect( () => compileExpression(`"\\r"`) ).throws(); 
+        expect( () => compileExpression(`"\\n"`) ).throws(); 
+        expect( () => compileExpression(`"\\x13"`) ).throws(); 
+        expect( () => compileExpression(`"\\u0013"`) ).throws(); 
 
         expect( global.p0wned ).equals(false);
     });
