@@ -49,6 +49,10 @@ describe('Various other things', () => {
         expect( eval('foo in ("aa", "bb")', {foo:'cc'}) ).equals(0);
         expect( eval('foo not in ("aa", "bb")', {foo:'aa'}) ).equals(0);
         expect( eval('foo not in ("aa", "bb")', {foo:'cc'}) ).equals(1);
+
+        expect( eval(`"\n"`) ).equals("\n");
+        expect( eval(`"\u0000"`) ).equals("\u0000");
+        expect( eval(`"\uD800"`) ).equals("\uD800");
     });
 
     it('regexp support', () => {
