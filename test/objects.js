@@ -1,4 +1,4 @@
-const { compileExpression } = require("../src/filtrex");
+const { compileExpression } = require("../lib/filtrex");
 
 const { describe, it } = require("mocha");
 const { expect } = require("chai");
@@ -10,9 +10,9 @@ describe('Object support', () => {
 
     it('can bind to data', () => {
         const something = compileExpression('1 + foo * bar');
-        
-        expect(something({foo:5, bar:2})).equals(11); 
-        expect(something({foo:2, bar:1})).equals(3); 
+
+        expect(something({foo:5, bar:2})).equals(11);
+        expect(something({foo:2, bar:1})).equals(3);
     });
 
     it('includes symbols with dots', () => {
@@ -33,7 +33,7 @@ describe('Object support', () => {
         expect( () => compileExpression('0hey') ).throws();
         expect( () => compileExpression('123.456hey') ).throws();
     })
-    
+
     it('includes object property accessors', () => {
         expect(compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(
             {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}

@@ -1,4 +1,4 @@
-const { compileExpression } = require("../src/filtrex");
+const { compileExpression } = require("../lib/filtrex");
 
 const { describe, it } = require("mocha");
 
@@ -112,7 +112,7 @@ describe('Various other things', () => {
         let textToSearch = "able was i ere I saw elba\nthe Rain in spain falls MAINLY on the plain";
         let doesTextMatch = name =>  textToSearch.indexOf(name) !== -1;
         let evalProp = exp => compileExpression(exp, { customProp: doesTextMatch })();
-        
+
 
         expect( evalProp('able and was and i') ).equals(1);
         expect( evalProp('able and was and dog') ).equals(0);

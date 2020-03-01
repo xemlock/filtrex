@@ -1,4 +1,4 @@
-const { compileExpression } = require("../src/filtrex");
+const { compileExpression } = require("../lib/filtrex");
 
 const { describe, it } = require("mocha");
 const { expect } = require("chai");
@@ -27,16 +27,16 @@ describe('Security', () => {
         );
 
         expect( evil() ).is.instanceOf(Error);
-        
+
         expect( global.p0wned ).equals(false);
     });
 
 
-    it('cannot access properties of the data prototype', () => 
+    it('cannot access properties of the data prototype', () =>
         expect( compileExpression('a')(Object.create({a: 42})) ).equals(undefined)
     );
 
-    
+
     it('cannot inject single-quoted names with double quotes', () => {
         global.p0wned = false;
 
@@ -52,7 +52,7 @@ describe('Security', () => {
                 {'undefined:(global.p0wned=true)));((true?(x=>x)': ()=>42} }
             )()
         ).equals(42);
-        
+
         expect( global.p0wned ).equals(false);
     });
 
@@ -64,15 +64,15 @@ describe('Security', () => {
 
         // Invalid escape sequences:
         expect( () => compileExpression(`'\\'`) ).throws();
-        expect( () => compileExpression(`"\\"`) ).throws(); 
+        expect( () => compileExpression(`"\\"`) ).throws();
         expect( () => compileExpression(`"a\\"`) ).throws();
         expect( () => compileExpression(`"a\\" == "; global.p0wned = true; //"`) ).throws();
 
         // JS escape sequences other than \" and \\ are not allowed in Filtrex strings:
-        expect( () => compileExpression(`"\\r"`) ).throws(); 
-        expect( () => compileExpression(`"\\n"`) ).throws(); 
-        expect( () => compileExpression(`"\\x13"`) ).throws(); 
-        expect( () => compileExpression(`"\\u0013"`) ).throws(); 
+        expect( () => compileExpression(`"\\r"`) ).throws();
+        expect( () => compileExpression(`"\\n"`) ).throws();
+        expect( () => compileExpression(`"\\x13"`) ).throws();
+        expect( () => compileExpression(`"\\u0013"`) ).throws();
 
         expect( global.p0wned ).equals(false);
     });
