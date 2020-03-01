@@ -1,6 +1,6 @@
 {
   "name": "filtrex",
-  "version": "2.1.0-rc1",
+  "version": "2.1.0-rc2",
   "description": "A simple, safe, JavaScript Filter Expression compiler for end-users",
   "main": "lib/filtrex.js",
   "repository": "git@github.com:m93a/filtrex.git",
