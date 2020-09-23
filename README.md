@@ -34,7 +34,7 @@ Features
 Get it
 ------
 
-*    **DOWNLOAD [filtrex.js](https://rawgit.com/joewalnes/filtrex/master/filtrex.js)**
+*    **Get [filtrex](https://www.npmjs.com/package/filtrex) from NPM**
 
 10 second tutorial
 ------------------
