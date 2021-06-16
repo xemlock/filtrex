@@ -1,4 +1,4 @@
-const { compileExpression } = require("../lib/cjs/filtrex");
+const { compileExpression } = require("../dist/cjs/filtrex");
 
 const { describe, it } = require("mocha");
 
