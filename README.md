@@ -23,9 +23,9 @@ Why?
 
 There are many cases where you want a user to be able enter an arbitrary expression through a user interface. e.g.
 
-*   Plot a chart ([example](http://rawgit.com/m93a/filtrex/main/example/plot.html))
-*   Filter/searching across items using multiple fields ([example](http://rawgit.com/m93a/filtrex/main/example/highlight.html))
-*   Colorize items based on values ([example](http://rawgit.com/m93a/filtrex/main/example/colorize.html))
+*   Plot a chart ([example](https://m93a.github.io/filtrex/example/plot.html))
+*   Filter/searching across items using multiple fields ([example](https://m93a.github.io/filtrex/example/highlight.html))
+*   Colorize items based on values ([example](https://m93a.github.io/filtrex/example/colorize.html))
 *   Implement a browser based spreadsheet
 
 Sure, you could do that with JavaScript and `eval()`, but I'm sure I don't have to tell you how stupid that would be.
