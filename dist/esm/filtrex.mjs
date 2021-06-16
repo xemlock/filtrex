@@ -1,36 +1,63 @@
 // the parser is dynamically generated from generateParser.js at compile time
-import { parser } from './parser.mjs';
+import { parser } from './parser.mjs'
+import { hasOwnProperty, toPrimitive } from './utils.mjs'
 
 // Shared utility functions
 const std =
 {
 
     isfn: function(fns, funcName) {
-        return fns.hasOwnProperty(funcName) && typeof fns[funcName] === "function";
+        return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function";
     },
 
     unknown: function(funcName) {
-        throw ReferenceError('Unknown function: ' + funcName + '()');
+        throw new ReferenceError('Unknown function: ' + funcName + '()');
     },
 
     coerceArray: function(value) {
-        if (Array.isArray(value))
+        if (value === undefined || value === null) {
+            throw new TypeError(`Expected a list, but got ${value} instead.`)
+        }
+
+        if (Array.isArray(value)) {
             return value;
-        else
+        } else {
             return [value];
+        }
+    },
+
+    coerceNumber: function (value) {
+        const origValue = value
+
+        if (value === undefined || value === null)
+            throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
+
+        if (Array.isArray(value) && value.length === 1)
+            value = value[0]
+
+        if (typeof value === 'object')
+            value = toPrimitive(value)
+
+        if (typeof value === 'number' || typeof value === 'bigint')
+            return value;
+
+        throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
     },
 
     coerceBoolean: function(value) {
         if (typeof value === 'boolean')
-            return +value;
-        else
-            return value;
+            return value
+
+        if (typeof value === 'object' && value instanceof Boolean)
+            return value.valueOf();
+
+        throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
     },
 
     isSubset: function(a, b) {
         const A = std.coerceArray(a);
         const B = std.coerceArray(b);
-        return +A.every( val => B.includes(val) );
+        return A.every( val => B.includes(val) );
     },
 
     buildString: function(quote, literal)
@@ -106,11 +133,13 @@ export function compileExpression(expression, options) {
         random: Math.random,
         round: Math.round,
         sqrt: Math.sqrt,
+        exists: (v) => v !== undefined && v !== null,
+        empty: (v) => v === undefined || v === null || v === '' || Array.isArray(v) && v.length === 0
     };
 
     if (extraFunctions) {
         for (var name in extraFunctions) {
-            if (extraFunctions.hasOwnProperty(name)) {
+            if (hasOwnProperty(extraFunctions, name)) {
                 functions[name] = extraFunctions[name];
             }
         }
@@ -139,17 +168,17 @@ export function compileExpression(expression, options) {
     // Metaprogramming functions
 
     function prop(name, obj) {
-        return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+        return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
     }
 
     function safeGetter(obj) {
         return function get(name) {
-            return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+            return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
         }
     }
 
     if (typeof customProp === 'function') {
-        prop = (name, obj) => std.coerceBoolean(customProp(name, safeGetter(obj), obj));
+        prop = (name, obj) => customProp(name, safeGetter(obj), obj);
     }
 
 

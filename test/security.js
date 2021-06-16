@@ -80,7 +80,7 @@ describe('Security', () => {
 
     it('in() is not vulnerable to Object.prototype extensions ', () => {
         Object.prototype.aa = true;
-        expect( compileExpression('"aa" in ("bb", "cc")')() ).equals(0);
+        expect( compileExpression('"aa" in ("bb", "cc")')() ).equals(false);
         delete Object.prototype.aa;
     });
 

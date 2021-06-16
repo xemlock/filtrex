@@ -20,35 +20,35 @@ describe('Various other things', () => {
 
     it('in / not in', () => {
         // value in array
-        expect( eval('5 in (1, 2, 3, 4)') ).equals(0);
-        expect( eval('3 in (1, 2, 3, 4)') ).equals(1);
-        expect( eval('5 not in (1, 2, 3, 4)') ).equals(1);
-        expect( eval('3 not in (1, 2, 3, 4)') ).equals(0);
+        expect( eval('5 in (1, 2, 3, 4)') ).equals(false);
+        expect( eval('3 in (1, 2, 3, 4)') ).equals(true);
+        expect( eval('5 not in (1, 2, 3, 4)') ).equals(true);
+        expect( eval('3 not in (1, 2, 3, 4)') ).equals(false);
 
         // array in array
-        expect( eval('(1, 2) in (1, 2, 3)') ).equals(1);
-        expect( eval('(1, 2) in (2, 3, 1)') ).equals(1);
-        expect( eval('(3, 4) in (1, 2, 3)') ).equals(0);
-        expect( eval('(1, 2) not in (1, 2, 3)') ).equals(0);
-        expect( eval('(1, 2) not in (2, 3, 1)') ).equals(0);
-        expect( eval('(3, 4) not in (1, 2, 3)') ).equals(1);
+        expect( eval('(1, 2) in (1, 2, 3)') ).equals(true);
+        expect( eval('(1, 2) in (2, 3, 1)') ).equals(true);
+        expect( eval('(3, 4) in (1, 2, 3)') ).equals(false);
+        expect( eval('(1, 2) not in (1, 2, 3)') ).equals(false);
+        expect( eval('(1, 2) not in (2, 3, 1)') ).equals(false);
+        expect( eval('(3, 4) not in (1, 2, 3)') ).equals(true);
 
         // other edge cases
-        expect( eval('(1, 2) in 1'    ) ).equals(0);
-        expect( eval('1 in 1'         ) ).equals(1);
-        expect( eval('(1, 2) not in 1') ).equals(1);
-        expect( eval('1 not in 1'     ) ).equals(0);
+        expect( eval('(1, 2) in 1'    ) ).equals(false);
+        expect( eval('1 in 1'         ) ).equals(true);
+        expect( eval('(1, 2) not in 1') ).equals(true);
+        expect( eval('1 not in 1'     ) ).equals(false);
     });
 
     it('string support', () => {
-        expect( eval('foo == "hello"', {foo:'hello'}) ).equals(1);
-        expect( eval('foo == "hello"', {foo:'bye'  }) ).equals(0);
-        expect( eval('foo != "hello"', {foo:'hello'}) ).equals(0);
-        expect( eval('foo != "hello"', {foo:'bye'  }) ).equals(1);
-        expect( eval('foo in ("aa", "bb")', {foo:'aa'}) ).equals(1);
-        expect( eval('foo in ("aa", "bb")', {foo:'cc'}) ).equals(0);
-        expect( eval('foo not in ("aa", "bb")', {foo:'aa'}) ).equals(0);
-        expect( eval('foo not in ("aa", "bb")', {foo:'cc'}) ).equals(1);
+        expect( eval('foo == "hello"', {foo:'hello'}) ).equals(true);
+        expect( eval('foo == "hello"', {foo:'bye'  }) ).equals(false);
+        expect( eval('foo != "hello"', {foo:'hello'}) ).equals(false);
+        expect( eval('foo != "hello"', {foo:'bye'  }) ).equals(true);
+        expect( eval('foo in ("aa", "bb")', {foo:'aa'}) ).equals(true);
+        expect( eval('foo in ("aa", "bb")', {foo:'cc'}) ).equals(false);
+        expect( eval('foo not in ("aa", "bb")', {foo:'aa'}) ).equals(false);
+        expect( eval('foo not in ("aa", "bb")', {foo:'cc'}) ).equals(true);
 
         expect( eval(`"\n"`) ).equals("\n");
         expect( eval(`"\u0000"`) ).equals("\u0000");
@@ -56,8 +56,8 @@ describe('Various other things', () => {
     });
 
     it('regexp support', () => {
-        expect( eval('foo ~= "^[hH]ello"', {foo:'hello'}) ).equals(1);
-        expect( eval('foo ~= "^[hH]ello"', {foo:'bye'  }) ).equals(0);
+        expect( eval('foo ~= "^[hH]ello"', {foo:'hello'}) ).equals(true);
+        expect( eval('foo ~= "^[hH]ello"', {foo:'bye'  }) ).equals(false);
     });
 
     it('array support', () => {
@@ -87,7 +87,7 @@ describe('Various other things', () => {
     it('custom property function basics', () => {
         expect(
             compileExpression('a', { customProp: name => name === 'a' })()
-        ).equals(1);
+        ).equals(true);
 
         expect(
             compileExpression('a + bb + ccc', { customProp: name => name.length })()
@@ -99,13 +99,13 @@ describe('Various other things', () => {
         ).equals(7);
 
         expect(
-            compileExpression('a', { customProp: (name, get) => get(name) })({ a:true })
-        ).equals(1);
+            compileExpression('a', { customProp: (name, get) => get(name) })({ a: true })
+        ).equals(true);
 
-        let object = {a:1};
+        let object = {a: 2};
         expect(
             compileExpression('a', { customProp: (_,__,obj) => obj === object })(object)
-        ).equals(1);
+        ).equals(true);
     });
 
     it('custom property function text search', () => {
@@ -114,12 +114,12 @@ describe('Various other things', () => {
         let evalProp = exp => compileExpression(exp, { customProp: doesTextMatch })();
 
 
-        expect( evalProp('able and was and i') ).equals(1);
-        expect( evalProp('able and was and dog') ).equals(0);
-        expect( evalProp('able or dog') ).equals(1);
-        expect( evalProp('able') ).equals(1);
-        expect( evalProp('Rain and (missing or MAINLY)') ).equals(1);
-        expect( evalProp('NotThere or missing or falls and plain') ).equals(1);
+        expect( evalProp('able and was and i') ).equals(true);
+        expect( evalProp('able and was and dog') ).equals(false);
+        expect( evalProp('able or dog') ).equals(true);
+        expect( evalProp('able') ).equals(true);
+        expect( evalProp('Rain and (missing or MAINLY)') ).equals(true);
+        expect( evalProp('NotThere or missing or falls and plain') ).equals(true);
     });
 
     it('custom property function proxy', () => {

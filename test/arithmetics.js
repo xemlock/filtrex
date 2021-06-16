@@ -35,7 +35,7 @@ describe('Arithmetics', () => {
 
 
     it('supports functions with multiple args', () => {
-        expect( eval('random() >= 0') ).equals(1);
+        expect( eval('random() >= 0') ).equals(true);
         expect( eval('min(2)') ).equals(2);
         expect( eval('max(2)') ).equals(2);
         expect( eval('min(2, 5)') ).equals(2);
@@ -52,43 +52,45 @@ describe('Arithmetics', () => {
 
 
     it('can do comparisons', () => {
-        expect( eval('foo == 4', {foo: 4}) ).equals(1);
-        expect( eval('foo == 4', {foo: 3}) ).equals(0);
-        expect( eval('foo == 4', {foo:-4}) ).equals(0);
-        expect( eval('foo != 4', {foo: 4}) ).equals(0);
-        expect( eval('foo != 4', {foo: 3}) ).equals(1);
-        expect( eval('foo != 4', {foo:-4}) ).equals(1);
-        expect( eval('foo > 4',  {foo: 3}) ).equals(0);
-        expect( eval('foo > 4',  {foo: 4}) ).equals(0);
-        expect( eval('foo > 4',  {foo: 5}) ).equals(1);
-        expect( eval('foo >= 4', {foo: 3}) ).equals(0);
-        expect( eval('foo >= 4', {foo: 4}) ).equals(1);
-        expect( eval('foo >= 4', {foo: 5}) ).equals(1);
-        expect( eval('foo < 4',  {foo: 3}) ).equals(1);
-        expect( eval('foo < 4',  {foo: 4}) ).equals(0);
-        expect( eval('foo < 4',  {foo: 5}) ).equals(0);
-        expect( eval('foo <= 4', {foo: 3}) ).equals(1);
-        expect( eval('foo <= 4', {foo: 4}) ).equals(1);
-        expect( eval('foo <= 4', {foo: 5}) ).equals(0);
+        expect( eval('foo == 4', {foo: 4}) ).equals(true);
+        expect( eval('foo == 4', {foo: 3}) ).equals(false);
+        expect( eval('foo == 4', {foo:-4}) ).equals(false);
+        expect( eval('foo != 4', {foo: 4}) ).equals(false);
+        expect( eval('foo != 4', {foo: 3}) ).equals(true);
+        expect( eval('foo != 4', {foo:-4}) ).equals(true);
+        expect( eval('foo > 4',  {foo: 3}) ).equals(false);
+        expect( eval('foo > 4',  {foo: 4}) ).equals(false);
+        expect( eval('foo > 4',  {foo: 5}) ).equals(true);
+        expect( eval('foo >= 4', {foo: 3}) ).equals(false);
+        expect( eval('foo >= 4', {foo: 4}) ).equals(true);
+        expect( eval('foo >= 4', {foo: 5}) ).equals(true);
+        expect( eval('foo < 4',  {foo: 3}) ).equals(true);
+        expect( eval('foo < 4',  {foo: 4}) ).equals(false);
+        expect( eval('foo < 4',  {foo: 5}) ).equals(false);
+        expect( eval('foo <= 4', {foo: 3}) ).equals(true);
+        expect( eval('foo <= 4', {foo: 4}) ).equals(true);
+        expect( eval('foo <= 4', {foo: 5}) ).equals(false);
     });
 
 
     it('can do boolean logic', () => {
-        expect( eval('0 and 0') ).equals(0);
-        expect( eval('0 and 1') ).equals(0);
-        expect( eval('1 and 0') ).equals(0);
-        expect( eval('1 and 1') ).equals(1);
-        expect( eval('0 or 0')  ).equals(0);
-        expect( eval('0 or 1')  ).equals(1);
-        expect( eval('1 or 0')  ).equals(1);
-        expect( eval('1 or 1')  ).equals(1);
-        expect( eval('not 0')   ).equals(1);
-        expect( eval('not 1')   ).equals(0);
-        expect( eval('(0 and 1) or 1') ).equals(1);
-        expect( eval('0 and (1 or 1)') ).equals(0);
-        expect( eval('0 and 1 or 1')   ).equals(1);
-        expect( eval('1 or 1 and 0')   ).equals(1);
-        expect( eval('not 1 and 0')    ).equals(0);
+        const obj = { T: true, F: false };
+
+        expect( eval('F and F', obj) ).equals(false);
+        expect( eval('F and T', obj) ).equals(false);
+        expect( eval('T and F', obj) ).equals(false);
+        expect( eval('T and T', obj) ).equals(true);
+        expect( eval('F or F',  obj) ).equals(false);
+        expect( eval('F or T',  obj) ).equals(true);
+        expect( eval('T or F',  obj) ).equals(true);
+        expect( eval('T or T',  obj) ).equals(true);
+        expect( eval('not F',   obj) ).equals(true);
+        expect( eval('not T',   obj) ).equals(false);
+        expect( eval('(F and T) or T', obj) ).equals(true);
+        expect( eval('F and (T or T)', obj) ).equals(false);
+        expect( eval('F and T or T', obj)   ).equals(true);
+        expect( eval('T or T and F', obj)   ).equals(true);
+        expect( eval('not T and F', obj)    ).equals(false);
     });
 
 });

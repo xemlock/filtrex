@@ -19,7 +19,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp",
-    "test": "./node_modules/mocha/bin/mocha test",
+    "test": "yarn build && ./node_modules/mocha/bin/mocha test",
     "debug": "./node_modules/mocha/bin/mocha test --inspect-brk"
   },
   "devDependencies": {

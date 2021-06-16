@@ -1,6 +1,6 @@
 const Jison = require("./lib/jison").Jison;
 
-function code(args, skipParentheses) {
+function _code(args, skipParentheses) {
     var argsJs = args.map(function(a) {
         return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a);
     }).join(',');
@@ -10,7 +10,36 @@ function code(args, skipParentheses) {
             : '$$ = ["(", ' + argsJs + ', ")"];';
 }
 
-var grammar = {
+function code(fragments, ...params) {
+    const args = []
+
+    for (let i = 0; i < fragments.length - 1; i++) {
+        args.push(fragments[i])
+        args.push(params[i])
+    }
+
+    args.push(fragments[fragments.length - 1])
+
+    return _code(args, false)
+}
+
+function parenless(fragments, ...params) {
+    const args = []
+
+    for (let i = 0; i < fragments.length - 1; i++) {
+        args.push(fragments[i])
+        args.push(params[i])
+    }
+
+    args.push(fragments[fragments.length - 1])
+
+    return _code(args, true)
+}
+
+const bool = "std.coerceBoolean"
+const num = "std.coerceNumber"
+
+const grammar = {
     // Lexical tokens
     lex: {
         rules: [
@@ -85,46 +114,46 @@ var grammar = {
             ['e EOF', 'return $1;']
         ],
         e: [
-            ['e + e'  , code([1, '+', 3])],
-            ['e - e'  , code([1, '-', 3])],
-            ['e * e'  , code([1, '*', 3])],
-            ['e / e'  , code([1, '/', 3])],
-            ['e % e'  , code([1, '%', 3])],
-            ['e ^ e'  , code(['Math.pow(', 1, ',', 3, ')'])],
-            ['- e'    , code(['-', 2]), {prec: 'UMINUS'}],
-            ['e and e', code(['Number(', 1, '&&', 3, ')'])],
-            ['e or e' , code(['Number(', 1, '||', 3, ')'])],
-            ['not e'  , code(['Number(!', 2, ')'])],
-            ['e == e' , code(['Number(', 1, '==', 3, ')'])],
-            ['e != e' , code(['Number(', 1, '!=', 3, ')'])],
-            ['e ~= e' , code(['Number(RegExp(', 3, ').test(', 1, '))'])],
-            ['e < e'  , code(['Number(', 1, '<' , 3, ')'])],
-            ['e <= e' , code(['Number(', 1, '<=', 3, ')'])],
-            ['e > e'  , code(['Number(', 1, '> ', 3, ')'])],
-            ['e >= e' , code(['Number(', 1, '>=', 3, ')'])],
-            ['e ? e : e', code([1, '?', 3, ':', 5])],
-            ['( e )'  , code([2])],
-            ['( array , e )', code(['[', 2, ',', 4, ']'])],
-            ['NUMBER' , code([1])],
-            ['STRING' , code([1])],
-            ['SYMBOL' , code(['prop(', 1, ', data)'])],
-            ['SYMBOL of e', code(['prop(', 1, ',', 3, ')'])],
-            ['SYMBOL ( )', code(['(std.isfn(fns, ', 1, ') ? fns[', 1, ']() : std.unknown(', 1, '))'])],
-            ['SYMBOL ( argsList )', code(['(std.isfn(fns, ', 1, ') ? fns[', 1, '](', 3, ') : std.unknown(', 1, '))'])],
-            ['e in e', code(['std.isSubset(', 1, ', ', 3, ')'])],
-            ['e not in e', code(['+!std.isSubset(', 1, ', ', 4, ')'])],
+            ['e + e'  , code`${1} + ${3}`],
+            ['e - e'  , code`${1} - ${3}`],
+            ['e * e'  , code`${1} * ${3}`],
+            ['e / e'  , code`${1} / ${3}`],
+            ['e % e'  , code`${1} % ${3}`],
+            ['e ^ e'  , code`Math.pow( ${1}, ${3} )`],
+            ['- e'    , code`- ${2}`, {prec: 'UMINUS'}],
+            ['e and e', code`${bool}(${1}) && ${bool}(${3})`],
+            ['e or e' , code`${bool}(${1}) || ${bool}(${3})`],
+            ['not e'  , code`! ${bool}(${2})`],
+            ['e == e' , code`${1} === ${3}`],
+            ['e != e' , code`${1} !== ${3}`],
+            ['e ~= e' , code`RegExp(${3}).test(${1})`],
+            ['e < e'  , code`${1} < ${3}`],
+            ['e <= e' , code`${1} <= ${3}`],
+            ['e > e'  , code`${1} > ${3}`],
+            ['e >= e' , code`${1} >= ${3}`],
+            ['e ? e : e', code`${1} ? ${3} : ${5}`],
+            ['( e )'  , code`${2}`],
+            ['( array , e )', code`[ ${2}, ${4} ]`],
+            ['NUMBER' , code`${1}`],
+            ['STRING' , code`${1}`],
+            ['SYMBOL' , code`prop(${1}, data)`],
+            ['SYMBOL of e', code`prop(${1}, ${3})`],
+            ['SYMBOL ( )', code`std.isfn(fns, ${1}) ? fns[${1}]() : std.unknown(${1})`],
+            ['SYMBOL ( argsList )', code`std.isfn(fns, ${1}) ? fns[${1}](${3}) : std.unknown(${1})`],
+            ['e in e', code`std.isSubset(${1}, ${3})`],
+            ['e not in e', code`!std.isSubset(${1}, ${4})`],
         ],
         argsList: [
-            ['e', code([1], true)],
-            ['argsList , e', code([1, ',', 3], true)],
+            ['e', parenless`${1}`],
+            ['argsList , e', parenless`${1}, ${3}`],
         ],
         inSet: [
-            ['e', code(['o ==', 1], true)],
-            ['inSet , e', code([1, '|| o ==', 3], true)],
+            ['e', parenless`o === ${1}`],
+            ['inSet , e', parenless`${1} || o === ${3}`],
         ],
         array: [
-            ['e', code([1])],
-            ['array , e', code([1, ',', 3], true)],
+            ['e', parenless`${1}`],
+            ['array , e', parenless`${1}, ${3}`],
         ],
     }
 };

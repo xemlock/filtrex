@@ -116,106 +116,106 @@ var filtrex = (function (exports) {
                     case 1:
                         return $$[$0 - 1];
                     case 2:
-                        this.$ = ["(", $$[$0 - 2], "+", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " + ", $$[$0], "", ")"];
                         break;
                     case 3:
-                        this.$ = ["(", $$[$0 - 2], "-", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " - ", $$[$0], "", ")"];
                         break;
                     case 4:
-                        this.$ = ["(", $$[$0 - 2], "*", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " * ", $$[$0], "", ")"];
                         break;
                     case 5:
-                        this.$ = ["(", $$[$0 - 2], "/", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " / ", $$[$0], "", ")"];
                         break;
                     case 6:
-                        this.$ = ["(", $$[$0 - 2], "%", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " % ", $$[$0], "", ")"];
                         break;
                     case 7:
-                        this.$ = ["(", "Math.pow(", $$[$0 - 2], ",", $$[$0], ")", ")"];
+                        this.$ = ["(", "Math.pow( ", $$[$0 - 2], ", ", $$[$0], " )", ")"];
                         break;
                     case 8:
-                        this.$ = ["(", "-", $$[$0], ")"];
+                        this.$ = ["(", "- ", $$[$0], "", ")"];
                         break;
                     case 9:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "&&", $$[$0], ")", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") && ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 10:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "||", $$[$0], ")", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") || ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 11:
-                        this.$ = ["(", "Number(!", $$[$0], ")", ")"];
+                        this.$ = ["(", "! ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 12:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "==", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " === ", $$[$0], "", ")"];
                         break;
                     case 13:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "!=", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " !== ", $$[$0], "", ")"];
                         break;
                     case 14:
-                        this.$ = ["(", "Number(RegExp(", $$[$0], ").test(", $$[$0 - 2], "))", ")"];
+                        this.$ = ["(", "RegExp(", $$[$0], ").test(", $$[$0 - 2], ")", ")"];
                         break;
                     case 15:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "<", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " < ", $$[$0], "", ")"];
                         break;
                     case 16:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "<=", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " <= ", $$[$0], "", ")"];
                         break;
                     case 17:
-                        this.$ = ["(", "Number(", $$[$0 - 2], "> ", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " > ", $$[$0], "", ")"];
                         break;
                     case 18:
-                        this.$ = ["(", "Number(", $$[$0 - 2], ">=", $$[$0], ")", ")"];
+                        this.$ = ["(", "", $$[$0 - 2], " >= ", $$[$0], "", ")"];
                         break;
                     case 19:
-                        this.$ = ["(", $$[$0 - 4], "?", $$[$0 - 2], ":", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0 - 4], " ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
                         break;
                     case 20:
-                        this.$ = ["(", $$[$0 - 1], ")"];
+                        this.$ = ["(", "", $$[$0 - 1], "", ")"];
                         break;
                     case 21:
-                        this.$ = ["(", "[", $$[$0 - 3], ",", $$[$0 - 1], "]", ")"];
+                        this.$ = ["(", "[ ", $$[$0 - 3], ", ", $$[$0 - 1], " ]", ")"];
                         break;
                     case 22:
-                        this.$ = ["(", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0], "", ")"];
                         break;
                     case 23:
-                        this.$ = ["(", $$[$0], ")"];
+                        this.$ = ["(", "", $$[$0], "", ")"];
                         break;
                     case 24:
                         this.$ = ["(", "prop(", $$[$0], ", data)", ")"];
                         break;
                     case 25:
-                        this.$ = ["(", "prop(", $$[$0 - 2], ",", $$[$0], ")", ")"];
+                        this.$ = ["(", "prop(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 26:
-                        this.$ = ["(", "(std.isfn(fns, ", $$[$0 - 2], ") ? fns[", $$[$0 - 2], "]() : std.unknown(", $$[$0 - 2], "))", ")"];
+                        this.$ = ["(", "std.isfn(fns, ", $$[$0 - 2], ") ? fns[", $$[$0 - 2], "]() : std.unknown(", $$[$0 - 2], ")", ")"];
                         break;
                     case 27:
-                        this.$ = ["(", "(std.isfn(fns, ", $$[$0 - 3], ") ? fns[", $$[$0 - 3], "](", $$[$0 - 1], ") : std.unknown(", $$[$0 - 3], "))", ")"];
+                        this.$ = ["(", "std.isfn(fns, ", $$[$0 - 3], ") ? fns[", $$[$0 - 3], "](", $$[$0 - 1], ") : std.unknown(", $$[$0 - 3], ")", ")"];
                         break;
                     case 28:
                         this.$ = ["(", "std.isSubset(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 29:
-                        this.$ = ["(", "+!std.isSubset(", $$[$0 - 3], ", ", $$[$0], ")", ")"];
+                        this.$ = ["(", "!std.isSubset(", $$[$0 - 3], ", ", $$[$0], ")", ")"];
                         break;
                     case 30:
-                        this.$ = [$$[$0]];
+                        this.$ = ["", $$[$0], ""];
                         break;
                     case 31:
-                        this.$ = [$$[$0 - 2], ",", $$[$0]];
+                        this.$ = ["", $$[$0 - 2], ", ", $$[$0], ""];
                         break;
                     case 32:
-                        this.$ = ["o ==", $$[$0]];
+                        this.$ = ["o === ", $$[$0], ""];
                         break;
                     case 33:
-                        this.$ = [$$[$0 - 2], "|| o ==", $$[$0]];
+                        this.$ = ["", $$[$0 - 2], " || o === ", $$[$0], ""];
                         break;
                     case 34:
-                        this.$ = ["(", $$[$0], ")"];
+                        this.$ = ["", $$[$0], ""];
                         break;
                     case 35:
-                        this.$ = [$$[$0 - 2], ",", $$[$0]];
+                        this.$ = ["", $$[$0 - 2], ", ", $$[$0], ""];
                         break;
                 }
             },
@@ -1690,6 +1690,56 @@ var filtrex = (function (exports) {
     const parser = _parser;
     _parser.Parser;
 
+    /**
+     * Determines whether an object has a property with the specified name.
+     * @param {object} obj the object to be checked
+     * @param {string|number} prop property name
+     */
+    function hasOwnProperty(obj, prop) {
+        if (typeof obj === "object" || typeof obj === "function") {
+            return Object.prototype.hasOwnProperty.call(obj, prop)
+        }
+
+        return false
+    }
+
+    /**
+     * Safe getter for `v[Symbol.toPrimitive]`.
+     */
+    const _toPrimitive =
+        typeof Symbol !== "function" || typeof Symbol.toPrimitive !== "symbol"
+        ? () => undefined
+        : (v) => {
+            if (typeof v[Symbol.toPrimitive] === "function") {
+                return v[Symbol.toPrimitive]
+            }
+
+            return undefined
+        };
+
+    /**
+     * Attempt to convert an object to the required primitive type.
+     * @param {object} obj
+     * @param {"string"|"number"|"bigint"} type
+     * @returns {string|number|bigint|undefined}
+     */
+    function toPrimitive(obj, type) {
+        if (typeof obj !== "object" || typeof obj !== "function") {
+            return undefined
+        }
+
+        try {
+            let val = _toPrimitive(obj)(type);
+            if (typeof val === type) return val
+
+            val = obj.valueOf();
+            if (typeof val === type) return val
+
+        } finally {
+            return undefined
+        }
+    }
+
     // the parser is dynamically generated from generateParser.js at compile time
 
     // Shared utility functions
@@ -1697,31 +1747,57 @@ var filtrex = (function (exports) {
     {
 
         isfn: function(fns, funcName) {
-            return fns.hasOwnProperty(funcName) && typeof fns[funcName] === "function";
+            return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function";
         },
 
         unknown: function(funcName) {
-            throw ReferenceError('Unknown function: ' + funcName + '()');
+            throw new ReferenceError('Unknown function: ' + funcName + '()');
         },
 
         coerceArray: function(value) {
-            if (Array.isArray(value))
+            if (value === undefined || value === null) {
+                throw new TypeError(`Expected a list, but got ${value} instead.`)
+            }
+
+            if (Array.isArray(value)) {
                 return value;
-            else
+            } else {
                 return [value];
+            }
+        },
+
+        coerceNumber: function (value) {
+            const origValue = value;
+
+            if (value === undefined || value === null)
+                throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
+
+            if (Array.isArray(value) && value.length === 1)
+                value = value[0];
+
+            if (typeof value === 'object')
+                value = toPrimitive(value);
+
+            if (typeof value === 'number' || typeof value === 'bigint')
+                return value;
+
+            throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
         },
 
         coerceBoolean: function(value) {
             if (typeof value === 'boolean')
-                return +value;
-            else
-                return value;
+                return value
+
+            if (typeof value === 'object' && value instanceof Boolean)
+                return value.valueOf();
+
+            throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
         },
 
         isSubset: function(a, b) {
             const A = std.coerceArray(a);
             const B = std.coerceArray(b);
-            return +A.every( val => B.includes(val) );
+            return A.every( val => B.includes(val) );
         },
 
         buildString: function(quote, literal)
@@ -1797,11 +1873,13 @@ var filtrex = (function (exports) {
             random: Math.random,
             round: Math.round,
             sqrt: Math.sqrt,
+            exists: (v) => v !== undefined && v !== null,
+            empty: (v) => v === undefined || v === null || v === '' || Array.isArray(v) && v.length === 0
         };
 
         if (extraFunctions) {
             for (var name in extraFunctions) {
-                if (extraFunctions.hasOwnProperty(name)) {
+                if (hasOwnProperty(extraFunctions, name)) {
                     functions[name] = extraFunctions[name];
                 }
             }
@@ -1830,17 +1908,17 @@ var filtrex = (function (exports) {
         // Metaprogramming functions
 
         function prop(name, obj) {
-            return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+            return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
         }
 
         function safeGetter(obj) {
             return function get(name) {
-                return Object.prototype.hasOwnProperty.call(obj||{}, name) ? obj[name] : undefined;
+                return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
             }
         }
 
         if (typeof customProp === 'function') {
-            prop = (name, obj) => std.coerceBoolean(customProp(name, safeGetter(obj), obj));
+            prop = (name, obj) => customProp(name, safeGetter(obj), obj);
         }
 
 
