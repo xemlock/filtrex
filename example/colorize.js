@@ -59,7 +59,7 @@ function updateExpression() {
   } else {
     try {
       // Build highlighter from user's expression
-      colorizer = compileExpression(expression); // <-- Filtrex!
+      colorizer = filtrex.compileExpression(expression); // <-- Filtrex!
       input.css('background-color', '#dfd');
     } catch (e) {
       // Failed to parse expression. Don't highlight anything.

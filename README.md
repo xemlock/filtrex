@@ -8,19 +8,29 @@ A simple, safe, JavaScript expression engine, allowing end-users to enter arbitr
 category == "meal" and (calories * weight > 2000.0 or subcategory in ("cake", "pie"))
 ```
 
+Get it
+------
+Filtrex is available as a NPM package via `npm install filtrex` or `yarn add filtrex`:
+```typescript
+import { compileExpression } from 'filtrex';
+const f = compileExpression(`category == "meal"`)
+```
+You can also get the bundled versions from [`./dist/`](https://github.com/m93a/filtrex/tree/main/dist).
+
+
 Why?
 ----
 
 There are many cases where you want a user to be able enter an arbitrary expression through a user interface. e.g.
 
-*   Plot a chart ([example](http://rawgit.com/joewalnes/filtrex/master/example/plot.html))
-*   Filter/searching across items using multiple fields ([example](http://rawgit.com/joewalnes/filtrex/master/example/highlight.html))
-*   Colorize items based on values ([example](http://rawgit.com/joewalnes/filtrex/master/example/colorize.html))
+*   Plot a chart ([example](http://rawgit.com/m93a/filtrex/main/example/plot.html))
+*   Filter/searching across items using multiple fields ([example](http://rawgit.com/m93a/filtrex/main/example/highlight.html))
+*   Colorize items based on values ([example](http://rawgit.com/m93a/filtrex/main/example/colorize.html))
 *   Implement a browser based spreadsheet
 
 Sure, you could do that with JavaScript and `eval()`, but I'm sure I don't have to tell you how stupid that would be.
 
-Filtrex defines a really simple expression language that should be familiar to anyone who's ever used a spreadsheet and compile it into a JavaScript function at runtime.
+Filtrex defines a really simple expression language that should be familiar to anyone who's ever used a spreadsheet, and compiles it into a JavaScript function at runtime.
 
 Features
 --------
@@ -31,20 +41,17 @@ Features
 *   **Pluggable!** Add your own data and functions.
 *   **Predictable!** Because users can't define loops or recursive functions, you know you won't be left hanging.
 
-Get it
-------
-
-*    **Get [filtrex](https://www.npmjs.com/package/filtrex) from NPM**
-
 10 second tutorial
 ------------------
 
-```javascript
+```typescript
+import { compileExpression } from 'filtrex';
+
 // Input from user (e.g. search filter)
-var expression = 'transactions <= 5 and abs(profit) > 20.5';
+const expression = `transactions <= 5 and abs(profit) > 20.5`;
 
 // Compile expression to executable function
-var myfilter = compileExpression(expression);
+const myfilter = compileExpression(expression);
 
 // Execute function
 myfilter({transactions: 3, profit:-40.5}); // returns 1
@@ -126,9 +133,9 @@ Operator precedence follows that of any sane language.
 Adding custom functions
 -----------------------
 
-When integrating in to your application, you can add your own custom functions.
+When integrating into your application, you can add your own custom functions.
 
-```javascript
+```typescript
 // Custom function: Return string length.
 function strlen(s) {
   return s.length;
@@ -191,15 +198,15 @@ Because it was originally built for FILTeR EXpressions.
 
 **License?**
 
-[MIT](https://github.com/joewalnes/filtrex/raw/master/LICENSE)
+[MIT](https://github.com/m93a/filtrex/raw/main/LICENSE)
 
 **Unit tests?**
 
-Here: [Source](https://github.com/joewalnes/filtrex/blob/master/test/filtrex-test.html), [Results](https://rawgit.com/joewalnes/filtrex/master/test/filtrex-test.html)
+Here: [Source](https://github.com/m93a/filtrex/tree/main/test)
 
 **What happens if the expression is malformed?**
 
-Calling `compileExpression()` with a malformed expression will throw an exception. You can catch that and display feedback to the user. A good UI pattern is to attempt to compile on each keystroke and continuously indicate whether the expression is valid.
+Calling `compileExpression()` with a malformed expression will throw an exception. You can catch that and display feedback to the user. A good UI pattern is to attempt to compile on each change (properly [debounced](https://medium.com/@jamischarles/what-is-debouncing-2505c0648ff1), of course) and continuously indicate whether the expression is valid. On the other hand, once the expression is successfully compiled, it will never throw – this is to prevent the user from making your program fail when you expect it the least – a compiled expression that fails at runtime will **return** an error.
 
 
 Contributors
@@ -216,7 +223,6 @@ Contributors
 Like this? Want other thingies?
 -------------------------------
 
-*   [meta-utils](https://github.com/meta-utils) – Various useful utilities for TypeScript and JavaScript development
 *   [websocketd](https://github.com/joewalnes/websocketd) – Turn any program that uses STDIN/STDOUT into a WebSocket server. Like inetd, but for WebSockets.
 *   [ReconnectingWebSocket](https://github.com/joewalnes/reconnecting-websocket) – Simplest way to add some robustness to your WebSocket connections.
 *   [Smoothie Charts](http://smoothiecharts.org/) – JavaScript charts for streaming data.

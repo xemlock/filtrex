@@ -5,7 +5,7 @@ function main() {
 }
 
 // Allow more mathematical functions to be called from expressions.
-var additionalFunctions = {
+var extraFunctions = {
   acos: Math.acos,
   asin: Math.asin,
   atan: Math.atan,
@@ -32,7 +32,7 @@ function updateExpression() {
   }
 
   try {
-    var plotFunction = compileExpression(expression, additionalFunctions); // <-- Filtrex!
+    var plotFunction = filtrex.compileExpression(expression, { extraFunctions }); // <-- Filtrex!
     input.css('background-color', '#dfd');
   } catch (e) {
     // Failed to parse expression. Don't plot.
