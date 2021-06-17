@@ -1,7 +1,16 @@
 const Jison = require("./lib/jison").Jison;
 
-function _code(args, skipParentheses) {
-    var argsJs = args.map(function(a) {
+function _code(fragments, params, skipParentheses) {
+    const args = []
+
+    for (let i = 0; i < fragments.length - 1; i++) {
+        args.push(fragments[i])
+        args.push(params[i])
+    }
+
+    args.push(fragments[fragments.length - 1])
+
+    const argsJs = args.map(function(a) {
         return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a);
     }).join(',');
 
@@ -11,29 +20,11 @@ function _code(args, skipParentheses) {
 }
 
 function code(fragments, ...params) {
-    const args = []
-
-    for (let i = 0; i < fragments.length - 1; i++) {
-        args.push(fragments[i])
-        args.push(params[i])
-    }
-
-    args.push(fragments[fragments.length - 1])
-
-    return _code(args, false)
+    return _code(fragments, params, false)
 }
 
 function parenless(fragments, ...params) {
-    const args = []
-
-    for (let i = 0; i < fragments.length - 1; i++) {
-        args.push(fragments[i])
-        args.push(params[i])
-    }
-
-    args.push(fragments[fragments.length - 1])
-
-    return _code(args, true)
+    return _code(fragments, params, true)
 }
 
 const bool = "std.coerceBoolean"
@@ -59,13 +50,14 @@ const grammar = {
             ['<=', 'return "<=";'],
             ['<', 'return "<";'],
             ['>', 'return ">";'],
-            ['\\?', 'return "?";'],
-            ['\\:', 'return ":";'],
             ['and[^\\w]', 'return "and";'],
             ['or[^\\w]' , 'return "or";'],
             ['not[^\\w]', 'return "not";'],
             ['in[^\\w]', 'return "in";'],
             ['of[^\\w]', 'return "of";'],
+            ['if[^\\w]', 'return "if";'],
+            ['then[^\\w]', 'return "then";'],
+            ['else[^\\w]', 'return "else";'],
 
             ['\\s+',  ''], // skip whitespace
             ['[0-9]+(?:\\.[0-9]+)?\\b', 'return "NUMBER";'], // 212.321
@@ -95,7 +87,7 @@ const grammar = {
     // Different languages have different rules, but this seems a good starting
     // point: http://en.wikipedia.org/wiki/Order_of_operations#Programming_languages
     operators: [
-        ['left', '?', ':'],
+        ['left', 'if', 'then', 'else'],
         ['left', 'or'],
         ['left', 'and'],
         ['left', 'in'],
@@ -131,7 +123,7 @@ const grammar = {
             ['e <= e' , code`${1} <= ${3}`],
             ['e > e'  , code`${1} > ${3}`],
             ['e >= e' , code`${1} >= ${3}`],
-            ['e ? e : e', code`${1} ? ${3} : ${5}`],
+            ['if e then e else e', code`${bool}(${2}) ? ${4} : ${6}`],
             ['( e )'  , code`${2}`],
             ['( array , e )', code`[ ${2}, ${4} ]`],
             ['NUMBER' , code`${1}`],

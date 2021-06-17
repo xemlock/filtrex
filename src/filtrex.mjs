@@ -168,12 +168,18 @@ export function compileExpression(expression, options) {
     // Metaprogramming functions
 
     function prop(name, obj) {
-        return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
+        if (hasOwnProperty(obj||{}, name))
+            return obj[name];
+
+        throw new ReferenceError(`Property “${name}” does not exist.`)
     }
 
     function safeGetter(obj) {
         return function get(name) {
-            return hasOwnProperty(obj||{}, name) ? obj[name] : undefined;
+            if (hasOwnProperty(obj||{}, name))
+                return obj[name];
+
+            throw new ReferenceError(`Property “${name}” does not exist.`)
         }
     }
 

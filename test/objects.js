@@ -39,8 +39,8 @@ describe('Object support', () => {
             {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}
         )).equals("epic");
 
-        expect(compileExpression('something of nothing')({})).equals(undefined);
-        expect(compileExpression('toString of something')({ something: {}})).equals(undefined);
+        expect(compileExpression('something of nothing')({ nothing: undefined })).is.instanceOf(ReferenceError);
+        expect(compileExpression('toString of something')({ something: {}})).is.instanceOf(ReferenceError);
     });
 
 });

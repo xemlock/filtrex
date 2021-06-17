@@ -16,8 +16,6 @@ const eval = (str, obj) => compileExpression(str)(obj);
 
 describe('Various other things', () => {
 
-
-
     it('in / not in', () => {
         // value in array
         expect( eval('5 in (1, 2, 3, 4)') ).equals(false);
@@ -68,12 +66,12 @@ describe('Various other things', () => {
     });
 
     it('ternary operator', () => {
-        expect( eval('1 > 2 ? 3 : 4') ).equals(4);
-        expect( eval('1 < 2 ? 3 : 4') ).equals(3);
+        expect( eval('if 1 > 2 then 3 else 4') ).equals(4);
+        expect( eval('if 1 < 2 then 3 else 4') ).equals(3);
     });
 
     it('kitchensink', () => {
-        var kitchenSink = compileExpression('4 > lowNumber * 2 and (max(a, b) < 20 or foo) ? 1.1 : 9.4');
+        var kitchenSink = compileExpression('if 4 > lowNumber * 2 and (max(a, b) < 20 or foo) then 1.1 else 9.4');
         expect( kitchenSink({lowNumber: 1.5, a: 10, b: 12, foo: false}) ).equals(1.1);
         expect( kitchenSink({lowNumber: 3.5, a: 10, b: 12, foo: false}) ).equals(9.4);
     });

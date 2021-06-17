@@ -8,11 +8,7 @@ const { expect } = require("chai");
 describe('Security', () => {
 
     it('cannot access prototype symbols of data', () =>
-        expect(
-            compileExpression('toString')({})
-        ).equals(
-            undefined
-        )
+        expect(compileExpression('toString')({})).is.instanceOf(ReferenceError)
     );
 
 
@@ -33,7 +29,7 @@ describe('Security', () => {
 
 
     it('cannot access properties of the data prototype', () =>
-        expect( compileExpression('a')(Object.create({a: 42})) ).equals(undefined)
+        expect( compileExpression('a')(Object.create({a: 42})) ).is.instanceOf(ReferenceError)
     );
 
 
@@ -88,8 +84,8 @@ describe('Security', () => {
     it('blocks prototype access in custom property function', () => {
         expect(
             compileExpression('a', { customProp: (name, get) => get(name) })
-            (Object.create({ a:1 }))
-        ).equals(undefined);
+            (Object.create({ a: 1 }))
+        ).is.instanceOf(ReferenceError);
     });
 
 
