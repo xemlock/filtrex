@@ -1,4 +1,5 @@
-const Jison = require("./lib/jison").Jison;
+import { defaultTag } from "./utils.mjs";
+import { Jison } from "./lib/jison.mjs";
 
 function _code(fragments, params, skipParentheses) {
     const args = []
@@ -25,6 +26,10 @@ function code(fragments, ...params) {
 
 function parenless(fragments, ...params) {
     return _code(fragments, params, true)
+}
+
+function noop(...args) {
+    return [defaultTag(...args), parenless(...args)]
 }
 
 const _ = String.raw
@@ -119,13 +124,7 @@ const grammar = {
             ['e or e' , code`${bool}${1} || ${bool}${3}`],
             ['not e'  , code`! ${bool}${2}`],
 
-            ['e == e' , operatorCode],
-            ['e != e' , operatorCode],
-            ['e ~= e' , operatorCode],
-            ['e < e'  , operatorCode],
-            ['e <= e' , operatorCode],
-            ['e > e'  , operatorCode],
-            ['e >= e' , operatorCode],
+            ['e Relational e' , operatorCode, {prec: '=='}],
 
             ['if e then e else e', code`${bool}${2} ? ${4} : ${6}`],
             ['e in e', code`std.isSubset(${1}, ${3})`],
@@ -142,6 +141,15 @@ const grammar = {
             ['Symbol ( )', code`call(${1})`],
             ['Symbol ( Arguments )', code`call(${1}, ${3})`],
         ],
+        Relational: [
+            noop`==`,
+            noop`!=`,
+            noop`~=`,
+            noop`<`,
+            noop`<=`,
+            noop`>=`,
+            noop`>`,
+        ],
         Arguments: [
             ['e', parenless`${1}`],
             ['Arguments , e', parenless`${1}, ${3}`],
@@ -149,4 +157,4 @@ const grammar = {
     }
 };
 
-exports.parser = new Jison.Parser(grammar);
+export const parser = new Jison.Parser(grammar);

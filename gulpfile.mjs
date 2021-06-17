@@ -1,13 +1,24 @@
-// Compile parser
-const { parser } = require('./src/generateParser');
-const parserSourceCode = parser.generate({ moduleType: 'esm' })
+import { parser } from './src/generateParser.mjs'
+import { Readable, pipeline as _pipe } from 'stream'
+import { promisify } from 'util'
+import { rollup } from 'rollup'
 
-const Vinyl = require('vinyl')
+import Vinyl from 'vinyl'
+import beautify from 'gulp-beautify'
+import rename from 'gulp-rename'
+import del from 'del'
+
+// fml, this is the last time i develop for node
+const { src, dest } = (await import('gulp')).default
+const uglify = (await import('gulp-uglify-es')).default.default
+
+const pipe = promisify(_pipe)
+
 
 // Create file from string
 // via https://stackoverflow.com/a/23398200/1137334
 function srcFromString(path, str) {
-    var src = require('stream').Readable({ objectMode: true })
+    var src = Readable({ objectMode: true })
     src._read = function () {
       this.push(new Vinyl({
         cwd: '',
@@ -21,27 +32,19 @@ function srcFromString(path, str) {
 }
 
 
-const pipe = require('util').promisify(require('stream').pipeline)
-const { src, dest } = require('gulp')
-const beautify = require('gulp-beautify')
-const uglify = require('gulp-uglify-es').default
-const rename = require('gulp-rename')
-const del = require('del')
 
-const { rollup } = require('rollup')
+
 const SRC = './src'
 const DIST = './dist'
 
+const parserSourceCode = parser.generate({ moduleType: 'esm' })
 
-const clean =
-exports.clean =
-async function clean() {
+
+export async function clean() {
     await del(`${DIST}/**`)
 }
 
-const buildEsm =
-exports.buildEsm =
-async function buildEsm() {
+export async function buildEsm() {
     await pipe(
         srcFromString(`${SRC}/parser.mjs`, parserSourceCode),
         beautify({ indent_size: 4, end_with_newline: true }),
@@ -53,9 +56,7 @@ async function buildEsm() {
     )
 }
 
-const buildCjs =
-exports.buildCjs =
-async function buildCjs() {
+export async function buildCjs() {
     const bundle = await rollup({
         input: `${DIST}/esm/filtrex.mjs`
     });
@@ -68,9 +69,7 @@ async function buildCjs() {
     })
 }
 
-const buildBrowser =
-exports.buildBrowser =
-async function buildBrowser() {
+export async function buildBrowser() {
     const bundle = await rollup({
         input: `${DIST}/esm/filtrex.mjs`
     });
@@ -91,12 +90,11 @@ async function buildBrowser() {
     )
 }
 
-const build =
-exports.default =
-exports.build =
-async function build() {
+export async function build() {
     await clean()
     await buildEsm()
     await buildCjs()
     await buildBrowser()
 }
+
+export default build
