@@ -118,58 +118,58 @@ var filtrex = (function (exports) {
                     case 1:
                         return $$[$0 - 1];
                     case 2:
-                        this.$ = ["(", "", $$[$0 - 2], " + ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 3:
-                        this.$ = ["(", "", $$[$0 - 2], " - ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 4:
-                        this.$ = ["(", "", $$[$0 - 2], " * ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 5:
-                        this.$ = ["(", "", $$[$0 - 2], " / ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 6:
-                        this.$ = ["(", "", $$[$0 - 2], " % ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 7:
-                        this.$ = ["(", "Math.pow( ", $$[$0 - 2], ", ", $$[$0], " )", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 8:
                         this.$ = ["(", "- ", $$[$0], "", ")"];
                         break;
                     case 9:
-                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") && ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " && ", "std.coerceBoolean", "", $$[$0], "", ")"];
                         break;
                     case 10:
-                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") || ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " || ", "std.coerceBoolean", "", $$[$0], "", ")"];
                         break;
                     case 11:
-                        this.$ = ["(", "! ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
+                        this.$ = ["(", "! ", "std.coerceBoolean", "", $$[$0], "", ")"];
                         break;
                     case 12:
-                        this.$ = ["(", "", $$[$0 - 2], " === ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 13:
-                        this.$ = ["(", "", $$[$0 - 2], " !== ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 14:
-                        this.$ = ["(", "RegExp(", $$[$0], ").test(", $$[$0 - 2], ")", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 15:
-                        this.$ = ["(", "", $$[$0 - 2], " < ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 16:
-                        this.$ = ["(", "", $$[$0 - 2], " <= ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 17:
-                        this.$ = ["(", "", $$[$0 - 2], " > ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 18:
-                        this.$ = ["(", "", $$[$0 - 2], " >= ", $$[$0], "", ")"];
+                        this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 19:
-                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 4], ") ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 4], " ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
                         break;
                     case 20:
                         this.$ = ["(", "", $$[$0 - 1], "", ")"];
@@ -1793,6 +1793,108 @@ var filtrex = (function (exports) {
         }
     }
 
+
+    /**
+     * Mathematically correct modulo
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+
+    function mod(a, b) {
+        return (a % b + b) % b
+    }
+
+
+
+    // Type assertions/coertions
+
+    function num(value) {
+        const origValue = value;
+
+        if (value === undefined || value === null)
+            throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
+
+        if (Array.isArray(value) && value.length === 1)
+            value = value[0];
+
+        if (typeof value === 'object')
+            value = toPrimitive(value, 'number');
+
+        if (typeof value === 'number')
+            return value;
+
+        throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
+    }
+
+    function str(value) {
+        const origValue = value;
+
+        if (value === undefined || value === null)
+            throw new TypeError(`Expected a text, but got ${value} instead.`)
+
+        if (Array.isArray(value) && value.length === 1)
+            value = value[0];
+
+        if (typeof value === 'object')
+            value = toPrimitive(value, 'string');
+
+        if (typeof value === 'string')
+            return value;
+
+        throw new TypeError(`Expected a text, but got an ${typeof origValue} instead.`)
+    }
+
+    function numstr(value) {
+        const origValue = value;
+        let converted;
+
+        if (typeof value === 'string' || typeof value === 'number')
+            return value
+
+        if (value === undefined || value === null)
+            throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
+
+        if (Array.isArray(value) && value.length === 1)
+            value = value[0];
+
+        if (typeof value === 'object') {
+            converted = toPrimitive(value, 'number');
+
+            if (typeof converted === 'number')
+                return converted;
+
+            converted = toPrimitive(value, 'string');
+
+            if (typeof converted === 'string')
+                return converted;
+        }
+
+        throw new TypeError(`Expected a text or a numeric value, but got an ${typeof origValue} instead.`)
+    }
+
+    function bool(value) {
+        if (typeof value === 'boolean')
+            return value
+
+        if (typeof value === 'object' && value instanceof Boolean)
+            return value.valueOf();
+
+        throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
+    }
+
+    function arr(value) {
+        if (value === undefined || value === null) {
+            throw new TypeError(`Expected a list, but got ${value} instead.`)
+        }
+
+        if (Array.isArray(value)) {
+            return value;
+        } else {
+            return [value];
+        }
+    }
+
     // the parser is dynamically generated from generateParser.js at compile time
 
     // Shared utility functions
@@ -1807,49 +1909,14 @@ var filtrex = (function (exports) {
             throw new ReferenceError('Unknown function: ' + funcName + '()');
         },
 
-        coerceArray: function(value) {
-            if (value === undefined || value === null) {
-                throw new TypeError(`Expected a list, but got ${value} instead.`)
-            }
-
-            if (Array.isArray(value)) {
-                return value;
-            } else {
-                return [value];
-            }
-        },
-
-        coerceNumber: function (value) {
-            const origValue = value;
-
-            if (value === undefined || value === null)
-                throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
-
-            if (Array.isArray(value) && value.length === 1)
-                value = value[0];
-
-            if (typeof value === 'object')
-                value = toPrimitive(value);
-
-            if (typeof value === 'number' || typeof value === 'bigint')
-                return value;
-
-            throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
-        },
-
-        coerceBoolean: function(value) {
-            if (typeof value === 'boolean')
-                return value
-
-            if (typeof value === 'object' && value instanceof Boolean)
-                return value.valueOf();
-
-            throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
-        },
+        coerceArray: arr,
+        coerceNumber: num,
+        coerceNumberOrString: numstr,
+        coerceBoolean: bool,
 
         isSubset: function(a, b) {
-            const A = std.coerceArray(a);
-            const B = std.coerceArray(b);
+            const A = arr(a);
+            const B = arr(b);
             return A.every( val => B.includes(val) );
         },
 
@@ -1906,10 +1973,11 @@ var filtrex = (function (exports) {
         if (arguments.length > 2) throw new TypeError('Too many arguments.');
 
         options = typeof options === "object" ? options : {};
-        let {extraFunctions, customProp} = options;
-        for (let key of Object.getOwnPropertyNames(options))
+        let {extraFunctions, customProp, operators} = options;
+        for (const key of Object.keys(options))
         {
-            if (key !== "extraFunctions" && key !== "customProp") throw new TypeError(`Unknown option: ${key}`);
+            if (!(["extraFunctions", "customProp", "operators"].includes(key)))
+                throw new TypeError(`Unknown option: ${key}`);
         }
 
 
@@ -1931,12 +1999,38 @@ var filtrex = (function (exports) {
         };
 
         if (extraFunctions) {
-            for (var name in extraFunctions) {
-                if (hasOwnProperty(extraFunctions, name)) {
-                    functions[name] = extraFunctions[name];
-                }
+            for (const name of Object.keys(extraFunctions)) {
+                functions[name] = extraFunctions[name];
             }
         }
+
+        let defaultOperators = {
+            '+': (a, b) => numstr(a) + numstr(b),
+            '-': (a, b) => b === undefined ? -num(a) : num(a) - num(b),
+            '*': (a, b) => num(a) * num(b),
+            '/': (a, b) => num(a) / num(b),
+
+            '%': (a, b) => mod(num(a), num(b)),
+            '^': (a, b) => Math.pow(num(a), num(b)),
+
+            '==': (a, b) => a === b,
+            '!=': (a, b) => a !== b,
+
+            '<': (a, b) => num(a) < num(b),
+            '<=': (a, b) => num(a) <= num(b),
+            '>=': (a, b) => num(a) >= num(b),
+            '>': (a, b) => num(a) > num(b),
+
+            '~=': (a, b) => RegExp(str(b)).test(str(a))
+        };
+
+        if (operators) {
+            for (const name of Object.keys(operators)) {
+                defaultOperators[name] = operators[name];
+            }
+        }
+
+        operators = defaultOperators;
 
 
 
@@ -1984,11 +2078,11 @@ var filtrex = (function (exports) {
 
         // Patch together and return
 
-        let func = new Function('fns', 'std', 'prop', 'data', js.join(''));
+        let func = new Function('fns', 'ops', 'std', 'prop', 'data', js.join(''));
 
         return function(data) {
             try {
-                return func(functions, std, prop, data);
+                return func(functions, operators, std, prop, data);
             }
             catch (e)
             {

@@ -36,7 +36,7 @@
  *  * `x or y` Boolean or
  *  * `x and y` Boolean and
  *  * `not x` Boolean not
- *  * `x ? y : z` If boolean x, value y, else z
+ *  * `if x then y else z` If boolean x, value y, else z
  *  * `( x )` Explicity operator precedence
  *  * `( x, y, z )` Array of elements x, y and z
  *  * `abs(x)` Absolute value
@@ -64,7 +64,7 @@ export interface Options
      */
     extraFunctions?: {
         [T: string]: Function
-    },
+    }
 
     /**
      * If you want to do some more magic with your expression, you can supply a custom function
@@ -89,13 +89,38 @@ export interface Options
      *   (word, _, string) => containsWord(string, word)
      * );
      *
-     * myfilter("Bob is boring"); // returns 0
-     * myfilter("Bob met Alice"); // returns 1
-     * myfilter("Cecil is cool"); // returns 1
+     * myfilter("Bob is boring"); // returns false
+     * myfilter("Bob met Alice"); // returns true
+     * myfilter("Cecil is cool"); // returns true
      */
     customProp?: (
         name: string,
         get: (name: string) => any,
         object: any
     ) => any
+
+    /**
+     * This option lets you override operators like `+` and `>=` with custom functions.
+     */
+    operators?: Operators
+}
+
+export interface Operators {
+    '+'?: (a: any, b: any) => any
+    '-'?: (a: any, b?: any) => any
+    '*'?: (a: any, b: any) => any
+    '/'?: (a: any, b: any) => any
+
+    '%'?: (a: any, b: any) => any
+    '^'?: (a: any, b: any) => any
+
+    '==': (a: any, b: any) => boolean
+    '!=': (a: any, b: any) => boolean
+
+    '<'?: (a: any, b: any) => boolean
+    '>='?: (a: any, b: any) => boolean
+    '<='?: (a: any, b: any) => boolean
+    '>'?: (a: any, b: any) => boolean
+
+    '~='?: (a: any, b: any) => boolean
 }

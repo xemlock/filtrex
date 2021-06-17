@@ -28,7 +28,7 @@ function parenless(fragments, ...params) {
 }
 
 const bool = "std.coerceBoolean"
-const num = "std.coerceNumber"
+const operatorCode = code`ops['${2}'](${1}, ${3})`
 
 const grammar = {
     // Lexical tokens
@@ -106,24 +106,24 @@ const grammar = {
             ['e EOF', 'return $1;']
         ],
         e: [
-            ['e + e'  , code`${1} + ${3}`],
-            ['e - e'  , code`${1} - ${3}`],
-            ['e * e'  , code`${1} * ${3}`],
-            ['e / e'  , code`${1} / ${3}`],
-            ['e % e'  , code`${1} % ${3}`],
-            ['e ^ e'  , code`Math.pow( ${1}, ${3} )`],
+            ['e + e'  , operatorCode],
+            ['e - e'  , operatorCode],
+            ['e * e'  , operatorCode],
+            ['e / e'  , operatorCode],
+            ['e % e'  , operatorCode],
+            ['e ^ e'  , operatorCode],
             ['- e'    , code`- ${2}`, {prec: 'UMINUS'}],
-            ['e and e', code`${bool}(${1}) && ${bool}(${3})`],
-            ['e or e' , code`${bool}(${1}) || ${bool}(${3})`],
-            ['not e'  , code`! ${bool}(${2})`],
-            ['e == e' , code`${1} === ${3}`],
-            ['e != e' , code`${1} !== ${3}`],
-            ['e ~= e' , code`RegExp(${3}).test(${1})`],
-            ['e < e'  , code`${1} < ${3}`],
-            ['e <= e' , code`${1} <= ${3}`],
-            ['e > e'  , code`${1} > ${3}`],
-            ['e >= e' , code`${1} >= ${3}`],
-            ['if e then e else e', code`${bool}(${2}) ? ${4} : ${6}`],
+            ['e and e', code`${bool}${1} && ${bool}${3}`],
+            ['e or e' , code`${bool}${1} || ${bool}${3}`],
+            ['not e'  , code`! ${bool}${2}`],
+            ['e == e' , operatorCode],
+            ['e != e' , operatorCode],
+            ['e ~= e' , operatorCode],
+            ['e < e'  , operatorCode],
+            ['e <= e' , operatorCode],
+            ['e > e'  , operatorCode],
+            ['e >= e' , operatorCode],
+            ['if e then e else e', code`${bool}${2} ? ${4} : ${6}`],
             ['( e )'  , code`${2}`],
             ['( array , e )', code`[ ${2}, ${4} ]`],
             ['NUMBER' , code`${1}`],

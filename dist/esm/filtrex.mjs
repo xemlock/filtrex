@@ -1,6 +1,6 @@
 // the parser is dynamically generated from generateParser.js at compile time
 import { parser } from './parser.mjs'
-import { hasOwnProperty, toPrimitive } from './utils.mjs'
+import { hasOwnProperty, bool, num, numstr, mod, arr, str } from './utils.mjs'
 
 // Shared utility functions
 const std =
@@ -14,49 +14,14 @@ const std =
         throw new ReferenceError('Unknown function: ' + funcName + '()');
     },
 
-    coerceArray: function(value) {
-        if (value === undefined || value === null) {
-            throw new TypeError(`Expected a list, but got ${value} instead.`)
-        }
-
-        if (Array.isArray(value)) {
-            return value;
-        } else {
-            return [value];
-        }
-    },
-
-    coerceNumber: function (value) {
-        const origValue = value
-
-        if (value === undefined || value === null)
-            throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
-
-        if (Array.isArray(value) && value.length === 1)
-            value = value[0]
-
-        if (typeof value === 'object')
-            value = toPrimitive(value)
-
-        if (typeof value === 'number' || typeof value === 'bigint')
-            return value;
-
-        throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
-    },
-
-    coerceBoolean: function(value) {
-        if (typeof value === 'boolean')
-            return value
-
-        if (typeof value === 'object' && value instanceof Boolean)
-            return value.valueOf();
-
-        throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
-    },
+    coerceArray: arr,
+    coerceNumber: num,
+    coerceNumberOrString: numstr,
+    coerceBoolean: bool,
 
     isSubset: function(a, b) {
-        const A = std.coerceArray(a);
-        const B = std.coerceArray(b);
+        const A = arr(a);
+        const B = arr(b);
         return A.every( val => B.includes(val) );
     },
 
@@ -113,10 +78,11 @@ export function compileExpression(expression, options) {
     if (arguments.length > 2) throw new TypeError('Too many arguments.');
 
     options = typeof options === "object" ? options : {};
-    let {extraFunctions, customProp} = options;
-    for (let key of Object.getOwnPropertyNames(options))
+    let {extraFunctions, customProp, operators} = options;
+    for (const key of Object.keys(options))
     {
-        if (key !== "extraFunctions" && key !== "customProp") throw new TypeError(`Unknown option: ${key}`);
+        if (!(["extraFunctions", "customProp", "operators"].includes(key)))
+            throw new TypeError(`Unknown option: ${key}`);
     }
 
 
@@ -138,12 +104,38 @@ export function compileExpression(expression, options) {
     };
 
     if (extraFunctions) {
-        for (var name in extraFunctions) {
-            if (hasOwnProperty(extraFunctions, name)) {
-                functions[name] = extraFunctions[name];
-            }
+        for (const name of Object.keys(extraFunctions)) {
+            functions[name] = extraFunctions[name];
         }
     }
+
+    let defaultOperators = {
+        '+': (a, b) => numstr(a) + numstr(b),
+        '-': (a, b) => b === undefined ? -num(a) : num(a) - num(b),
+        '*': (a, b) => num(a) * num(b),
+        '/': (a, b) => num(a) / num(b),
+
+        '%': (a, b) => mod(num(a), num(b)),
+        '^': (a, b) => Math.pow(num(a), num(b)),
+
+        '==': (a, b) => a === b,
+        '!=': (a, b) => a !== b,
+
+        '<': (a, b) => num(a) < num(b),
+        '<=': (a, b) => num(a) <= num(b),
+        '>=': (a, b) => num(a) >= num(b),
+        '>': (a, b) => num(a) > num(b),
+
+        '~=': (a, b) => RegExp(str(b)).test(str(a))
+    };
+
+    if (operators) {
+        for (const name of Object.keys(operators)) {
+            defaultOperators[name] = operators[name];
+        }
+    }
+
+    operators = defaultOperators
 
 
 
@@ -191,11 +183,11 @@ export function compileExpression(expression, options) {
 
     // Patch together and return
 
-    let func = new Function('fns', 'std', 'prop', 'data', js.join(''));
+    let func = new Function('fns', 'ops', 'std', 'prop', 'data', js.join(''));
 
     return function(data) {
         try {
-            return func(functions, std, prop, data);
+            return func(functions, operators, std, prop, data);
         }
         catch (e)
         {
