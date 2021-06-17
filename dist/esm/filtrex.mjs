@@ -110,8 +110,6 @@ export function compileExpression(expression, options) {
     }
 
     let defaultOperators = {
-        juxtapos: (a, b) => num(a) * num(b),
-
         '+': (a, b) => numstr(a) + numstr(b),
         '-': (a, b) => b === undefined ? -num(a) : num(a) - num(b),
         '*': (a, b) => num(a) * num(b),

@@ -96,7 +96,6 @@ const grammar = {
         ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
-        ['left', 'JUXTAPOS'],
         ['left', '^'],
         ['left', 'not'],
         ['left', 'UMINUS'],
@@ -106,10 +105,6 @@ const grammar = {
     bnf: {
         expressions: [ // Entry point
             ['e EOF', 'return $1;']
-        ],
-        NumberOrSymbol: [
-            ['Number' , parenless`${1}`],
-            ['Symbol' , parenless`prop(${1}, data)`],
         ],
         e: [
             ['- e'    , code`ops['-'](${2})`, {prec: 'UMINUS'}],
@@ -139,18 +134,13 @@ const grammar = {
             ['( e )'  , code`${2}`],
             ['( Arguments , e )', code`[ ${2}, ${4} ]`],
 
-            ['NumberOrSymbol', code`${1}`],
+            ['Number' , code`${1}`],
+            ['Symbol' , code`prop(${1}, data)`],
             ['String' , code`${1}`],
             ['Symbol of e', code`prop(${1}, ${3})`],
 
             ['Symbol ( )', code`call(${1})`],
             ['Symbol ( Arguments )', code`call(${1}, ${3})`],
-
-            ['NumberOrSymbol Juxtaposed', code`ops.juxtapos(${1}, ${2})`, {prec: 'JUXTAPOS'}],
-        ],
-        Juxtaposed: [
-            ['NumberOrSymbol', parenless`${1}`, {prec: 'JUXTAPOS'}],
-            ['Juxtaposed NumberOrSymbol', parenless`ops.juxtapos(${1},${2})`, {prec: 'JUXTAPOS'}],
         ],
         Arguments: [
             ['e', parenless`${1}`],

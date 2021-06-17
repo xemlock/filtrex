@@ -15,9 +15,10 @@ describe('Arithmetics', () => {
         expect( eval('2 * 3 + 1') ).equals(7);
         expect( eval('1 + (2 * 3)') ).equals(7);
         expect( eval('(1 + 2) * 3') ).equals(9);
-        expect( eval('((1 + 2) * 3 / 2 + 1 - 4 + (2 ^ 3)) * -2') ).equals(-19);
+        expect( eval('((1 + 2) * 3 / 2 + 1 - 4 + 2 ^ 3) * -2') ).equals(-19);
         expect( eval('1.4 * 1.1') ).equals(1.54);
         expect( eval('97 % 10') ).equals(7);
+        expect( eval('2 * 3 ^ 2') ).equals(18)
     });
 
 
@@ -99,15 +100,6 @@ describe('Arithmetics', () => {
         expect( eval('11 % 2') ).equals(1)
         expect( eval('-1 % 2') ).equals(1)
         expect( eval('-0.1 % 5') ).equals(4.9)
-    })
-
-    it('does implicit multiplication', () => {
-        const data = { a: 2, b: 3, pi: Math.PI, radius: 5 }
-
-        expect( eval('a b', data) ).equals(6)
-        expect( eval('2 a', data) ).equals(4)
-        expect( eval('2a', data) ).equals(4)
-        expect( eval('2b^2', data) ).equals(18)
     })
 
 });
