@@ -29,11 +29,6 @@ describe('Object support', () => {
         expect( compileExpression('$_.0$$')({'$_.0$$': 123}) ).equals(123);
     });
 
-    it('disallows symbols starting with numerals', () => {
-        expect( () => compileExpression('0hey') ).throws();
-        expect( () => compileExpression('123.456hey') ).throws();
-    })
-
     it('includes object property accessors', () => {
         expect(compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(
             {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}

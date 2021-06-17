@@ -27,6 +27,8 @@ function parenless(fragments, ...params) {
     return _code(fragments, params, true)
 }
 
+const _ = String.raw
+
 const bool = "std.coerceBoolean"
 const operatorCode = code`ops['${2}'](${1}, ${3})`
 
@@ -34,51 +36,51 @@ const grammar = {
     // Lexical tokens
     lex: {
         rules: [
-            ['\\*', 'return "*";'],
-            ['\\/', 'return "/";'],
-            ['-'  , 'return "-";'],
-            ['\\+', 'return "+";'],
-            ['\\^', 'return "^";'],
-            ['\\%', 'return "%";'],
-            ['\\(', 'return "(";'],
-            ['\\)', 'return ")";'],
-            ['\\,', 'return ",";'],
-            ['==', 'return "==";'],
-            ['\\!=', 'return "!=";'],
-            ['\\~=', 'return "~=";'],
-            ['>=', 'return ">=";'],
-            ['<=', 'return "<=";'],
-            ['<', 'return "<";'],
-            ['>', 'return ">";'],
-            ['and[^\\w]', 'return "and";'],
-            ['or[^\\w]' , 'return "or";'],
-            ['not[^\\w]', 'return "not";'],
-            ['in[^\\w]', 'return "in";'],
-            ['of[^\\w]', 'return "of";'],
-            ['if[^\\w]', 'return "if";'],
-            ['then[^\\w]', 'return "then";'],
-            ['else[^\\w]', 'return "else";'],
+            [_`\*`, `return "*" ;`],
+            [_`\/`, `return "/" ;`],
+            [_`-` , `return "-" ;`],
+            [_`\+`, `return "+" ;`],
+            [_`\^`, `return "^" ;`],
+            [_`\%`, `return "%" ;`],
+            [_`\(`, `return "(" ;`],
+            [_`\)`, `return ")" ;`],
+            [_`\,`, `return "," ;`],
+            [_`==`, `return "==";`],
+            [_`\!=`,`return "!=";`],
+            [_`\~=`,`return "~=";`],
+            [_`>=`, `return ">=";`],
+            [_`<=`, `return "<=";`],
+            [_`<` , `return "<" ;`],
+            [_`>` , `return ">" ;`],
+            [_`and[^\w]` , `return "and" ;`],
+            [_`or[^\w]`  , `return "or"  ;`],
+            [_`not[^\w]` , `return "not" ;`],
+            [_`in[^\w]`  , `return "in"  ;`],
+            [_`of[^\w]`  , `return "of"  ;`],
+            [_`if[^\w]`  , `return "if"  ;`],
+            [_`then[^\w]`, `return "then";`],
+            [_`else[^\w]`, `return "else";`],
 
-            ['\\s+',  ''], // skip whitespace
-            ['[0-9]+(?:\\.[0-9]+)?\\b', 'return "NUMBER";'], // 212.321
+            [_`\s+`,  ''], // skip whitespace
+            [_`[0-9]+(?:\.[0-9]+)?(?![0-9\.])`, `return "Number";`], // 212.321
 
-            ['[a-zA-Z$_][\\.a-zA-Z0-9$_]*',
+            [_`[a-zA-Z$_][\.a-zA-Z0-9$_]*`,
                 `yytext = JSON.stringify(yytext);
-                return "SYMBOL";`
+                return "Symbol";`
             ], // some.Symbol22
 
-            [`'(?:\\\\'|\\\\\\\\|[^'\\\\])*'`,
+            [_`'(?:\\'|\\\\|[^'\\])*'`,
                 `yytext = yy.buildString("'", yytext);
-                return "SYMBOL";`
+                return "Symbol";`
             ], // 'any \'escaped\' symbol'
 
-            [`"(?:\\\\"|\\\\\\\\|[^"\\\\])*"`,
+            [_`"(?:\\"|\\\\|[^"\\])*"`,
                 `yytext = yy.buildString('"', yytext);
-                return "STRING";`
+                return "String";`
             ], // "any \"escaped\" string"
 
             // End
-            ['$', 'return "EOF";'],
+            [_`$`, 'return "EOF";'],
         ]
     },
     // Operator precedence - lowest precedence first.
@@ -91,10 +93,10 @@ const grammar = {
         ['left', 'or'],
         ['left', 'and'],
         ['left', 'in'],
-        ['left', '==', '!=', '~='],
-        ['left', '<', '<=', '>', '>='],
+        ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
+        ['left', 'JUXTAPOS'],
         ['left', '^'],
         ['left', 'not'],
         ['left', 'UMINUS'],
@@ -105,17 +107,23 @@ const grammar = {
         expressions: [ // Entry point
             ['e EOF', 'return $1;']
         ],
+        NumberOrSymbol: [
+            ['Number' , parenless`${1}`],
+            ['Symbol' , parenless`prop(${1}, data)`],
+        ],
         e: [
+            ['- e'    , code`ops['-'](${2})`, {prec: 'UMINUS'}],
             ['e + e'  , operatorCode],
             ['e - e'  , operatorCode],
             ['e * e'  , operatorCode],
             ['e / e'  , operatorCode],
             ['e % e'  , operatorCode],
             ['e ^ e'  , operatorCode],
-            ['- e'    , code`ops['-'](${2})`, {prec: 'UMINUS'}],
+
             ['e and e', code`${bool}${1} && ${bool}${3}`],
             ['e or e' , code`${bool}${1} || ${bool}${3}`],
             ['not e'  , code`! ${bool}${2}`],
+
             ['e == e' , operatorCode],
             ['e != e' , operatorCode],
             ['e ~= e' , operatorCode],
@@ -123,29 +131,30 @@ const grammar = {
             ['e <= e' , operatorCode],
             ['e > e'  , operatorCode],
             ['e >= e' , operatorCode],
+
             ['if e then e else e', code`${bool}${2} ? ${4} : ${6}`],
-            ['( e )'  , code`${2}`],
-            ['( array , e )', code`[ ${2}, ${4} ]`],
-            ['NUMBER' , code`${1}`],
-            ['STRING' , code`${1}`],
-            ['SYMBOL' , code`prop(${1}, data)`],
-            ['SYMBOL of e', code`prop(${1}, ${3})`],
-            ['SYMBOL ( )', code`std.isfn(fns, ${1}) ? fns[${1}]() : std.unknown(${1})`],
-            ['SYMBOL ( argsList )', code`std.isfn(fns, ${1}) ? fns[${1}](${3}) : std.unknown(${1})`],
             ['e in e', code`std.isSubset(${1}, ${3})`],
             ['e not in e', code`!std.isSubset(${1}, ${4})`],
+
+            ['( e )'  , code`${2}`],
+            ['( Arguments , e )', code`[ ${2}, ${4} ]`],
+
+            ['NumberOrSymbol', code`${1}`],
+            ['String' , code`${1}`],
+            ['Symbol of e', code`prop(${1}, ${3})`],
+
+            ['Symbol ( )', code`call(${1})`],
+            ['Symbol ( Arguments )', code`call(${1}, ${3})`],
+
+            ['NumberOrSymbol Juxtaposed', code`ops.juxtapos(${1}, ${2})`, {prec: 'JUXTAPOS'}],
         ],
-        argsList: [
+        Juxtaposed: [
+            ['NumberOrSymbol', parenless`${1}`, {prec: 'JUXTAPOS'}],
+            ['Juxtaposed NumberOrSymbol', parenless`ops.juxtapos(${1},${2})`, {prec: 'JUXTAPOS'}],
+        ],
+        Arguments: [
             ['e', parenless`${1}`],
-            ['argsList , e', parenless`${1}, ${3}`],
-        ],
-        inSet: [
-            ['e', parenless`o === ${1}`],
-            ['inSet , e', parenless`${1} || o === ${3}`],
-        ],
-        array: [
-            ['e', parenless`${1}`],
-            ['array , e', parenless`${1}, ${3}`],
+            ['Arguments , e', parenless`${1}, ${3}`],
         ],
     }
 };

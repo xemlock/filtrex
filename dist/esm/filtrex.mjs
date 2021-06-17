@@ -110,6 +110,8 @@ export function compileExpression(expression, options) {
     }
 
     let defaultOperators = {
+        juxtapos: (a, b) => num(a) * num(b),
+
         '+': (a, b) => numstr(a) + numstr(b),
         '-': (a, b) => b === undefined ? -num(a) : num(a) - num(b),
         '*': (a, b) => num(a) * num(b),
@@ -168,15 +170,24 @@ export function compileExpression(expression, options) {
         prop = (name, obj) => customProp(name, safeGetter(obj), obj);
     }
 
+    function createCall(fns) {
+        return function call(name, ...args) {
+            if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
+                return fns[name](...args)
+
+            throw new ReferenceError(`Unknown function: ${name}()`);
+        }
+    }
+
 
 
     // Patch together and return
 
-    let func = new Function('fns', 'ops', 'std', 'prop', 'data', js.join(''));
+    let func = new Function('call', 'ops', 'std', 'prop', 'data', js.join(''));
 
     return function(data) {
         try {
-            return func(functions, operators, std, prop, data);
+            return func(createCall(functions), operators, std, prop, data);
         }
         catch (e)
         {

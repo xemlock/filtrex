@@ -106,6 +106,8 @@ export interface Options
 }
 
 export interface Operators {
+    juxtapos?: (a: any, b: any) => any
+
     '+'?: (a: any, b: any) => any
     '-'?: (a: any, b?: any) => any
     '*'?: (a: any, b: any) => any

@@ -101,4 +101,13 @@ describe('Arithmetics', () => {
         expect( eval('-0.1 % 5') ).equals(4.9)
     })
 
+    it('does implicit multiplication', () => {
+        const data = { a: 2, b: 3, pi: Math.PI, radius: 5 }
+
+        expect( eval('a b', data) ).equals(6)
+        expect( eval('2 a', data) ).equals(4)
+        expect( eval('2a', data) ).equals(4)
+        expect( eval('2b^2', data) ).equals(18)
+    })
+
 });
