@@ -1,36 +1,5 @@
-import { defaultTag } from "./utils.mjs"
+import { code, parenless, noopTag as noop } from "./utils.mjs"
 import { Jison } from "./lib/jison.mjs"
-
-function _code(fragments, params, skipParentheses) {
-    const args = []
-
-    for (let i = 0; i < fragments.length - 1; i++) {
-        args.push(fragments[i])
-        args.push(params[i])
-    }
-
-    args.push(fragments[fragments.length - 1])
-
-    const argsJs = args.map(function(a) {
-        return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a)
-    }).join(',')
-
-    return skipParentheses
-            ? '$$ = [' + argsJs + '];'
-            : '$$ = ["(", ' + argsJs + ', ")"];';
-}
-
-function code(fragments, ...params) {
-    return _code(fragments, params, false)
-}
-
-function parenless(fragments, ...params) {
-    return _code(fragments, params, true)
-}
-
-function noop(...args) {
-    return [defaultTag(...args), parenless(...args)]
-}
 
 const _ = String.raw
 
@@ -124,8 +93,6 @@ const grammar = {
             ['e or e' , code`${bool}${1} || ${bool}${3}`],
             ['not e'  , code`! ${bool}${2}`],
 
-            ['e Relational e' , operatorCode, {prec: '=='}],
-
             ['if e then e else e', code`${bool}${2} ? ${4} : ${6}`],
             ['e in e', code`std.isSubset(${1}, ${3})`],
             ['e not in e', code`!std.isSubset(${1}, ${4})`],
@@ -140,15 +107,16 @@ const grammar = {
 
             ['Symbol ( )', code`call(${1})`],
             ['Symbol ( Arguments )', code`call(${1}, ${3})`],
+
+            ['Relation' , `$$ = yy.reduceRelation($1);`, {prec: '=='}],
         ],
-        Relational: [
-            noop`==`,
-            noop`!=`,
-            noop`~=`,
-            noop`<`,
-            noop`<=`,
-            noop`>=`,
-            noop`>`,
+        RelationalOperator: [
+            noop`==`, noop`!=`, noop`~=`, noop`<`,
+            noop`<=`, noop`>=`, noop`>`,
+        ],
+        Relation: [
+            ['e RelationalOperator e', `$$ = [$1, $2, $3];`, {prec: '=='}],
+            ['Relation RelationalOperator e', `$$ = [...$1, $2, $3]`, {prec: '=='}],
         ],
         Arguments: [
             ['e', parenless`${1}`],

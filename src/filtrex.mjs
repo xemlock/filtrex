@@ -1,16 +1,16 @@
 // the parser is dynamically generated from generateParser.js at compile time
 import { parser } from './parser.mjs'
-import { hasOwnProperty, bool, num, numstr, mod, arr, str, flatten } from './utils.mjs'
+import { hasOwnProperty, bool, num, numstr, mod, arr, str, flatten, code } from './utils.mjs'
 
 // Shared utility functions
 const std =
 {
 
-    isfn: function(fns, funcName) {
+    isfn(fns, funcName) {
         return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function"
     },
 
-    unknown: function(funcName) {
+    unknown(funcName) {
         throw new ReferenceError('Unknown function: ' + funcName + '()')
     },
 
@@ -19,13 +19,13 @@ const std =
     coerceNumberOrString: numstr,
     coerceBoolean: bool,
 
-    isSubset: function(a, b) {
+    isSubset(a, b) {
         const A = arr(a)
         const B = arr(b)
         return A.every( val => B.includes(val) )
     },
 
-    buildString: function(quote, literal)
+    buildString(quote, literal)
     {
         quote = String(quote)[0]
         literal = String(literal)
@@ -56,7 +56,21 @@ const std =
         }
 
         return JSON.stringify(built)
-    }
+    },
+
+    reduceRelation(arr) {
+        const result = []
+
+        // TODO cache results, don't compute them twice
+
+        for (let i = 1; i < arr.length - 1; i += 2) {
+            const a = flatten([arr[i-1]]).join('')
+            const b = flatten([arr[i+1]]).join('')
+            result.push( `ops["${arr[i]}"](${a}, ${b})` )
+        }
+
+        return '(' + result.join(' && ') + ')'
+    },
 }
 
 parser.yy = Object.create(std)

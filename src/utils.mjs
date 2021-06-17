@@ -144,3 +144,35 @@ export function defaultTag(strings, ...keys) {
         .reduce((p, s, i) => p + s + keys[i], '')
         + strings[lastIndex]
 }
+
+
+function _code(fragments, params, skipParentheses) {
+    const args = []
+
+    for (let i = 0; i < fragments.length - 1; i++) {
+        args.push(fragments[i])
+        args.push(params[i])
+    }
+
+    args.push(fragments[fragments.length - 1])
+
+    const argsJs = args.map(function(a) {
+        return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a)
+    }).join(',')
+
+    return skipParentheses
+            ? '$$ = [' + argsJs + '];'
+            : '$$ = ["(", ' + argsJs + ', ")"];';
+}
+
+export function code(fragments, ...params) {
+    return _code(fragments, params, false)
+}
+
+export function parenless(fragments, ...params) {
+    return _code(fragments, params, true)
+}
+
+export function noopTag(...args) {
+    return [defaultTag(...args), parenless(...args)]
+}
