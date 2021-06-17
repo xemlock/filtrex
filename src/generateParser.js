@@ -112,7 +112,7 @@ const grammar = {
             ['e / e'  , operatorCode],
             ['e % e'  , operatorCode],
             ['e ^ e'  , operatorCode],
-            ['- e'    , code`- ${2}`, {prec: 'UMINUS'}],
+            ['- e'    , code`ops['-'](${2})`, {prec: 'UMINUS'}],
             ['e and e', code`${bool}${1} && ${bool}${3}`],
             ['e or e' , code`${bool}${1} || ${bool}${3}`],
             ['not e'  , code`! ${bool}${2}`],
