@@ -137,7 +137,7 @@ var _parser = (function() {
                     this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                     break;
                 case 8:
-                    this.$ = ["(", "- ", $$[$0], "", ")"];
+                    this.$ = ["(", "ops['-'](", $$[$0], ")", ")"];
                     break;
                 case 9:
                     this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " && ", "std.coerceBoolean", "", $$[$0], "", ")"];
@@ -1757,43 +1757,6 @@ function hasOwnProperty(obj, prop) {
     return false
 }
 
-/**
- * Safe getter for `v[Symbol.toPrimitive]`.
- */
-const _toPrimitive =
-    typeof Symbol !== "function" || typeof Symbol.toPrimitive !== "symbol"
-    ? () => undefined
-    : (v) => {
-        if (typeof v[Symbol.toPrimitive] === "function") {
-            return v[Symbol.toPrimitive]
-        }
-
-        return undefined
-    };
-
-/**
- * Attempt to convert an object to the required primitive type.
- * @param {object} obj
- * @param {"string"|"number"|"bigint"} type
- * @returns {string|number|bigint|undefined}
- */
-function toPrimitive(obj, type) {
-    if (typeof obj !== "object" || typeof obj !== "function") {
-        return undefined
-    }
-
-    try {
-        let val = _toPrimitive(obj)(type);
-        if (typeof val === type) return val
-
-        val = obj.valueOf();
-        if (typeof val === type) return val
-
-    } finally {
-        return undefined
-    }
-}
-
 
 /**
  * Mathematically correct modulo
@@ -1807,81 +1770,81 @@ function mod(a, b) {
 }
 
 
+/**
+ * Converts instances of Number, String and Boolean to primitives
+ */
+function unbox(value) {
+    if (typeof value !== 'object')
+        return value
+
+    if (value instanceof Number || value instanceof String || value instanceof Boolean)
+        return value.valueOf()
+}
+
+
+/**
+ * Unboxes value and unwraps it from a single-element array
+ */
+function unwrap(value) {
+    if (Array.isArray(value) && value.length === 1)
+        value = value[0];
+
+    return unbox(value)
+}
+
+
+/**
+ * Returns the type of a value in a neat, user-readable way
+ */
+function prettyType(value) {
+    value = unwrap(value);
+
+    if (value === undefined) return 'undefined'
+    if (value === null) return 'null'
+    if (value === true) return 'true'
+    if (value === false) return 'false'
+
+    if (typeof value === 'number') return 'number'
+    if (typeof value === 'string') return 'text'
+
+    if (typeof value !== 'object' && typeof value !== 'function')
+        return 'unknown type'
+
+    if (Array.isArray(value)) return 'list'
+
+    return 'object'
+}
+
+
 
 // Type assertions/coertions
 
 function num(value) {
-    const origValue = value;
+    value = unwrap(value);
+    if (typeof value === 'number') return value
 
-    if (value === undefined || value === null)
-        throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
-
-    if (Array.isArray(value) && value.length === 1)
-        value = value[0];
-
-    if (typeof value === 'object')
-        value = toPrimitive(value, 'number');
-
-    if (typeof value === 'number')
-        return value;
-
-    throw new TypeError(`Expected a numeric value, but got an ${typeof origValue} instead.`)
+    throw new TypeError(`Expected a number, but got a ${prettyType(value)} instead.`)
 }
 
 function str(value) {
-    const origValue = value;
+    value = unwrap(value);
+    if (typeof value === 'string') return value
 
-    if (value === undefined || value === null)
-        throw new TypeError(`Expected a text, but got ${value} instead.`)
-
-    if (Array.isArray(value) && value.length === 1)
-        value = value[0];
-
-    if (typeof value === 'object')
-        value = toPrimitive(value, 'string');
-
-    if (typeof value === 'string')
-        return value;
-
-    throw new TypeError(`Expected a text, but got an ${typeof origValue} instead.`)
+    throw new TypeError(`Expected a text, but got a ${prettyType(value)} instead.`)
 }
 
 function numstr(value) {
-    const origValue = value;
-    let converted;
+    value = unwrap(value);
+    if (typeof value === 'string' || typeof value === 'number') return value
 
-    if (typeof value === 'string' || typeof value === 'number')
-        return value
-
-    if (value === undefined || value === null)
-        throw new TypeError(`Expected a numeric value, but got ${value} instead.`)
-
-    if (Array.isArray(value) && value.length === 1)
-        value = value[0];
-
-    if (typeof value === 'object') {
-        converted = toPrimitive(value, 'number');
-
-        if (typeof converted === 'number')
-            return converted;
-
-        converted = toPrimitive(value, 'string');
-
-        if (typeof converted === 'string')
-            return converted;
-    }
-
-    throw new TypeError(`Expected a text or a numeric value, but got an ${typeof origValue} instead.`)
+    throw new TypeError(`Expected a text or a number, but got a ${prettyType(value)} instead.`)
 }
 
 function bool(value) {
-    if (typeof value === 'boolean')
-        return value
+    value = unwrap(value);
+    if (typeof value === 'boolean') return value
 
-    if (typeof value === 'object' && value instanceof Boolean)
-        return value.valueOf();
-
-    throw new TypeError(`Expected a boolean (“true” or “false”) value, but got an ${typeof value} instead.`)
+    throw new TypeError(`Expected a logical value (“true” or “false”), but got a ${prettyType(value)} instead.`)
 }
 
 function arr(value) {
@@ -1895,6 +1858,26 @@ function arr(value) {
         return [value];
     }
 }
+
+/**
+ * Array.flat polyfill from MDN
+ */
+function flatten(input) {
+    const stack = [...input];
+    const res = [];
+    while(stack.length) {
+      // pop value from stack
+      const next = stack.pop();
+      if(Array.isArray(next)) {
+        // push back array items, won't modify the original input
+        stack.push(...next);
+      } else {
+        res.push(next);
+      }
+    }
+    // reverse to restore input order
+    return res.reverse();
+  }
 
 // the parser is dynamically generated from generateParser.js at compile time
 
@@ -2037,20 +2020,9 @@ function compileExpression(expression, options) {
 
     // Compile the expression
 
-    let tree = parser.parse(expression);
-
-    let js = [];
-    js.push('return ');
-    function toJs(node) {
-        if (Array.isArray(node)) {
-            node.forEach(toJs);
-        } else {
-            js.push(node);
-        }
-    }
-    tree.forEach(toJs);
+    let js = flatten( parser.parse(expression) );
+    js.unshift('return ');
     js.push(';');
-
 
 
     // Metaprogramming functions

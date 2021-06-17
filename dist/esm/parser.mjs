@@ -134,7 +134,7 @@ var _parser = (function() {
                     this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                     break;
                 case 8:
-                    this.$ = ["(", "- ", $$[$0], "", ")"];
+                    this.$ = ["(", "ops['-'](", $$[$0], ")", ")"];
                     break;
                 case 9:
                     this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " && ", "std.coerceBoolean", "", $$[$0], "", ")"];

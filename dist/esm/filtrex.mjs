@@ -1,6 +1,6 @@
 // the parser is dynamically generated from generateParser.js at compile time
 import { parser } from './parser.mjs'
-import { hasOwnProperty, bool, num, numstr, mod, arr, str } from './utils.mjs'
+import { hasOwnProperty, bool, num, numstr, mod, arr, str, flatten } from './utils.mjs'
 
 // Shared utility functions
 const std =
@@ -141,20 +141,9 @@ export function compileExpression(expression, options) {
 
     // Compile the expression
 
-    let tree = parser.parse(expression);
-
-    let js = [];
-    js.push('return ');
-    function toJs(node) {
-        if (Array.isArray(node)) {
-            node.forEach(toJs);
-        } else {
-            js.push(node);
-        }
-    }
-    tree.forEach(toJs);
+    let js = flatten( parser.parse(expression) );
+    js.unshift('return ');
     js.push(';');
-
 
 
     // Metaprogramming functions

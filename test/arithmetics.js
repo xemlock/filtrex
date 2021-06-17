@@ -93,4 +93,12 @@ describe('Arithmetics', () => {
         expect( eval('not T and F', obj)    ).equals(false);
     });
 
+
+    it('does modulo correctly', () => {
+        expect( eval('10 % 2') ).equals(0)
+        expect( eval('11 % 2') ).equals(1)
+        expect( eval('-1 % 2') ).equals(1)
+        expect( eval('-0.1 % 5') ).equals(4.9)
+    })
+
 });
