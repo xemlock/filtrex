@@ -1737,10 +1737,10 @@ var filtrex = (function (exports) {
     function flatten(input) {
         const stack = [...input];
         const res = [];
-        while(stack.length) {
+        while (stack.length) {
             // pop value from stack
             const next = stack.pop();
-            if(Array.isArray(next)) {
+            if (Array.isArray(next)) {
                 // push back array items, won't modify the original input
                 stack.push(...next);
             } else {
@@ -1748,7 +1748,7 @@ var filtrex = (function (exports) {
             }
         }
         // reverse to restore input order
-        return res.reverse();
+        return res.reverse()
     }
 
     // the parser is dynamically generated from generateParser.js at compile time
@@ -1758,11 +1758,11 @@ var filtrex = (function (exports) {
     {
 
         isfn: function(fns, funcName) {
-            return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function";
+            return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function"
         },
 
         unknown: function(funcName) {
-            throw new ReferenceError('Unknown function: ' + funcName + '()');
+            throw new ReferenceError('Unknown function: ' + funcName + '()')
         },
 
         coerceArray: arr,
@@ -1773,7 +1773,7 @@ var filtrex = (function (exports) {
         isSubset: function(a, b) {
             const A = arr(a);
             const B = arr(b);
-            return A.every( val => B.includes(val) );
+            return A.every( val => B.includes(val) )
         },
 
         buildString: function(quote, literal)
@@ -1783,22 +1783,22 @@ var filtrex = (function (exports) {
             let built = '';
 
             if (literal[0] !== quote || literal[literal.length-1] !== quote)
-                throw new Error(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`);
+                throw new Error(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
 
             for (let i = 1; i < literal.length - 1; i++)
             {
                 if (literal[i] === "\\")
                 {
                     i++;
-                    if (i >= literal.length - 1) throw new Error(`Unexpected internal error: Unescaped backslash at the end of string literal.`);
+                    if (i >= literal.length - 1) throw new Error(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
 
                     if (literal[i] === "\\") built += '\\';
                     else if (literal[i] === quote) built += quote;
-                    else throw new Error(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`);
+                    else throw new Error(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
                 }
                 else if (literal[i] === quote)
                 {
-                    throw new Error(`Unexpected internal error: String literal contains unescaped quotation mark.`);
+                    throw new Error(`Unexpected internal error: String literal contains unescaped quotation mark.`)
                 }
                 else
                 {
@@ -1806,7 +1806,7 @@ var filtrex = (function (exports) {
                 }
             }
 
-            return JSON.stringify(built);
+            return JSON.stringify(built)
         }
     };
 
@@ -1826,14 +1826,14 @@ var filtrex = (function (exports) {
 
         // Check and coerce arguments
 
-        if (arguments.length > 2) throw new TypeError('Too many arguments.');
+        if (arguments.length > 2) throw new TypeError('Too many arguments.')
 
         options = typeof options === "object" ? options : {};
         let {extraFunctions, customProp, operators} = options;
         for (const key of Object.keys(options))
         {
             if (!(["extraFunctions", "customProp", "operators"].includes(key)))
-                throw new TypeError(`Unknown option: ${key}`);
+                throw new TypeError(`Unknown option: ${key}`)
         }
 
 
@@ -1901,7 +1901,7 @@ var filtrex = (function (exports) {
 
         function prop(name, obj) {
             if (hasOwnProperty(obj||{}, name))
-                return obj[name];
+                return obj[name]
 
             throw new ReferenceError(`Property “${name}” does not exist.`)
         }
@@ -1909,7 +1909,7 @@ var filtrex = (function (exports) {
         function safeGetter(obj) {
             return function get(name) {
                 if (hasOwnProperty(obj||{}, name))
-                    return obj[name];
+                    return obj[name]
 
                 throw new ReferenceError(`Property “${name}” does not exist.`)
             }
@@ -1924,7 +1924,7 @@ var filtrex = (function (exports) {
                 if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
                     return fns[name](...args)
 
-                throw new ReferenceError(`Unknown function: ${name}()`);
+                throw new ReferenceError(`Unknown function: ${name}()`)
             }
         }
 
@@ -1936,11 +1936,11 @@ var filtrex = (function (exports) {
 
         return function(data) {
             try {
-                return func(createCall(functions), operators, std, prop, data);
+                return func(createCall(functions), operators, std, prop, data)
             }
             catch (e)
             {
-                return e;
+                return e
             }
         };
     }

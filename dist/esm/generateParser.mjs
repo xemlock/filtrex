@@ -1,5 +1,5 @@
-import { defaultTag } from "./utils.mjs";
-import { Jison } from "./lib/jison.mjs";
+import { defaultTag } from "./utils.mjs"
+import { Jison } from "./lib/jison.mjs"
 
 function _code(fragments, params, skipParentheses) {
     const args = []
@@ -12,8 +12,8 @@ function _code(fragments, params, skipParentheses) {
     args.push(fragments[fragments.length - 1])
 
     const argsJs = args.map(function(a) {
-        return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a);
-    }).join(',');
+        return typeof(a) == 'number' ? ('$' + a) : JSON.stringify(a)
+    }).join(',')
 
     return skipParentheses
             ? '$$ = [' + argsJs + '];'
@@ -155,6 +155,6 @@ const grammar = {
             ['Arguments , e', parenless`${1}, ${3}`],
         ],
     }
-};
+}
 
-export const parser = new Jison.Parser(grammar);
+export const parser = new Jison.Parser(grammar)
