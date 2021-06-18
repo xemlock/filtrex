@@ -73,6 +73,17 @@ describe('Arithmetics', () => {
         expect( eval('foo <= 4', {foo: 5}) ).equals(false);
     });
 
+    it('can do chained comparisons', () => {
+        expect( eval('1 == 1 == 1') ).equals(true)
+        expect( eval('1 == 1 != 2') ).equals(true)
+        expect( eval('1 != 2 != 1') ).equals(true)
+        expect( eval('1 < 2 <= 2 < 3') ).equals(true)
+        expect( eval('1 != 1 == 1') ).equals(false)
+        expect( eval('1 <= 1 > 1') ).equals(false)
+        expect( eval('"a" == "a" != "b"') ).equals(true)
+        expect( eval('"abc" == "abc" ~= "a.c" == "a.c" != "abc"') ).equals(true)
+    })
+
 
     it('can do boolean logic', () => {
         const obj = { T: true, F: false };

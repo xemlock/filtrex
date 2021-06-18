@@ -68,6 +68,7 @@ const grammar = {
         ['left', 'and'],
         ['left', 'in'],
         ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
+        ['left', 'CHAINED-REL'],
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
         ['left', '^'],
@@ -89,24 +90,24 @@ const grammar = {
             ['e % e'  , operatorCode],
             ['e ^ e'  , operatorCode],
 
-            ['e and e', code`${bool}${1} && ${bool}${3}`],
-            ['e or e' , code`${bool}${1} || ${bool}${3}`],
-            ['not e'  , code`! ${bool}${2}`],
+            ['e and e', code`${bool}(${1}) && ${bool}(${3})`],
+            ['e or e' , code`${bool}(${1}) || ${bool}(${3})`],
+            ['not e'  , code`! ${bool}(${2})`],
 
-            ['if e then e else e', code`${bool}${2} ? ${4} : ${6}`],
+            ['if e then e else e', code`${bool}(${2}) ? ${4} : ${6}`],
             ['e in e', code`std.isSubset(${1}, ${3})`],
             ['e not in e', code`!std.isSubset(${1}, ${4})`],
 
             ['( e )'  , code`${2}`],
             ['( Arguments , e )', code`[ ${2}, ${4} ]`],
 
-            ['Number' , code`${1}`],
-            ['Symbol' , code`prop(${1}, data)`],
-            ['String' , code`${1}`],
-            ['Symbol of e', code`prop(${1}, ${3})`],
+            ['Number' , parenless`${1}`],
+            ['Symbol' , parenless`prop(${1}, data)`],
+            ['String' , parenless`${1}`],
+            ['Symbol of e', parenless`prop(${1}, ${3})`],
 
-            ['Symbol ( )', code`call(${1})`],
-            ['Symbol ( Arguments )', code`call(${1}, ${3})`],
+            ['Symbol ( )', parenless`call(${1})`],
+            ['Symbol ( Arguments )', parenless`call(${1}, ${3})`],
 
             ['Relation' , `$$ = yy.reduceRelation($1);`, {prec: '=='}],
         ],
@@ -115,8 +116,8 @@ const grammar = {
             noop`<=`, noop`>=`, noop`>`,
         ],
         Relation: [
+            ['Relation RelationalOperator e', `$$ = [...$1, $2, $3]`, {prec: 'CHAINED-REL'}],
             ['e RelationalOperator e', `$$ = [$1, $2, $3];`, {prec: '=='}],
-            ['Relation RelationalOperator e', `$$ = [...$1, $2, $3]`, {prec: '=='}],
         ],
         Arguments: [
             ['e', parenless`${1}`],

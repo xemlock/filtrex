@@ -59,17 +59,24 @@ const std =
     },
 
     reduceRelation(arr) {
-        const result = []
 
-        // TODO cache results, don't compute them twice
+        const declarations = []
+        const comparisons = []
 
-        for (let i = 1; i < arr.length - 1; i += 2) {
-            const a = flatten([arr[i-1]]).join('')
-            const b = flatten([arr[i+1]]).join('')
-            result.push( `ops["${arr[i]}"](${a}, ${b})` )
+        let previousExpression = flatten([arr[0]]).join('')
+        let j = 0;
+
+        for (let i = 1; i < arr.length - 1; i += 2)
+        {
+            const expr = flatten([arr[i+1]]).join('')
+            const tempVar = `tmp${j++}`
+
+            comparisons.push( `ops["${arr[i]}"](${previousExpression}, ${tempVar} = ${expr})` )
+            previousExpression = tempVar
+            declarations.push(tempVar)
         }
 
-        return '(' + result.join(' && ') + ')'
+        return `(function(){ var ${ declarations.join(', ')}; return ${ comparisons.join(' && ') };})()`
     },
 }
 

@@ -138,16 +138,16 @@ var filtrex = (function (exports) {
                         this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
                         break;
                     case 9:
-                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " && ", "std.coerceBoolean", "", $$[$0], "", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") && ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 10:
-                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 2], " || ", "std.coerceBoolean", "", $$[$0], "", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") || ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 11:
-                        this.$ = ["(", "! ", "std.coerceBoolean", "", $$[$0], "", ")"];
+                        this.$ = ["(", "! ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
                         break;
                     case 12:
-                        this.$ = ["(", "", "std.coerceBoolean", "", $$[$0 - 4], " ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
+                        this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 4], ") ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
                         break;
                     case 13:
                         this.$ = ["(", "std.isSubset(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
@@ -162,22 +162,22 @@ var filtrex = (function (exports) {
                         this.$ = ["(", "[ ", $$[$0 - 3], ", ", $$[$0 - 1], " ]", ")"];
                         break;
                     case 17:
-                        this.$ = ["(", "", $$[$0], "", ")"];
+                        this.$ = ["", $$[$0], ""];
                         break;
                     case 18:
-                        this.$ = ["(", "prop(", $$[$0], ", data)", ")"];
+                        this.$ = ["prop(", $$[$0], ", data)"];
                         break;
                     case 19:
-                        this.$ = ["(", "", $$[$0], "", ")"];
+                        this.$ = ["", $$[$0], ""];
                         break;
                     case 20:
-                        this.$ = ["(", "prop(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+                        this.$ = ["prop(", $$[$0 - 2], ", ", $$[$0], ")"];
                         break;
                     case 21:
-                        this.$ = ["(", "call(", $$[$0 - 2], ")", ")"];
+                        this.$ = ["call(", $$[$0 - 2], ")"];
                         break;
                     case 22:
-                        this.$ = ["(", "call(", $$[$0 - 3], ", ", $$[$0 - 1], ")", ")"];
+                        this.$ = ["call(", $$[$0 - 3], ", ", $$[$0 - 1], ")"];
                         break;
                     case 23:
                         this.$ = yy.reduceRelation($$[$0]);
@@ -204,10 +204,10 @@ var filtrex = (function (exports) {
                         this.$ = [">"];
                         break;
                     case 31:
-                        this.$ = [$$[$0 - 2], $$[$0 - 1], $$[$0]];
+                        this.$ = [...$$[$0 - 2], $$[$0 - 1], $$[$0]];
                         break;
                     case 32:
-                        this.$ = [...$$[$0 - 2], $$[$0 - 1], $$[$0]];
+                        this.$ = [$$[$0 - 2], $$[$0 - 1], $$[$0]];
                         break;
                     case 33:
                         this.$ = ["", $$[$0], ""];
@@ -896,29 +896,29 @@ var filtrex = (function (exports) {
                 25: [1, 9],
                 27: 10
             }, {
-                5: [2, 31],
+                5: [2, 32],
                 6: [1, 13],
                 7: [1, 12],
                 8: [1, 14],
                 9: [1, 15],
                 10: [1, 16],
                 11: [1, 17],
-                12: [2, 31],
-                13: [2, 31],
+                12: [2, 32],
+                13: [2, 32],
                 14: [1, 21],
-                16: [2, 31],
-                17: [2, 31],
-                18: [2, 31],
-                20: [2, 31],
-                22: [2, 31],
+                16: [2, 32],
+                17: [2, 32],
+                18: [2, 32],
+                20: [2, 32],
+                22: [2, 32],
                 28: 22,
-                29: [2, 31],
-                30: [2, 31],
-                31: [2, 31],
-                32: [2, 31],
-                33: [2, 31],
-                34: [2, 31],
-                35: [2, 31]
+                29: [2, 32],
+                30: [2, 32],
+                31: [2, 32],
+                32: [2, 32],
+                33: [2, 32],
+                34: [2, 32],
+                35: [2, 32]
             }, {
                 4: 58,
                 6: [1, 3],
@@ -1034,29 +1034,29 @@ var filtrex = (function (exports) {
                 34: [1, 28],
                 35: [1, 29]
             }, {
-                5: [2, 32],
+                5: [2, 31],
                 6: [1, 13],
                 7: [1, 12],
                 8: [1, 14],
                 9: [1, 15],
                 10: [1, 16],
                 11: [1, 17],
-                12: [2, 32],
-                13: [2, 32],
+                12: [2, 31],
+                13: [2, 31],
                 14: [1, 21],
-                16: [2, 32],
-                17: [2, 32],
-                18: [2, 32],
-                20: [2, 32],
-                22: [2, 32],
+                16: [2, 31],
+                17: [2, 31],
+                18: [2, 31],
+                20: [2, 31],
+                22: [2, 31],
                 28: 22,
-                29: [2, 32],
-                30: [2, 32],
-                31: [2, 32],
-                32: [2, 32],
-                33: [2, 32],
-                34: [2, 32],
-                35: [2, 32]
+                29: [2, 31],
+                30: [2, 31],
+                31: [2, 31],
+                32: [2, 31],
+                33: [2, 31],
+                34: [2, 31],
+                35: [2, 31]
             }, {
                 5: [2, 14],
                 6: [2, 14],
@@ -1899,17 +1899,26 @@ var filtrex = (function (exports) {
         },
 
         reduceRelation(arr) {
-            const result = [];
 
-            // TODO cache results, don't compute them twice
+            const declarations = [];
+            const comparisons = [];
 
-            for (let i = 1; i < arr.length - 1; i += 2) {
-                const a = flatten([arr[i-1]]).join('');
-                const b = flatten([arr[i+1]]).join('');
-                result.push( `ops["${arr[i]}"](${a}, ${b})` );
+            let previousExpression = flatten([arr[0]]).join('');
+            let j = 0;
+
+            for (let i = 1; i < arr.length - 1; i += 2)
+            {
+                const expr = flatten([arr[i+1]]).join('');
+                const tempVar = `tmp${j++}`;
+
+                comparisons.push( `ops["${arr[i]}"](${previousExpression}, ${tempVar} = ${expr})` );
+                previousExpression = tempVar;
+                declarations.push(tempVar);
             }
 
-            return '(' + result.join(' && ') + ')'
+            const result = `(function(){ var ${ declarations.join(', ')}; return ${ comparisons.join(' && ') };})()`;
+            console.log(result);
+            return result
         },
     };
 
