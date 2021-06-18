@@ -76,9 +76,7 @@ const std =
             declarations.push(tempVar)
         }
 
-        const result = `(function(){ var ${ declarations.join(', ')}; return ${ comparisons.join(' && ') };})()`
-        console.log(result)
-        return result
+        return `(function(){ var ${ declarations.join(', ')}; return ${ comparisons.join(' && ') };})()`
     },
 }
 

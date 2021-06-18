@@ -67,8 +67,9 @@ const grammar = {
         ['left', 'or'],
         ['left', 'and'],
         ['left', 'in'],
+        ['left', 'NONCHAINEDREL'],
         ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
-        ['left', 'CHAINED-REL'],
+        ['left', 'CHAINEDREL'],
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
         ['left', '^'],
@@ -116,8 +117,8 @@ const grammar = {
             noop`<=`, noop`>=`, noop`>`,
         ],
         Relation: [
-            ['Relation RelationalOperator e', `$$ = [...$1, $2, $3]`, {prec: 'CHAINED-REL'}],
-            ['e RelationalOperator e', `$$ = [$1, $2, $3];`, {prec: '=='}],
+            ['e RelationalOperator Relation', `$$ = [$1, $2, ...$3]`, {prec: 'CHAINEDREL'}],
+            ['e RelationalOperator e', `$$ = [$1, $2, $3];`, {prec: 'NONCHAINEDREL'}],
         ],
         Arguments: [
             ['e', parenless`${1}`],
