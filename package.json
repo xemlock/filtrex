@@ -1,8 +1,9 @@
 {
   "name": "filtrex",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A simple, safe, JavaScript Filter Expression compiler for end-users",
   "main": "dist/cjs/filtrex.js",
+  "types": "dist/esm/filtrex.d.ts",
   "module": "dist/esm/filtrex.mjs",
   "browser": "dist/browser/filtrex.min.js",
   "repository": "git@github.com:m93a/filtrex.git",
