@@ -113,4 +113,9 @@ describe('Arithmetics', () => {
         expect( eval('-0.1 % 5') ).equals(4.9)
     })
 
+
+    it('exponentiation has precedence over unary minus', () => {
+        expect( eval('-x^2', {x:2}) ).equals(-4)
+    })
+
 });

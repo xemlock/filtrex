@@ -72,9 +72,8 @@ const grammar = {
         ['left', 'CHAINEDREL'],
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
+        ['left', 'not', 'UMINUS'],
         ['left', '^'],
-        ['left', 'not'],
-        ['left', 'UMINUS'],
         ['left', 'of'],
     ],
     // Grammar
