@@ -26,6 +26,7 @@ const grammar = {
             [_`<=`, `return "<=";`],
             [_`<` , `return "<" ;`],
             [_`>` , `return ">" ;`],
+            [_`not\s+in[^\w]`, `return "notIn";`],
             [_`and[^\w]` , `return "and" ;`],
             [_`or[^\w]`  , `return "or"  ;`],
             [_`not[^\w]` , `return "not" ;`],
@@ -66,7 +67,7 @@ const grammar = {
         ['left', 'if', 'then', 'else'],
         ['left', 'or'],
         ['left', 'and'],
-        ['left', 'in'],
+        ['left', 'in', 'notIn'],
         ['left', 'NONCHAINEDREL'],
         ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
         ['left', 'CHAINEDREL'],
@@ -96,7 +97,7 @@ const grammar = {
 
             ['if e then e else e', code`${bool}(${2}) ? ${4} : ${6}`],
             ['e in e', code`std.isSubset(${1}, ${3})`],
-            ['e not in e', code`!std.isSubset(${1}, ${4})`],
+            ['e notIn e', code`!std.isSubset(${1}, ${3})`],
 
             ['( e )'  , code`${2}`],
             ['( Arguments , e )', code`[ ${2}, ${4} ]`],

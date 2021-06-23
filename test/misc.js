@@ -153,4 +153,11 @@ describe('Various other things', () => {
         expect(err.message).equals("Unknown function: sqrt()");
     });
 
+    it('gives the correct precedence to "in" and "not in"', () => {
+        expect( eval('4 + 3 in (7, 8)') ).equals(true);
+        expect( eval('4 + 3 in (6, 8)') ).equals(false);
+        expect( eval('4 + 3 not in (7, 8)') ).equals(false);
+        expect( eval('4 + 3 not in (6, 8)') ).equals(true);
+    })
+
 });
