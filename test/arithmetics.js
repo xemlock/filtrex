@@ -118,4 +118,8 @@ describe('Arithmetics', () => {
         expect( eval('-x^2', {x:2}) ).equals(-4)
     })
 
+    it('exponentiation is right-associative', () => {
+        expect( eval('5^3^2') ).equals(5**(3**2))
+    })
+
 });

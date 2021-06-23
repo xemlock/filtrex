@@ -74,7 +74,7 @@ const grammar = {
         ['left', '+', '-'],
         ['left', '*', '/', '%'],
         ['left', 'not', 'UMINUS'],
-        ['left', '^'],
+        ['right', '^'],
         ['left', 'of'],
     ],
     // Grammar
