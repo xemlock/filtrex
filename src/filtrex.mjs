@@ -117,7 +117,6 @@ export function compileExpression(expression, options) {
         log: Math.log,
         max: Math.max,
         min: Math.min,
-        random: Math.random,
         round: Math.round,
         sqrt: Math.sqrt,
         exists: (v) => v !== undefined && v !== null,

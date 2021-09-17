@@ -107,7 +107,7 @@ Boolean logic | Description
 x or y | Boolean or
 x and y | Boolean and
 not x | Boolean not
-x ? y : z | If boolean x, value y, else z
+if x then y else z | If boolean x, value y, else z
 ( x ) | Explicity operator precedence
 
 Objects and arrays | Description
@@ -124,7 +124,6 @@ floor(x) | Round floating point down
 log(x) | Natural logarithm
 max(a, b, c...) | Max value (variable length of args)
 min(a, b, c...) | Min value (variable length of args)
-random() | Random floating point from 0.0 to 1.0
 round(x) | Round floating point
 sqrt(x) | Square root
 
