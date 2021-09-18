@@ -1,6 +1,7 @@
 // the parser is dynamically generated from generateParser.js at compile time
 import { parser } from './parser.mjs'
 import { hasOwnProperty, bool, num, numstr, mod, arr, str, flatten, code } from './utils.mjs'
+import { UnknownFunctionError, UnknownPropertyError, UnknownOptionError, InternalError } from './errors.mjs'
 
 // Shared utility functions
 const std =
@@ -11,7 +12,7 @@ const std =
     },
 
     unknown(funcName) {
-        throw new ReferenceError('Unknown function: ' + funcName + '()')
+        throw new UnknownFunctionError(funcName)
     },
 
     coerceArray: arr,
@@ -32,22 +33,22 @@ const std =
         let built = ''
 
         if (literal[0] !== quote || literal[literal.length-1] !== quote)
-            throw new Error(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
+            throw new InternalError(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
 
         for (let i = 1; i < literal.length - 1; i++)
         {
             if (literal[i] === "\\")
             {
                 i++;
-                if (i >= literal.length - 1) throw new Error(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
+                if (i >= literal.length - 1) throw new InternalError(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
 
                 if (literal[i] === "\\") built += '\\'
                 else if (literal[i] === quote) built += quote
-                else throw new Error(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
+                else throw new InternalError(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
             }
             else if (literal[i] === quote)
             {
-                throw new Error(`Unexpected internal error: String literal contains unescaped quotation mark.`)
+                throw new InternalError(`Unexpected internal error: String literal contains unescaped quotation mark.`)
             }
             else
             {
@@ -103,7 +104,7 @@ export function compileExpression(expression, options) {
     for (const key of Object.keys(options))
     {
         if (!(["extraFunctions", "customProp", "operators"].includes(key)))
-            throw new TypeError(`Unknown option: ${key}`)
+            throw new UnknownOptionError(key)
     }
 
 
@@ -174,7 +175,7 @@ export function compileExpression(expression, options) {
         if (hasOwnProperty(obj||{}, name))
             return obj[name]
 
-        throw new ReferenceError(`Property “${name}” does not exist.`)
+        throw new UnknownPropertyError(name)
     }
 
     function safeGetter(obj) {
@@ -182,7 +183,7 @@ export function compileExpression(expression, options) {
             if (hasOwnProperty(obj||{}, name))
                 return obj[name]
 
-            throw new ReferenceError(`Property “${name}” does not exist.`)
+            throw new UnknownPropertyError(name)
         }
     }
 
@@ -195,7 +196,7 @@ export function compileExpression(expression, options) {
             if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
                 return fns[name](...args)
 
-            throw new ReferenceError(`Unknown function: ${name}()`)
+            throw new UnknownFunctionError(name)
         }
     }
 
