@@ -120,8 +120,12 @@ Built-in functions | Description
 --- | ---
 abs(x) | Absolute value
 ceil(x) | Round floating point up
+empty(x) | True if _x_ is `undefined`, `null`, an empty array or an empty string
+exists(x) | True unless _x_ is `undefined` or `null`
 floor(x) | Round floating point down
 log(x) | Natural logarithm
+log2(x) | Logarithm base two
+log10(x) | Logarithm base ten
 max(a, b, c...) | Max value (variable length of args)
 min(a, b, c...) | Min value (variable length of args)
 round(x) | Round floating point

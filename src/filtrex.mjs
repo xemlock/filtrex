@@ -115,6 +115,8 @@ export function compileExpression(expression, options) {
         ceil: Math.ceil,
         floor: Math.floor,
         log: Math.log,
+        log2: Math.log2,
+        log10: Math.log10,
         max: Math.max,
         min: Math.min,
         round: Math.round,
