@@ -1662,13 +1662,19 @@ var filtrex = (function (exports) {
                     case 26:
                         return "Number";
                     case 27:
-                        yy_.yytext = JSON.stringify(yy_.yytext);
+                        yy_.yytext = JSON.stringify({
+                            name: yy_.yytext,
+                            type: 'unescaped'
+                        });
                         return "Symbol";
                     case 28:
-                        yy_.yytext = yy.buildString("'", yy_.yytext);
+                        yy_.yytext = JSON.stringify({
+                            name: yy.buildString("'", yy_.yytext),
+                            type: 'single-quoted'
+                        });
                         return "Symbol";
                     case 29:
-                        yy_.yytext = yy.buildString('"', yy_.yytext);
+                        yy_.yytext = JSON.stringify(yy.buildString('"', yy_.yytext));
                         return "String";
                     case 30:
                         return "EOF";
@@ -1694,6 +1700,102 @@ var filtrex = (function (exports) {
     })();
     const parser = _parser;
     _parser.Parser;
+
+    /**
+     * Runtime error – user attempted to call a function
+     * which is not a predefined function, nor specified
+     * in `options.extraFunctions`.
+     * 
+     * @prop {string} functionName
+     * @prop {string} I18N_STRING has the value `'UNKNOWN_FUNCTION'`
+     */
+    class UnknownFunctionError
+    extends ReferenceError {
+        I18N_STRING = 'UNKNOWN_FUNCTION'
+
+        constructor (funcName) {
+            super(`Unknown function: ${funcName}()`);
+            this.functionName = funcName;
+        }
+    }
+
+    /**
+     * Runtime error – user attempted to access a property which
+     * is not present in the `data` object, nor in the `constants`.
+     * If the property is meant to be empty, use `undefined` or
+     * `null` as its value. If you need to use optional properties
+     * in your `data`, define a `customProp` function.
+     * 
+     * @prop {string} propertyName
+     * @prop {string} I18N_STRING has the value `'UNKNOWN_PROPERTY'`
+     */
+    class UnknownPropertyError
+    extends ReferenceError {
+        I18N_STRING = 'UNKNOWN_PROPERTY'
+
+        constructor (propName) {
+            super(`Property “${propName}” does not exist.`);
+            this.propertyName = propName;
+        }
+    }
+
+    /**
+     * Compile time error – you specified an option which
+     * was not recognized by Filtrex. Double-check your
+     * spelling and the version of Filtrex you are using.
+     * 
+     * @prop {string} keyName
+     * @prop {string} I18N_STRING has the value `'UNKNOWN_OPTION'`
+     */
+    class UnknownOptionError
+    extends TypeError {
+        I18N_STRING = 'UNKNOWN_OPTION'
+
+        constructor (key) {
+            super(`Unknown option: ${key}`);
+            this.keyName = key;
+        }
+    }
+
+    /**
+     * Runtime error – user passed a different type than the one
+     * accepted by the function or operator.
+     * 
+     * The possible values of `expectedType` and `recievedType`
+     * are: `"undefined"`, `"null"`, `"true"`, `"false"`, `"number"`,
+     * `"text"`, `"unknown type"`, `"list"`, `"object"`, `"text or number"`
+     * and `"logical value (“true” or “false”)"`
+     * 
+     * @prop {string} expectedType
+     * @prop {string} recievedType
+     * @prop {string} I18N_STRING has the value `'UNEXPECTED_TYPE'`
+     */
+    class UnexpectedTypeError
+    extends TypeError {
+        I18N_STRING = 'UNEXPECTED_TYPE'
+
+        constructor (expected, got) {
+            super(`Expected a ${expected}, but got a ${got} instead.`);
+
+            this.expectedType = expected;
+            this.recievedType = got;
+        }
+    }
+
+    /**
+     * An internal error. This was not meant to happen, please report
+     * at https://github.com/m93a/filtrex/
+     * 
+     * @prop {string} I18N_STRING has the value `'INTERNAL'`
+     */
+    class InternalError
+    extends Error {
+        I18N_STRING = 'INTERNAL'
+
+        constructor (message) {
+            super(message);
+        }
+    }
 
     /**
      * Determines whether an object has a property with the specified name.
@@ -1774,33 +1876,33 @@ var filtrex = (function (exports) {
         value = unwrap(value);
         if (typeof value === 'number') return value
 
-        throw new TypeError(`Expected a number, but got a ${prettyType(value)} instead.`)
+        throw new UnexpectedTypeError('number', prettyType(value))
     }
 
     function str(value) {
         value = unwrap(value);
         if (typeof value === 'string') return value
 
-        throw new TypeError(`Expected a text, but got a ${prettyType(value)} instead.`)
+        throw new UnexpectedTypeError('text', prettyType(value))
     }
 
     function numstr(value) {
         value = unwrap(value);
         if (typeof value === 'string' || typeof value === 'number') return value
 
-        throw new TypeError(`Expected a text or a number, but got a ${prettyType(value)} instead.`)
+        throw new UnexpectedTypeError('text or number', prettyType(value))
     }
 
     function bool(value) {
         value = unwrap(value);
         if (typeof value === 'boolean') return value
 
-        throw new TypeError(`Expected a logical value (“true” or “false”), but got a ${prettyType(value)} instead.`)
+        throw new UnexpectedTypeError('logical value (“true” or “false”)', prettyType(value))
     }
 
     function arr(value) {
         if (value === undefined || value === null) {
-            throw new TypeError(`Expected a list, but got ${value} instead.`)
+            throw new UnexpectedTypeError('list', prettyType(value))
         }
 
         if (Array.isArray(value)) {
@@ -1841,7 +1943,7 @@ var filtrex = (function (exports) {
         },
 
         unknown(funcName) {
-            throw new ReferenceError('Unknown function: ' + funcName + '()')
+            throw new UnknownFunctionError(funcName)
         },
 
         coerceArray: arr,
@@ -1862,22 +1964,22 @@ var filtrex = (function (exports) {
             let built = '';
 
             if (literal[0] !== quote || literal[literal.length-1] !== quote)
-                throw new Error(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
+                throw new InternalError(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
 
             for (let i = 1; i < literal.length - 1; i++)
             {
                 if (literal[i] === "\\")
                 {
                     i++;
-                    if (i >= literal.length - 1) throw new Error(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
+                    if (i >= literal.length - 1) throw new InternalError(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
 
                     if (literal[i] === "\\") built += '\\';
                     else if (literal[i] === quote) built += quote;
-                    else throw new Error(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
+                    else throw new InternalError(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
                 }
                 else if (literal[i] === quote)
                 {
-                    throw new Error(`Unexpected internal error: String literal contains unescaped quotation mark.`)
+                    throw new InternalError(`Unexpected internal error: String literal contains unescaped quotation mark.`)
                 }
                 else
                 {
@@ -1885,7 +1987,7 @@ var filtrex = (function (exports) {
                 }
             }
 
-            return JSON.stringify(built)
+            return built
         },
 
         reduceRelation(arr) {
@@ -1912,15 +2014,59 @@ var filtrex = (function (exports) {
 
     parser.yy = Object.create(std);
 
+
+
     /**
-     * Filtrex provides compileExpression() to compile user expressions to JavaScript.
+     * A simple, safe, JavaScript expression engine, allowing end-users to enter arbitrary expressions without p0wning you.
      *
-     * See https://github.com/joewalnes/filtrex for tutorial, reference and examples.
-     * MIT License.
+     * @example
+     * // Input from user (e.g. search filter)
+     * let expression = 'transactions <= 5 and abs(profit) > 20.5';
      *
-     * Includes Jison by Zachary Carter. See http://jison.org/
+     * // Compile expression to executable function
+     * let myfilter = compileExpression(expression);
      *
-     * -Joe Walnes
+     * // Execute function
+     * myfilter({transactions: 3, profit:-40.5}); // returns 1
+     * myfilter({transactions: 3, profit:-14.5}); // returns 0
+     *
+     * @param expression
+     * The expression to be parsed. Under the hood, the expression gets compiled to a clean and fast JavaScript function.
+     * There are only 2 types: numbers and strings. Numbers may be floating point or integers. Boolean logic is applied
+     * on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
+     * Examples of numbers: `43`, `-1.234`; example of a string: `"hello"`; example of external data variable: `foo`, `a.b.c`,
+     * `'foo-bar'`.
+     * You can use the following operations:
+     *  * `x + y` Add
+     *  * `x - y` Subtract
+     *  * `x * y` Multiply
+     *  * `x / y` Divide
+     *  * `x % y` Modulo
+     *  * `x ^ y` Power
+     *  * `x == y` Equals
+     *  * `x < y` Less than
+     *  * `x <= y` Less than or equal to
+     *  * `x > y` Greater than
+     *  * `x >= y` Greater than or equal to
+     *  * `x == y <= z` Chained relation, equivalent to `(x == y and y <= z)`
+     *  * `x of y` Get property x of object y
+     *  * `x in (a, b, c)` Equivalent to `(x == a or x == b or x == c)`
+     *  * `x not in (a, b, c)` Equivalent to `(x != a and x != b and x != c)`
+     *  * `x or y` Boolean or
+     *  * `x and y` Boolean and
+     *  * `not x` Boolean not
+     *  * `if x then y else z` If boolean x, value y, else z
+     *  * `( x )` Explicity operator precedence
+     *  * `( x, y, z )` Array of elements x, y and z
+     *  * `abs(x)` Absolute value
+     *  * `ceil(x)` Round floating point up
+     *  * `floor(x)` Round floating point down
+     *  * `log(x)` Natural logarithm
+     *  * `max(a, b, c...)` Max value (variable length of args)
+     *  * `min(a, b, c...)` Min value (variable length of args)
+     *  * `round(x)` Round floating point
+     *  * `sqrt(x)` Square root
+     *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
      */
     function compileExpression(expression, options) {
 
@@ -1929,12 +2075,12 @@ var filtrex = (function (exports) {
         if (arguments.length > 2) throw new TypeError('Too many arguments.')
 
         options = typeof options === "object" ? options : {};
-        let {extraFunctions, customProp, operators} = options;
+
+        const knownOptions = ['extraFunctions', 'constants', 'customProp', 'operators'];
+        let {extraFunctions, constants, customProp, operators} = options;
+
         for (const key of Object.keys(options))
-        {
-            if (!(["extraFunctions", "customProp", "operators"].includes(key)))
-                throw new TypeError(`Unknown option: ${key}`)
-        }
+            if (!knownOptions.includes(key)) throw new UnknownOptionError(key)
 
 
 
@@ -1945,9 +2091,10 @@ var filtrex = (function (exports) {
             ceil: Math.ceil,
             floor: Math.floor,
             log: Math.log,
+            log2: Math.log2,
+            log10: Math.log10,
             max: Math.max,
             min: Math.min,
-            random: Math.random,
             round: Math.round,
             sqrt: Math.sqrt,
             exists: (v) => v !== undefined && v !== null,
@@ -1988,6 +2135,8 @@ var filtrex = (function (exports) {
 
         operators = defaultOperators;
 
+        constants = constants ?? {};
+
 
 
         // Compile the expression
@@ -1999,33 +2148,40 @@ var filtrex = (function (exports) {
 
         // Metaprogramming functions
 
-        function prop(name, obj) {
-            if (hasOwnProperty(obj||{}, name))
+        function nakedProp(name, obj) {
+            if (hasOwnProperty(obj ?? {}, name))
                 return obj[name]
 
-            throw new ReferenceError(`Property “${name}” does not exist.`)
+            throw new UnknownPropertyError(name)
         }
 
         function safeGetter(obj) {
             return function get(name) {
-                if (hasOwnProperty(obj||{}, name))
+                if (hasOwnProperty(obj ?? {}, name))
                     return obj[name]
 
-                throw new ReferenceError(`Property “${name}” does not exist.`)
+                throw new UnknownPropertyError(name)
             }
         }
 
         if (typeof customProp === 'function') {
-            prop = (name, obj) => customProp(name, safeGetter(obj), obj);
+            nakedProp = (name, obj) => customProp(name, safeGetter(obj), obj);
         }
 
         function createCall(fns) {
-            return function call(name, ...args) {
+            return function call({ name }, ...args) {
                 if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
                     return fns[name](...args)
 
-                throw new ReferenceError(`Unknown function: ${name}()`)
+                throw new UnknownFunctionError(name)
             }
+        }
+
+        function prop({ name, type }, obj) {
+            if (type === 'unescaped' && hasOwnProperty(constants, name))
+                return constants[name]
+
+            return nakedProp(name, obj)
         }
 
 

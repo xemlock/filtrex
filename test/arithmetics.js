@@ -36,7 +36,7 @@ describe('Arithmetics', () => {
 
 
     it('supports functions with multiple args', () => {
-        expect( eval('random() >= 0') ).equals(true);
+        expect( eval('min()') ).equals(Infinity);
         expect( eval('min(2)') ).equals(2);
         expect( eval('max(2)') ).equals(2);
         expect( eval('min(2, 5)') ).equals(2);

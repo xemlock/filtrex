@@ -40,17 +40,23 @@ const grammar = {
             [_`[0-9]+(?:\.[0-9]+)?(?![0-9\.])`, `return "Number";`], // 212.321
 
             [_`[a-zA-Z$_][\.a-zA-Z0-9$_]*`,
-                `yytext = JSON.stringify(yytext);
+                `yytext = JSON.stringify({
+                    name: yytext,
+                    type: 'unescaped'
+                });
                 return "Symbol";`
             ], // some.Symbol22
 
             [_`'(?:\\'|\\\\|[^'\\])*'`,
-                `yytext = yy.buildString("'", yytext);
+                `yytext = JSON.stringify({
+                    name: yy.buildString("'", yytext),
+                    type: 'single-quoted'
+                });
                 return "Symbol";`
             ], // 'any \'escaped\' symbol'
 
             [_`"(?:\\"|\\\\|[^"\\])*"`,
-                `yytext = yy.buildString('"', yytext);
+                `yytext = JSON.stringify(yy.buildString('"', yytext));
                 return "String";`
             ], // "any \"escaped\" string"
 

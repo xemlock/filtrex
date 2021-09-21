@@ -1691,15 +1691,21 @@ var _parser = (function() {
                     return "Number";
                     break;
                 case 27:
-                    yy_.yytext = JSON.stringify(yy_.yytext);
+                    yy_.yytext = JSON.stringify({
+                        name: yy_.yytext,
+                        type: 'unescaped'
+                    });
                     return "Symbol";
                     break;
                 case 28:
-                    yy_.yytext = yy.buildString("'", yy_.yytext);
+                    yy_.yytext = JSON.stringify({
+                        name: yy.buildString("'", yy_.yytext),
+                        type: 'single-quoted'
+                    });
                     return "Symbol";
                     break;
                 case 29:
-                    yy_.yytext = yy.buildString('"', yy_.yytext);
+                    yy_.yytext = JSON.stringify(yy.buildString('"', yy_.yytext));
                     return "String";
                     break;
                 case 30:

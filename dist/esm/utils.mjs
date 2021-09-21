@@ -1,3 +1,5 @@
+import { UnexpectedTypeError } from './errors.mjs'
+
 /**
  * Determines whether an object has a property with the specified name.
  * @param {object} obj the object to be checked
@@ -77,33 +79,33 @@ export function num(value) {
     value = unwrap(value)
     if (typeof value === 'number') return value
 
-    throw new TypeError(`Expected a number, but got a ${prettyType(value)} instead.`)
+    throw new UnexpectedTypeError('number', prettyType(value))
 }
 
 export function str(value) {
     value = unwrap(value)
     if (typeof value === 'string') return value
 
-    throw new TypeError(`Expected a text, but got a ${prettyType(value)} instead.`)
+    throw new UnexpectedTypeError('text', prettyType(value))
 }
 
 export function numstr(value) {
     value = unwrap(value)
     if (typeof value === 'string' || typeof value === 'number') return value
 
-    throw new TypeError(`Expected a text or a number, but got a ${prettyType(value)} instead.`)
+    throw new UnexpectedTypeError('text or number', prettyType(value))
 }
 
 export function bool(value) {
     value = unwrap(value)
     if (typeof value === 'boolean') return value
 
-    throw new TypeError(`Expected a logical value (“true” or “false”), but got a ${prettyType(value)} instead.`)
+    throw new UnexpectedTypeError('logical value (“true” or “false”)', prettyType(value))
 }
 
 export function arr(value) {
     if (value === undefined || value === null) {
-        throw new TypeError(`Expected a list, but got ${value} instead.`)
+        throw new UnexpectedTypeError('list', prettyType(value))
     }
 
     if (Array.isArray(value)) {

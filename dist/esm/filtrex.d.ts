@@ -18,7 +18,7 @@
  * on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
  * Examples of numbers: `43`, `-1.234`; example of a string: `"hello"`; example of external data variable: `foo`, `a.b.c`,
  * `'foo-bar'`.
- * You can use the following operators:
+ * You can use the following operations:
  *  * `x + y` Add
  *  * `x - y` Subtract
  *  * `x * y` Multiply
@@ -30,6 +30,7 @@
  *  * `x <= y` Less than or equal to
  *  * `x > y` Greater than
  *  * `x >= y` Greater than or equal to
+ *  * `x == y <= z` Chained relation, equivalent to `(x == y and y <= z)`
  *  * `x of y` Get property x of object y
  *  * `x in (a, b, c)` Equivalent to `(x == a or x == b or x == c)`
  *  * `x not in (a, b, c)` Equivalent to `(x != a and x != b and x != c)`
@@ -45,7 +46,6 @@
  *  * `log(x)` Natural logarithm
  *  * `max(a, b, c...)` Max value (variable length of args)
  *  * `min(a, b, c...)` Min value (variable length of args)
- *  * `random()` Random floating point from 0.0 to 1.0
  *  * `round(x)` Round floating point
  *  * `sqrt(x)` Square root
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
@@ -64,6 +64,16 @@ export interface Options
      */
     extraFunctions?: {
         [T: string]: Function
+    }
+
+    /**
+     * Pass constants like `pi` or `true` to the expression without having to modify data.
+     * These constants will shadow identically named properties on the data object. In order
+     * to access `data.pi` instead of `constants.pi`, for example, use a single-quoted
+     * symbol in your expression, ie. `'pi'` instead of just `pi`.
+     */
+    constants?: {
+        [T: string]: any
     }
 
     /**
