@@ -67,6 +67,16 @@ export interface Options
     }
 
     /**
+     * Pass constants like `pi` or `true` to the expression without having to modify data.
+     * These constants will shadow identically named properties on the data object. In order
+     * to access `data.pi` instead of `constants.pi`, for example, use a single-quoted
+     * symbol in your expression, ie. `'pi'` instead of just `pi`.
+     */
+    constants?: {
+        [T: string]: any
+    }
+
+    /**
      * If you want to do some more magic with your expression, you can supply a custom function
      * that will resolve the identifiers used in the expression and assign them a value yourself.
      *

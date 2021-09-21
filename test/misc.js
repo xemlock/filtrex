@@ -160,4 +160,32 @@ describe('Various other things', () => {
         expect( eval('4 + 3 not in (6, 8)') ).equals(true);
     })
 
+    it('constants basics', () => {
+        const options = { constants: { pi: Math.PI, true: true, false: false }}
+
+        expect(
+            compileExpression('2 * pi * radius', options)({ radius: 6 })
+        ).equals(2 * Math.PI * 6)
+
+        expect(
+            compileExpression('not true == false and not false == true', options)()
+        ).equals(true)
+
+        expect(
+            compileExpression('pi', options)({ pi: 3 })
+        ).equals(Math.PI)
+
+        expect(
+            compileExpression(`'pi'`, options)({ pi: 3 })
+        ).equals(3)
+
+
+        const options2 = { constants: { a: "a_const " } }
+        const data = { a: "a_data ", b: "b_data " }
+        const expr = `'a' + a + 'b' + b`
+
+        expect( compileExpression(expr, options2)(data) ).equals("a_data a_const b_data b_data ")
+
+    })
+
 });

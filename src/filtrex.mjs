@@ -56,7 +56,7 @@ const std =
             }
         }
 
-        return JSON.stringify(built)
+        return built
     },
 
     reduceRelation(arr) {
@@ -100,12 +100,12 @@ export function compileExpression(expression, options) {
     if (arguments.length > 2) throw new TypeError('Too many arguments.')
 
     options = typeof options === "object" ? options : {}
-    let {extraFunctions, customProp, operators} = options
+
+    const knownOptions = ['extraFunctions', 'constants', 'customProp', 'operators']
+    let {extraFunctions, constants, customProp, operators} = options
+
     for (const key of Object.keys(options))
-    {
-        if (!(["extraFunctions", "customProp", "operators"].includes(key)))
-            throw new UnknownOptionError(key)
-    }
+        if (!knownOptions.includes(key)) throw new UnknownOptionError(key)
 
 
 
@@ -160,6 +160,8 @@ export function compileExpression(expression, options) {
 
     operators = defaultOperators
 
+    constants = constants ?? {}
+
 
 
     // Compile the expression
@@ -171,8 +173,8 @@ export function compileExpression(expression, options) {
 
     // Metaprogramming functions
 
-    function prop(name, obj) {
-        if (hasOwnProperty(obj||{}, name))
+    function nakedProp(name, obj) {
+        if (hasOwnProperty(obj ?? {}, name))
             return obj[name]
 
         throw new UnknownPropertyError(name)
@@ -180,7 +182,7 @@ export function compileExpression(expression, options) {
 
     function safeGetter(obj) {
         return function get(name) {
-            if (hasOwnProperty(obj||{}, name))
+            if (hasOwnProperty(obj ?? {}, name))
                 return obj[name]
 
             throw new UnknownPropertyError(name)
@@ -188,16 +190,23 @@ export function compileExpression(expression, options) {
     }
 
     if (typeof customProp === 'function') {
-        prop = (name, obj) => customProp(name, safeGetter(obj), obj)
+        nakedProp = (name, obj) => customProp(name, safeGetter(obj), obj)
     }
 
     function createCall(fns) {
-        return function call(name, ...args) {
+        return function call({ name }, ...args) {
             if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
                 return fns[name](...args)
 
             throw new UnknownFunctionError(name)
         }
+    }
+
+    function prop({ name, type }, obj) {
+        if (type === 'unescaped' && hasOwnProperty(constants, name))
+            return constants[name]
+
+        return nakedProp(name, obj)
     }
 
 
