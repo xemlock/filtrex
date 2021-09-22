@@ -106,7 +106,8 @@ export interface Options
     customProp?: (
         name: string,
         get: (name: string) => any,
-        object: any
+        object: any,
+        type: 'unescaped' | 'single-quoted'
     ) => any
 
     /**
@@ -134,3 +135,31 @@ export interface Operators {
 
     '~='?: (a: any, b: any) => boolean
 }
+
+/**
+ * A custom prop function which treats dots inside a symbol
+ * as property accessors. If you want to use the `foo.bar`
+ * syntax to access properties instead of the default
+ * `bar of foo`, you can use this function using the following
+ * code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useDotAccessOperator
+ * } from 'filtrex'
+ *
+ * const expr = "foo.bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useDotAccessOperator
+ * });
+ *
+ * fn({ foo: { bar: 42 } }) // → 42
+ * ```
+ */
+export function useDotAccessOperator(
+    name: string,
+    get: (name: string) => any,
+    object: any,
+    type: 'unescaped' | 'single-quoted'
+)

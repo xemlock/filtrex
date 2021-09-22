@@ -1,4 +1,7 @@
-const { compileExpression } = require("../dist/cjs/filtrex");
+const {
+    compileExpression,
+    useDotAccessOperator,
+} = require("../dist/cjs/filtrex");
 
 const { describe, it } = require("mocha");
 
@@ -202,6 +205,16 @@ describe('Various other things', () => {
         expect( eval('1 < 2 ? 3 > 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(420);
         expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(69);
         expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 > 6 ? 69 : -1/12') ).equals(-1/12);
+    })
+
+    it('useDotAccessOperator works', () => {
+        const expr = "foo.bar"
+
+        const fn = compileExpression(expr, {
+            customProp: useDotAccessOperator
+        });
+
+        expect( fn({ foo: { bar: 42 } }) ).equals(42)
     })
 
 });

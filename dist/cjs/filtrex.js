@@ -2262,6 +2262,46 @@ const std =
 parser.yy = Object.create(std);
 
 
+/**
+ * A custom prop function which treats dots inside a symbol
+ * as property accessors. If you want to use the `foo.bar`
+ * syntax to access properties instead of the default
+ * `bar of foo`, you can use this function using the following
+ * code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useDotAccessOperator
+ * } from 'filtrex'
+ *
+ * const expr = "foo.bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useDotAccessOperator
+ * });
+ *
+ * fn({ foo: { bar: 42 } }) // → 42
+ * ```
+ */
+function useDotAccessOperator(name, get, obj, type) {
+    // ignore dots inside escaped symbol
+    if (type === 'single-quoted')
+        return get(name)
+
+
+    const parts = name.split('.');
+
+    for (const propertyName of parts) {
+        if (hasOwnProperty(obj ?? {}, propertyName)) {
+            obj = obj[propertyName];
+        } else {
+            throw new UnknownPropertyError(propertyName)
+        }
+    }
+
+    return obj
+}
+
 
 /**
  * A simple, safe, JavaScript expression engine, allowing end-users to enter arbitrary expressions without p0wning you.
@@ -2395,7 +2435,7 @@ function compileExpression(expression, options) {
 
     // Metaprogramming functions
 
-    function nakedProp(name, obj) {
+    function nakedProp(name, obj, type) {
         if (hasOwnProperty(obj ?? {}, name))
             return obj[name]
 
@@ -2412,7 +2452,7 @@ function compileExpression(expression, options) {
     }
 
     if (typeof customProp === 'function') {
-        nakedProp = (name, obj) => customProp(name, safeGetter(obj), obj);
+        nakedProp = (name, obj, type) => customProp(name, safeGetter(obj), obj, type);
     }
 
     function createCall(fns) {
@@ -2428,7 +2468,7 @@ function compileExpression(expression, options) {
         if (type === 'unescaped' && hasOwnProperty(constants, name))
             return constants[name]
 
-        return nakedProp(name, obj)
+        return nakedProp(name, obj, type)
     }
 
 
@@ -2449,3 +2489,4 @@ function compileExpression(expression, options) {
 }
 
 exports.compileExpression = compileExpression;
+exports.useDotAccessOperator = useDotAccessOperator;
