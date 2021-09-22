@@ -87,8 +87,8 @@ x + y | Add
 x - y | Subtract
 x * y | Multiply
 x / y | Divide
-x % y | Modulo
 x ^ y | Power
+x mod y | Modulo
 
 Comparisons | Description
 --- | ---
@@ -98,6 +98,7 @@ x < y | Less than
 x <= y | Less than or equal to
 x > y | Greater than
 x >= y | Greater than or equal to
+x == y <= z | Chained relation, equivalent to (x == y and y <= z)
 x ~= y | Regular expression match
 x in (a, b, c) | Equivalent to (x == a or x == b or x == c)
 x not in (a, b, c) | Equivalent to (x != a and x != b and x != c)
@@ -107,7 +108,7 @@ Boolean logic | Description
 x or y | Boolean or
 x and y | Boolean and
 not x | Boolean not
-if x then y else z | If boolean x, value y, else z
+if x then y else z | If boolean x is true, return value y, else return z
 ( x ) | Explicity operator precedence
 
 Objects and arrays | Description

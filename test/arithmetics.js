@@ -17,7 +17,7 @@ describe('Arithmetics', () => {
         expect( eval('(1 + 2) * 3') ).equals(9);
         expect( eval('((1 + 2) * 3 / 2 + 1 - 4 + 2 ^ 3) * -2') ).equals(-19);
         expect( eval('1.4 * 1.1') ).equals(1.54);
-        expect( eval('97 % 10') ).equals(7);
+        expect( eval('97 mod 10') ).equals(7);
         expect( eval('2 * 3 ^ 2') ).equals(18)
     });
 
@@ -107,10 +107,10 @@ describe('Arithmetics', () => {
 
 
     it('does modulo correctly', () => {
-        expect( eval('10 % 2') ).equals(0)
-        expect( eval('11 % 2') ).equals(1)
-        expect( eval('-1 % 2') ).equals(1)
-        expect( eval('-0.1 % 5') ).equals(4.9)
+        expect( eval('10 mod 2') ).equals(0)
+        expect( eval('11 mod 2') ).equals(1)
+        expect( eval('-1 mod 2') ).equals(1)
+        expect( eval('-0.1 mod 5') ).equals(4.9)
     })
 
 

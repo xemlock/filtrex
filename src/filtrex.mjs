@@ -26,6 +26,40 @@ const std =
         return A.every( val => B.includes(val) )
     },
 
+    warnDeprecated: (function () {
+        const warnMax = 3
+
+        let warnedTimes = {
+            ternary: 0,
+            modulo: 0
+        }
+
+        return (cause, value) => {
+            switch (cause) {
+                case 'ternary':
+                    if (warnedTimes.ternary++ >= warnMax) break
+                    console.warn(
+                        "The use of ? and : as conditional operators has been deprecated " +
+                        "in Filtrex v3 in favor of the if..then..else ternary operator. " +
+                        "See issue #34 for more information."
+                    )
+                    break
+
+                case 'modulo':
+                    if (warnedTimes.modulo++ >= warnMax) break
+                    console.warn(
+                        "The use of '%' as a modulo operator has been deprecated in Filtrex v3 " +
+                        "in favor of the 'mod' operator. You can use it like this: '3 mod 2 == 1'. " +
+                        "See issue #48 for more information."
+                    )
+                    break
+            }
+
+            return value
+        }
+
+    })(),
+
     buildString(quote, literal)
     {
         quote = String(quote)[0]
@@ -110,8 +144,8 @@ parser.yy = Object.create(std)
  *  * `x - y` Subtract
  *  * `x * y` Multiply
  *  * `x / y` Divide
- *  * `x % y` Modulo
  *  * `x ^ y` Power
+ *  * `x mod y` Modulo
  *  * `x == y` Equals
  *  * `x < y` Less than
  *  * `x <= y` Less than or equal to
@@ -182,8 +216,8 @@ export function compileExpression(expression, options) {
         '*': (a, b) => num(a) * num(b),
         '/': (a, b) => num(a) / num(b),
 
-        '%': (a, b) => mod(num(a), num(b)),
         '^': (a, b) => Math.pow(num(a), num(b)),
+        'mod': (a, b) => mod(num(a), num(b)),
 
         '==': (a, b) => a === b,
         '!=': (a, b) => a !== b,

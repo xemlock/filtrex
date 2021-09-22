@@ -68,6 +68,11 @@ describe('Various other things', () => {
     it('ternary operator', () => {
         expect( eval('if 1 > 2 then 3 else 4') ).equals(4);
         expect( eval('if 1 < 2 then 3 else 4') ).equals(3);
+
+        expect( eval('if 1 < 2 then if 3 < 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(42);
+        expect( eval('if 1 < 2 then if 3 > 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(420);
+        expect( eval('if 1 > 2 then if 3 < 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(69);
+        expect( eval('if 1 > 2 then if 3 < 4 then 42 else 420 else if 5 > 6 then 69 else -1/12') ).equals(-1/12);
     });
 
     it('kitchensink', () => {
@@ -185,7 +190,18 @@ describe('Various other things', () => {
         const expr = `'a' + a + 'b' + b`
 
         expect( compileExpression(expr, options2)(data) ).equals("a_data a_const b_data b_data ")
+    })
 
+    it('deprecated syntax still works', () => {
+        expect( eval('10 % 2') ).equals(0)
+        expect( eval('11 % 2') ).equals(1)
+        expect( eval('-1 % 2') ).equals(1)
+        expect( eval('-0.1 % 5') ).equals(4.9)
+
+        expect( eval('1 < 2 ? 3 < 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(42);
+        expect( eval('1 < 2 ? 3 > 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(420);
+        expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(69);
+        expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 > 6 ? 69 : -1/12') ).equals(-1/12);
     })
 
 });

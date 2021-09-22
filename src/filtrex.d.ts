@@ -23,8 +23,8 @@
  *  * `x - y` Subtract
  *  * `x * y` Multiply
  *  * `x / y` Divide
- *  * `x % y` Modulo
  *  * `x ^ y` Power
+ *  * `x mod y` Modulo
  *  * `x == y` Equals
  *  * `x < y` Less than
  *  * `x <= y` Less than or equal to
@@ -37,7 +37,7 @@
  *  * `x or y` Boolean or
  *  * `x and y` Boolean and
  *  * `not x` Boolean not
- *  * `if x then y else z` If boolean x, value y, else z
+ *  * `if x then y else z` If boolean x is true, return value y, else return z
  *  * `( x )` Explicity operator precedence
  *  * `( x, y, z )` Array of elements x, y and z
  *  * `abs(x)` Absolute value

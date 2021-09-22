@@ -15,7 +15,6 @@ const grammar = {
             [_`-` , `return "-" ;`],
             [_`\+`, `return "+" ;`],
             [_`\^`, `return "^" ;`],
-            [_`\%`, `return "%" ;`],
             [_`\(`, `return "(" ;`],
             [_`\)`, `return ")" ;`],
             [_`\,`, `return "," ;`],
@@ -35,6 +34,7 @@ const grammar = {
             [_`if[^\w]`  , `return "if"  ;`],
             [_`then[^\w]`, `return "then";`],
             [_`else[^\w]`, `return "else";`],
+            [_`mod[^\w]` , `return "mod" ;`],
 
             [_`\s+`,  ''], // skip whitespace
             [_`[0-9]+(?:\.[0-9]+)?(?![0-9\.])`, `return "Number";`], // 212.321
@@ -60,6 +60,13 @@ const grammar = {
                 return "String";`
             ], // "any \"escaped\" string"
 
+
+            // Deprecated syntax
+            [_`\%`, `return "%" ;`],
+            [_`\?`, `return "?" ;`],
+            [_`:`, `return ":" ;`],
+
+
             // End
             [_`$`, 'return "EOF";'],
         ]
@@ -70,7 +77,7 @@ const grammar = {
     // Different languages have different rules, but this seems a good starting
     // point: http://en.wikipedia.org/wiki/Order_of_operations#Programming_languages
     operators: [
-        ['left', 'if', 'then', 'else'],
+        ['right', 'if', 'then', 'else', /* deprecated: */ '?', ':'],
         ['left', 'or'],
         ['left', 'and'],
         ['left', 'in', 'notIn'],
@@ -78,7 +85,7 @@ const grammar = {
         ['left', '==', '!=', '<', '<=', '>', '>=', '~='],
         ['left', 'CHAINEDREL'],
         ['left', '+', '-'],
-        ['left', '*', '/', '%'],
+        ['left', '*', '/', 'mod', /* deprecated: */ '%'],
         ['left', 'not', 'UMINUS'],
         ['right', '^'],
         ['left', 'of'],
@@ -94,8 +101,8 @@ const grammar = {
             ['e - e'  , operatorCode],
             ['e * e'  , operatorCode],
             ['e / e'  , operatorCode],
-            ['e % e'  , operatorCode],
             ['e ^ e'  , operatorCode],
+            ['e mod e', code`ops.mod(${1}, ${3})`],
 
             ['e and e', code`${bool}(${1}) && ${bool}(${3})`],
             ['e or e' , code`${bool}(${1}) || ${bool}(${3})`],
@@ -117,6 +124,11 @@ const grammar = {
             ['Symbol ( Arguments )', parenless`call(${1}, ${3})`],
 
             ['Relation' , `$$ = yy.reduceRelation($1);`, {prec: '=='}],
+
+            // Deprecated
+            ['e % e' , parenless`std.warnDeprecated('modulo', ops['mod'](${1}, ${3}))`],
+            ['e ? e : e', parenless`std.warnDeprecated('ternary', ${bool}(${1}) ? ${3} : ${5})`],
+
         ],
         RelationalOperator: [
             noop`==`, noop`!=`, noop`~=`, noop`<`,
