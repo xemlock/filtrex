@@ -1,6 +1,8 @@
 const {
     compileExpression,
     useDotAccessOperator,
+    useOptionalChaining,
+    useDotAccessOperatorAndOptionalChaining,
 } = require("../dist/cjs/filtrex");
 
 const { describe, it } = require("mocha");
@@ -215,6 +217,33 @@ describe('Various other things', () => {
         });
 
         expect( fn({ foo: { bar: 42 } }) ).equals(42)
+    })
+
+    it('useOptionalChaining work', () => {
+        const expr = "bar of foo"
+
+        const fn = compileExpression(expr, {
+            customProp: useOptionalChaining
+        });
+
+        expect( fn({ foo: null }) ).equals(null)
+        expect( fn({ foo: { bar: 42 } }) ).equals(42)
+    })
+
+    it('useDotAccessOperatorAndOptionalChaining works', () => {
+        const expr1 = "foo.bar"
+        const expr2 = "bar of foo"
+        const options = {
+            customProp: useDotAccessOperatorAndOptionalChaining
+        }
+
+        const fn1 = compileExpression(expr1, options);
+        const fn2 = compileExpression(expr2, options);
+
+        expect( fn1({ foo: null }) ).equals(null)
+        expect( fn1({ foo: { bar: 42 } }) ).equals(42)
+        expect( fn2({ foo: null }) ).equals(null)
+        expect( fn2({ foo: { bar: 42 } }) ).equals(42)
     })
 
 });

@@ -119,6 +119,34 @@ parser.yy = Object.create(std)
 
 
 /**
+ * A custom prop function which doesn't throw an UnknownPropertyError
+ * if the user tries to access a property of `undefined` and `null`,
+ * but instead returns `unknown` or `null`. This effectively turns
+ * `a of b` into `b.?a`. You can use this function using the following
+ * code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useOptionalChaining
+ * } from 'filtrex'
+ *
+ * const expr = "foo of bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useOptionalChaining
+ * });
+ *
+ * fn({ bar: null }) // → null
+ * ```
+ */
+export function useOptionalChaining(name, get, obj, type) {
+    if (obj === null || obj === undefined)
+        return obj
+
+    return get(name)
+}
+
+/**
  * A custom prop function which treats dots inside a symbol
  * as property accessors. If you want to use the `foo.bar`
  * syntax to access properties instead of the default
@@ -144,7 +172,6 @@ export function useDotAccessOperator(name, get, obj, type) {
     if (type === 'single-quoted')
         return get(name)
 
-
     const parts = name.split('.')
 
     for (const propertyName of parts) {
@@ -152,6 +179,47 @@ export function useDotAccessOperator(name, get, obj, type) {
             obj = obj[propertyName]
         } else {
             throw new UnknownPropertyError(propertyName)
+        }
+    }
+
+    return obj
+}
+
+
+/**
+ * A custom prop function which combines `useOptionalChaining` and `useDotAccessOperator`.
+ * The user can use both `foo of bar` and `bar.foo`, both have optional chaining.
+ * You can use this function using the following code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useDotAccessOperatorAndOptionalChaining
+ * } from 'filtrex'
+ *
+ * const expr = "foo.bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useDotAccessOperatorAndOptionalChaining
+ * });
+ *
+ * fn({ foo: null }) // → null
+ * ```
+ */
+ export function useDotAccessOperatorAndOptionalChaining(name, get, obj, type) {
+    if (obj === null || obj === undefined)
+        return obj
+
+    // ignore dots inside escaped symbol
+    if (type === 'single-quoted')
+        return get(name)
+
+    const parts = name.split('.')
+
+    for (const propertyName of parts) {
+        if (obj === null || obj === undefined) {
+            return obj
+        } else {
+            obj = obj[propertyName]
         }
     }
 
@@ -205,10 +273,14 @@ export function useDotAccessOperator(name, get, obj, type) {
  *  * `ceil(x)` Round floating point up
  *  * `floor(x)` Round floating point down
  *  * `log(x)` Natural logarithm
+ *  * `log2(x)` Binary logarithm
+ *  * `log10(x)` Decadic logarithm
  *  * `max(a, b, c...)` Max value (variable length of args)
  *  * `min(a, b, c...)` Min value (variable length of args)
  *  * `round(x)` Round floating point
  *  * `sqrt(x)` Square root
+ *  * `exists(x)` True if `x` is neither `undefined` nor `null`
+ *  * `empty(x)` True if `x` doesn't exist, it is an empty string or empty array
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
  */
 export function compileExpression(expression, options) {

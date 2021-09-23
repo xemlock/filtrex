@@ -2370,6 +2370,32 @@ var std = {
 };
 parser.yy = Object.create(std);
 /**
+ * A custom prop function which doesn't throw an UnknownPropertyError
+ * if the user tries to access a property of `undefined` and `null`,
+ * but instead returns `unknown` or `null`. This effectively turns
+ * `a of b` into `b.?a`. You can use this function using the following
+ * code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useOptionalChaining
+ * } from 'filtrex'
+ *
+ * const expr = "foo of bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useOptionalChaining
+ * });
+ *
+ * fn({ bar: null }) // → null
+ * ```
+ */
+
+function useOptionalChaining(name, get, obj, type) {
+  if (obj === null || obj === undefined) return obj;
+  return get(name);
+}
+/**
  * A custom prop function which treats dots inside a symbol
  * as property accessors. If you want to use the `foo.bar`
  * syntax to access properties instead of the default
@@ -2390,6 +2416,7 @@ parser.yy = Object.create(std);
  * fn({ foo: { bar: 42 } }) // → 42
  * ```
  */
+
 
 function useDotAccessOperator(name, get, obj, type) {
   // ignore dots inside escaped symbol
@@ -2415,6 +2442,54 @@ function useDotAccessOperator(name, get, obj, type) {
     _iterator.e(err);
   } finally {
     _iterator.f();
+  }
+
+  return obj;
+}
+/**
+ * A custom prop function which combines `useOptionalChaining` and `useDotAccessOperator`.
+ * The user can use both `foo of bar` and `bar.foo`, both have optional chaining.
+ * You can use this function using the following code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useDotAccessOperatorAndOptionalChaining
+ * } from 'filtrex'
+ *
+ * const expr = "foo.bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useDotAccessOperatorAndOptionalChaining
+ * });
+ *
+ * fn({ foo: null }) // → null
+ * ```
+ */
+
+
+function useDotAccessOperatorAndOptionalChaining(name, get, obj, type) {
+  if (obj === null || obj === undefined) return obj; // ignore dots inside escaped symbol
+
+  if (type === 'single-quoted') return get(name);
+  var parts = name.split('.');
+
+  var _iterator2 = _createForOfIteratorHelper(parts),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var propertyName = _step2.value;
+
+      if (obj === null || obj === undefined) {
+        return obj;
+      } else {
+        obj = obj[propertyName];
+      }
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
   }
 
   return obj;
@@ -2465,10 +2540,14 @@ function useDotAccessOperator(name, get, obj, type) {
  *  * `ceil(x)` Round floating point up
  *  * `floor(x)` Round floating point down
  *  * `log(x)` Natural logarithm
+ *  * `log2(x)` Binary logarithm
+ *  * `log10(x)` Decadic logarithm
  *  * `max(a, b, c...)` Max value (variable length of args)
  *  * `min(a, b, c...)` Min value (variable length of args)
  *  * `round(x)` Round floating point
  *  * `sqrt(x)` Square root
+ *  * `exists(x)` True if `x` is neither `undefined` nor `null`
+ *  * `empty(x)` True if `x` doesn't exist, it is an empty string or empty array
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
  */
 
@@ -2623,4 +2702,4 @@ function compileExpression(expression, options) {
   };
 }
 
-export { compileExpression, useDotAccessOperator };
+export { compileExpression, useDotAccessOperator, useDotAccessOperatorAndOptionalChaining, useOptionalChaining };
