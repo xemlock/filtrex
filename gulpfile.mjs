@@ -44,21 +44,37 @@ export async function clean() {
     await del(`${DIST}/**`)
 }
 
-export async function buildEsm() {
+export async function buildEsNext() {
     await pipe(
         srcFromString(`${SRC}/parser.mjs`, parserSourceCode),
         beautify({ indent_size: 4, end_with_newline: true }),
-        dest(`${DIST}/esm/`)
+        dest(`${DIST}/esnext/`)
     )
     await pipe(
         src([ `${SRC}/*.mjs`, `${SRC}/*.d.ts` ]),
-        dest(`${DIST}/esm/`)
+        dest(`${DIST}/esnext/`)
     )
+}
+
+export async function buildEsm() {
+    const bundle = await rollup({
+        input: `${DIST}/esnext/filtrex.mjs`
+    });
+
+    await bundle.write({
+        output: {
+            dir: `${DIST}/esm/`,
+            format: 'esm',
+            entryFileNames: '[name].mjs'
+        }
+    })
+
+    await pipe( src(`${SRC}/filtrex.d.ts`), dest(`${DIST}/esm/`) )
 }
 
 export async function buildCjs() {
     const bundle = await rollup({
-        input: `${DIST}/esm/filtrex.mjs`
+        input: `${DIST}/esnext/filtrex.mjs`
     });
 
     await bundle.write({
@@ -67,11 +83,13 @@ export async function buildCjs() {
             format: 'cjs'
         }
     })
+
+    await pipe( src(`${SRC}/filtrex.d.ts`), dest(`${DIST}/cjs/`) )
 }
 
 export async function buildBrowser() {
     const bundle = await rollup({
-        input: `${DIST}/esm/filtrex.mjs`
+        input: `${DIST}/esnext/filtrex.mjs`
     });
 
     await bundle.write({
@@ -88,10 +106,13 @@ export async function buildBrowser() {
         rename(path => path.basename += '.min'),
         dest(`${DIST}/browser/`)
     )
+
+    await pipe( src(`${SRC}/filtrex.d.ts`), dest(`${DIST}/browser/`) )
 }
 
 export async function build() {
     await clean()
+    await buildEsNext()
     await buildEsm()
     await buildCjs()
     await buildBrowser()
