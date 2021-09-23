@@ -18,25 +18,26 @@
  * on the truthy value of values (e.g. any non-zero number is true, any non-empty string is true, otherwise false).
  * Examples of numbers: `43`, `-1.234`; example of a string: `"hello"`; example of external data variable: `foo`, `a.b.c`,
  * `'foo-bar'`.
- * You can use the following operators:
+ * You can use the following operations:
  *  * `x + y` Add
  *  * `x - y` Subtract
  *  * `x * y` Multiply
  *  * `x / y` Divide
- *  * `x % y` Modulo
  *  * `x ^ y` Power
+ *  * `x mod y` Modulo
  *  * `x == y` Equals
  *  * `x < y` Less than
  *  * `x <= y` Less than or equal to
  *  * `x > y` Greater than
  *  * `x >= y` Greater than or equal to
+ *  * `x == y <= z` Chained relation, equivalent to `(x == y and y <= z)`
  *  * `x of y` Get property x of object y
  *  * `x in (a, b, c)` Equivalent to `(x == a or x == b or x == c)`
  *  * `x not in (a, b, c)` Equivalent to `(x != a and x != b and x != c)`
  *  * `x or y` Boolean or
  *  * `x and y` Boolean and
  *  * `not x` Boolean not
- *  * `x ? y : z` If boolean x, value y, else z
+ *  * `if x then y else z` If boolean x is true, return value y, else return z
  *  * `( x )` Explicity operator precedence
  *  * `( x, y, z )` Array of elements x, y and z
  *  * `abs(x)` Absolute value
@@ -45,7 +46,6 @@
  *  * `log(x)` Natural logarithm
  *  * `max(a, b, c...)` Max value (variable length of args)
  *  * `min(a, b, c...)` Min value (variable length of args)
- *  * `random()` Random floating point from 0.0 to 1.0
  *  * `round(x)` Round floating point
  *  * `sqrt(x)` Square root
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
@@ -64,7 +64,17 @@ export interface Options
      */
     extraFunctions?: {
         [T: string]: Function
-    },
+    }
+
+    /**
+     * Pass constants like `pi` or `true` to the expression without having to modify data.
+     * These constants will shadow identically named properties on the data object. In order
+     * to access `data.pi` instead of `constants.pi`, for example, use a single-quoted
+     * symbol in your expression, ie. `'pi'` instead of just `pi`.
+     */
+    constants?: {
+        [T: string]: any
+    }
 
     /**
      * If you want to do some more magic with your expression, you can supply a custom function
@@ -89,13 +99,67 @@ export interface Options
      *   (word, _, string) => containsWord(string, word)
      * );
      *
-     * myfilter("Bob is boring"); // returns 0
-     * myfilter("Bob met Alice"); // returns 1
-     * myfilter("Cecil is cool"); // returns 1
+     * myfilter("Bob is boring"); // returns false
+     * myfilter("Bob met Alice"); // returns true
+     * myfilter("Cecil is cool"); // returns true
      */
     customProp?: (
         name: string,
         get: (name: string) => any,
-        object: any
+        object: any,
+        type: 'unescaped' | 'single-quoted'
     ) => any
+
+    /**
+     * This option lets you override operators like `+` and `>=` with custom functions.
+     */
+    operators?: Operators
 }
+
+export interface Operators {
+    '+'?: (a: any, b: any) => any
+    '-'?: (a: any, b?: any) => any
+    '*'?: (a: any, b: any) => any
+    '/'?: (a: any, b: any) => any
+
+    '%'?: (a: any, b: any) => any
+    '^'?: (a: any, b: any) => any
+
+    '==': (a: any, b: any) => boolean
+    '!=': (a: any, b: any) => boolean
+
+    '<'?: (a: any, b: any) => boolean
+    '>='?: (a: any, b: any) => boolean
+    '<='?: (a: any, b: any) => boolean
+    '>'?: (a: any, b: any) => boolean
+
+    '~='?: (a: any, b: any) => boolean
+}
+
+/**
+ * A custom prop function which treats dots inside a symbol
+ * as property accessors. If you want to use the `foo.bar`
+ * syntax to access properties instead of the default
+ * `bar of foo`, you can use this function using the following
+ * code:
+ * ```
+ * import {
+ *   compileExpression,
+ *   useDotAccessOperator
+ * } from 'filtrex'
+ *
+ * const expr = "foo.bar"
+ *
+ * const fn = compileExpression(expr, {
+ *   customProp: useDotAccessOperator
+ * });
+ *
+ * fn({ foo: { bar: 42 } }) // → 42
+ * ```
+ */
+export function useDotAccessOperator(
+    name: string,
+    get: (name: string) => any,
+    object: any,
+    type: 'unescaped' | 'single-quoted'
+)

@@ -87,8 +87,8 @@ x + y | Add
 x - y | Subtract
 x * y | Multiply
 x / y | Divide
-x % y | Modulo
 x ^ y | Power
+x mod y | Modulo
 
 Comparisons | Description
 --- | ---
@@ -98,6 +98,7 @@ x < y | Less than
 x <= y | Less than or equal to
 x > y | Greater than
 x >= y | Greater than or equal to
+x == y <= z | Chained relation, equivalent to (x == y and y <= z)
 x ~= y | Regular expression match
 x in (a, b, c) | Equivalent to (x == a or x == b or x == c)
 x not in (a, b, c) | Equivalent to (x != a and x != b and x != c)
@@ -107,7 +108,7 @@ Boolean logic | Description
 x or y | Boolean or
 x and y | Boolean and
 not x | Boolean not
-x ? y : z | If boolean x, value y, else z
+if x then y else z | If boolean x is true, return value y, else return z
 ( x ) | Explicity operator precedence
 
 Objects and arrays | Description
@@ -120,11 +121,14 @@ Built-in functions | Description
 --- | ---
 abs(x) | Absolute value
 ceil(x) | Round floating point up
+empty(x) | True if _x_ is `undefined`, `null`, an empty array or an empty string
+exists(x) | True unless _x_ is `undefined` or `null`
 floor(x) | Round floating point down
 log(x) | Natural logarithm
+log2(x) | Logarithm base two
+log10(x) | Logarithm base ten
 max(a, b, c...) | Max value (variable length of args)
 min(a, b, c...) | Min value (variable length of args)
-random() | Random floating point from 0.0 to 1.0
 round(x) | Round floating point
 sqrt(x) | Square root
 

@@ -29,18 +29,13 @@ describe('Object support', () => {
         expect( compileExpression('$_.0$$')({'$_.0$$': 123}) ).equals(123);
     });
 
-    it('disallows symbols starting with numerals', () => {
-        expect( () => compileExpression('0hey') ).throws();
-        expect( () => compileExpression('123.456hey') ).throws();
-    })
-
     it('includes object property accessors', () => {
         expect(compileExpression(`hat of 'the captain' of Danube.Steamboat.Shipping.Company`)(
             {'Danube.Steamboat.Shipping.Company': {'the captain': {hat: "epic"}}}
         )).equals("epic");
 
-        expect(compileExpression('something of nothing')({})).equals(undefined);
-        expect(compileExpression('toString of something')({ something: {}})).equals(undefined);
+        expect(compileExpression('something of nothing')({ nothing: undefined })).is.instanceOf(ReferenceError);
+        expect(compileExpression('toString of something')({ something: {}})).is.instanceOf(ReferenceError);
     });
 
 });

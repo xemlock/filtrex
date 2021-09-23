@@ -1,4 +1,7 @@
-const { compileExpression } = require("../dist/cjs/filtrex");
+const {
+    compileExpression,
+    useDotAccessOperator,
+} = require("../dist/cjs/filtrex");
 
 const { describe, it } = require("mocha");
 
@@ -16,39 +19,37 @@ const eval = (str, obj) => compileExpression(str)(obj);
 
 describe('Various other things', () => {
 
-
-
     it('in / not in', () => {
         // value in array
-        expect( eval('5 in (1, 2, 3, 4)') ).equals(0);
-        expect( eval('3 in (1, 2, 3, 4)') ).equals(1);
-        expect( eval('5 not in (1, 2, 3, 4)') ).equals(1);
-        expect( eval('3 not in (1, 2, 3, 4)') ).equals(0);
+        expect( eval('5 in (1, 2, 3, 4)') ).equals(false);
+        expect( eval('3 in (1, 2, 3, 4)') ).equals(true);
+        expect( eval('5 not in (1, 2, 3, 4)') ).equals(true);
+        expect( eval('3 not in (1, 2, 3, 4)') ).equals(false);
 
         // array in array
-        expect( eval('(1, 2) in (1, 2, 3)') ).equals(1);
-        expect( eval('(1, 2) in (2, 3, 1)') ).equals(1);
-        expect( eval('(3, 4) in (1, 2, 3)') ).equals(0);
-        expect( eval('(1, 2) not in (1, 2, 3)') ).equals(0);
-        expect( eval('(1, 2) not in (2, 3, 1)') ).equals(0);
-        expect( eval('(3, 4) not in (1, 2, 3)') ).equals(1);
+        expect( eval('(1, 2) in (1, 2, 3)') ).equals(true);
+        expect( eval('(1, 2) in (2, 3, 1)') ).equals(true);
+        expect( eval('(3, 4) in (1, 2, 3)') ).equals(false);
+        expect( eval('(1, 2) not in (1, 2, 3)') ).equals(false);
+        expect( eval('(1, 2) not in (2, 3, 1)') ).equals(false);
+        expect( eval('(3, 4) not in (1, 2, 3)') ).equals(true);
 
         // other edge cases
-        expect( eval('(1, 2) in 1'    ) ).equals(0);
-        expect( eval('1 in 1'         ) ).equals(1);
-        expect( eval('(1, 2) not in 1') ).equals(1);
-        expect( eval('1 not in 1'     ) ).equals(0);
+        expect( eval('(1, 2) in 1'    ) ).equals(false);
+        expect( eval('1 in 1'         ) ).equals(true);
+        expect( eval('(1, 2) not in 1') ).equals(true);
+        expect( eval('1 not in 1'     ) ).equals(false);
     });
 
     it('string support', () => {
-        expect( eval('foo == "hello"', {foo:'hello'}) ).equals(1);
-        expect( eval('foo == "hello"', {foo:'bye'  }) ).equals(0);
-        expect( eval('foo != "hello"', {foo:'hello'}) ).equals(0);
-        expect( eval('foo != "hello"', {foo:'bye'  }) ).equals(1);
-        expect( eval('foo in ("aa", "bb")', {foo:'aa'}) ).equals(1);
-        expect( eval('foo in ("aa", "bb")', {foo:'cc'}) ).equals(0);
-        expect( eval('foo not in ("aa", "bb")', {foo:'aa'}) ).equals(0);
-        expect( eval('foo not in ("aa", "bb")', {foo:'cc'}) ).equals(1);
+        expect( eval('foo == "hello"', {foo:'hello'}) ).equals(true);
+        expect( eval('foo == "hello"', {foo:'bye'  }) ).equals(false);
+        expect( eval('foo != "hello"', {foo:'hello'}) ).equals(false);
+        expect( eval('foo != "hello"', {foo:'bye'  }) ).equals(true);
+        expect( eval('foo in ("aa", "bb")', {foo:'aa'}) ).equals(true);
+        expect( eval('foo in ("aa", "bb")', {foo:'cc'}) ).equals(false);
+        expect( eval('foo not in ("aa", "bb")', {foo:'aa'}) ).equals(false);
+        expect( eval('foo not in ("aa", "bb")', {foo:'cc'}) ).equals(true);
 
         expect( eval(`"\n"`) ).equals("\n");
         expect( eval(`"\u0000"`) ).equals("\u0000");
@@ -56,8 +57,8 @@ describe('Various other things', () => {
     });
 
     it('regexp support', () => {
-        expect( eval('foo ~= "^[hH]ello"', {foo:'hello'}) ).equals(1);
-        expect( eval('foo ~= "^[hH]ello"', {foo:'bye'  }) ).equals(0);
+        expect( eval('foo ~= "^[hH]ello"', {foo:'hello'}) ).equals(true);
+        expect( eval('foo ~= "^[hH]ello"', {foo:'bye'  }) ).equals(false);
     });
 
     it('array support', () => {
@@ -68,12 +69,17 @@ describe('Various other things', () => {
     });
 
     it('ternary operator', () => {
-        expect( eval('1 > 2 ? 3 : 4') ).equals(4);
-        expect( eval('1 < 2 ? 3 : 4') ).equals(3);
+        expect( eval('if 1 > 2 then 3 else 4') ).equals(4);
+        expect( eval('if 1 < 2 then 3 else 4') ).equals(3);
+
+        expect( eval('if 1 < 2 then if 3 < 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(42);
+        expect( eval('if 1 < 2 then if 3 > 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(420);
+        expect( eval('if 1 > 2 then if 3 < 4 then 42 else 420 else if 5 < 6 then 69 else -1/12') ).equals(69);
+        expect( eval('if 1 > 2 then if 3 < 4 then 42 else 420 else if 5 > 6 then 69 else -1/12') ).equals(-1/12);
     });
 
     it('kitchensink', () => {
-        var kitchenSink = compileExpression('4 > lowNumber * 2 and (max(a, b) < 20 or foo) ? 1.1 : 9.4');
+        var kitchenSink = compileExpression('if 4 > lowNumber * 2 and (max(a, b) < 20 or foo) then 1.1 else 9.4');
         expect( kitchenSink({lowNumber: 1.5, a: 10, b: 12, foo: false}) ).equals(1.1);
         expect( kitchenSink({lowNumber: 3.5, a: 10, b: 12, foo: false}) ).equals(9.4);
     });
@@ -87,7 +93,7 @@ describe('Various other things', () => {
     it('custom property function basics', () => {
         expect(
             compileExpression('a', { customProp: name => name === 'a' })()
-        ).equals(1);
+        ).equals(true);
 
         expect(
             compileExpression('a + bb + ccc', { customProp: name => name.length })()
@@ -99,13 +105,13 @@ describe('Various other things', () => {
         ).equals(7);
 
         expect(
-            compileExpression('a', { customProp: (name, get) => get(name) })({ a:true })
-        ).equals(1);
+            compileExpression('a', { customProp: (name, get) => get(name) })({ a: true })
+        ).equals(true);
 
-        let object = {a:1};
+        let object = {a: 2};
         expect(
             compileExpression('a', { customProp: (_,__,obj) => obj === object })(object)
-        ).equals(1);
+        ).equals(true);
     });
 
     it('custom property function text search', () => {
@@ -114,12 +120,12 @@ describe('Various other things', () => {
         let evalProp = exp => compileExpression(exp, { customProp: doesTextMatch })();
 
 
-        expect( evalProp('able and was and i') ).equals(1);
-        expect( evalProp('able and was and dog') ).equals(0);
-        expect( evalProp('able or dog') ).equals(1);
-        expect( evalProp('able') ).equals(1);
-        expect( evalProp('Rain and (missing or MAINLY)') ).equals(1);
-        expect( evalProp('NotThere or missing or falls and plain') ).equals(1);
+        expect( evalProp('able and was and i') ).equals(true);
+        expect( evalProp('able and was and dog') ).equals(false);
+        expect( evalProp('able or dog') ).equals(true);
+        expect( evalProp('able') ).equals(true);
+        expect( evalProp('Rain and (missing or MAINLY)') ).equals(true);
+        expect( evalProp('NotThere or missing or falls and plain') ).equals(true);
     });
 
     it('custom property function proxy', () => {
@@ -154,5 +160,61 @@ describe('Various other things', () => {
         expect(err).is.instanceOf(ReferenceError);
         expect(err.message).equals("Unknown function: sqrt()");
     });
+
+    it('gives the correct precedence to "in" and "not in"', () => {
+        expect( eval('4 + 3 in (7, 8)') ).equals(true);
+        expect( eval('4 + 3 in (6, 8)') ).equals(false);
+        expect( eval('4 + 3 not in (7, 8)') ).equals(false);
+        expect( eval('4 + 3 not in (6, 8)') ).equals(true);
+    })
+
+    it('constants basics', () => {
+        const options = { constants: { pi: Math.PI, true: true, false: false }}
+
+        expect(
+            compileExpression('2 * pi * radius', options)({ radius: 6 })
+        ).equals(2 * Math.PI * 6)
+
+        expect(
+            compileExpression('not true == false and not false == true', options)()
+        ).equals(true)
+
+        expect(
+            compileExpression('pi', options)({ pi: 3 })
+        ).equals(Math.PI)
+
+        expect(
+            compileExpression(`'pi'`, options)({ pi: 3 })
+        ).equals(3)
+
+
+        const options2 = { constants: { a: "a_const " } }
+        const data = { a: "a_data ", b: "b_data " }
+        const expr = `'a' + a + 'b' + b`
+
+        expect( compileExpression(expr, options2)(data) ).equals("a_data a_const b_data b_data ")
+    })
+
+    it('deprecated syntax still works', () => {
+        expect( eval('10 % 2') ).equals(0)
+        expect( eval('11 % 2') ).equals(1)
+        expect( eval('-1 % 2') ).equals(1)
+        expect( eval('-0.1 % 5') ).equals(4.9)
+
+        expect( eval('1 < 2 ? 3 < 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(42);
+        expect( eval('1 < 2 ? 3 > 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(420);
+        expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 < 6 ? 69 : -1/12') ).equals(69);
+        expect( eval('1 > 2 ? 3 < 4 ? 42 : 420 : 5 > 6 ? 69 : -1/12') ).equals(-1/12);
+    })
+
+    it('useDotAccessOperator works', () => {
+        const expr = "foo.bar"
+
+        const fn = compileExpression(expr, {
+            customProp: useDotAccessOperator
+        });
+
+        expect( fn({ foo: { bar: 42 } }) ).equals(42)
+    })
 
 });
