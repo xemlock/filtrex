@@ -2,7 +2,7 @@
  * Runtime error – user attempted to call a function
  * which is not a predefined function, nor specified
  * in `options.extraFunctions`.
- * 
+ *
  * @prop {string} functionName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_FUNCTION'`
  */
@@ -22,7 +22,7 @@ extends ReferenceError {
  * If the property is meant to be empty, use `undefined` or
  * `null` as its value. If you need to use optional properties
  * in your `data`, define a `customProp` function.
- * 
+ *
  * @prop {string} propertyName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_PROPERTY'`
  */
@@ -40,7 +40,7 @@ extends ReferenceError {
  * Compile time error – you specified an option which
  * was not recognized by Filtrex. Double-check your
  * spelling and the version of Filtrex you are using.
- * 
+ *
  * @prop {string} keyName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_OPTION'`
  */
@@ -57,12 +57,12 @@ extends TypeError {
 /**
  * Runtime error – user passed a different type than the one
  * accepted by the function or operator.
- * 
+ *
  * The possible values of `expectedType` and `recievedType`
  * are: `"undefined"`, `"null"`, `"true"`, `"false"`, `"number"`,
  * `"text"`, `"unknown type"`, `"list"`, `"object"`, `"text or number"`
  * and `"logical value (“true” or “false”)"`
- * 
+ *
  * @prop {string} expectedType
  * @prop {string} recievedType
  * @prop {string} I18N_STRING has the value `'UNEXPECTED_TYPE'`
@@ -82,7 +82,7 @@ extends TypeError {
 /**
  * An internal error. This was not meant to happen, please report
  * at https://github.com/m93a/filtrex/
- * 
+ *
  * @prop {string} I18N_STRING has the value `'INTERNAL'`
  */
 export class InternalError

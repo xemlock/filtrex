@@ -2,15 +2,19 @@ import { parser } from './src/generateParser.mjs'
 import { Readable, pipeline as _pipe } from 'stream'
 import { promisify } from 'util'
 import { rollup } from 'rollup'
+import { babel, getBabelOutputPlugin } from '@rollup/plugin-babel'
 
 import Vinyl from 'vinyl'
 import beautify from 'gulp-beautify'
 import rename from 'gulp-rename'
 import del from 'del'
 
-// fml, this is the last time i develop for node
-const { src, dest } = (await import('gulp')).default
-const uglify = (await import('gulp-uglify-es')).default.default
+import gulp from 'gulp'
+const { src, dest } = gulp
+
+import uglify_ from 'gulp-uglify-es'
+const uglify = uglify_.default
+
 
 const pipe = promisify(_pipe)
 
@@ -58,15 +62,21 @@ export async function buildEsNext() {
 
 export async function buildEsm() {
     const bundle = await rollup({
-        input: `${DIST}/esnext/filtrex.mjs`
-    });
+        input: `${DIST}/esnext/filtrex.mjs`,
+    })
 
     await bundle.write({
         output: {
             dir: `${DIST}/esm/`,
             format: 'esm',
-            entryFileNames: '[name].mjs'
-        }
+            entryFileNames: '[name].mjs',
+        },
+        plugins: [
+            getBabelOutputPlugin({
+                presets: ['@babel/preset-env'],
+                targets: '> 0.25%, not dead',
+            }),
+        ],
     })
 
     await pipe( src(`${SRC}/filtrex.d.ts`), dest(`${DIST}/esm/`) )
@@ -80,8 +90,14 @@ export async function buildCjs() {
     await bundle.write({
         output: {
             dir: `${DIST}/cjs/`,
-            format: 'cjs'
-        }
+            format: 'cjs',
+        },
+        plugins: [
+            getBabelOutputPlugin({
+                presets: ['@babel/preset-env'],
+                targets: '> 0.25%, not dead',
+            }),
+        ],
     })
 
     await pipe( src(`${SRC}/filtrex.d.ts`), dest(`${DIST}/cjs/`) )
@@ -89,15 +105,32 @@ export async function buildCjs() {
 
 export async function buildBrowser() {
     const bundle = await rollup({
-        input: `${DIST}/esnext/filtrex.mjs`
+        input: `${DIST}/esnext/filtrex.mjs`,
+        plugins: [
+            babel({
+                presets: ['@babel/preset-env'],
+                targets: {
+                    // The oldest versions that show up in the CSV export of:
+                    // https://gs.statcounter.com/#all-browser_version-ww-monthly-202108-202108-bar
+                    android: '0',
+                    chrome: '22',
+                    edge: '17',
+                    firefox: '4',
+                    ie: '8',
+                    opera: '37',
+                    safari: '5',
+                    samsung: '1',
+                },
+            }),
+        ],
     });
 
     await bundle.write({
         output: {
             name: 'filtrex',
             dir: `${DIST}/browser/`,
-            format: 'iife'
-        }
+            format: 'iife',
+        },
     })
 
     await pipe(

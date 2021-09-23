@@ -20,7 +20,6 @@ export function hasOwnProperty(obj, prop) {
  * @param {number} b
  * @returns {number}
  */
-
 export function mod(a, b) {
     return (a % b + b) % b
 }
