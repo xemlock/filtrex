@@ -222,12 +222,3 @@ Contributors
 * [@bradparks](https://github.com/bradparks) Brad Parks – extensible prop function
 * [@arendjr](https://github.com/arendjr) Arend van Beelen jr. – quote escaping in string literals
 * [@alexgorbatchev](https://github.com/alexgorbatchev) Alex Gorbatchev – the original maintainer of the NPM package
-
-
-Like this? Want other thingies?
--------------------------------
-
-*   [websocketd](https://github.com/joewalnes/websocketd) – Turn any program that uses STDIN/STDOUT into a WebSocket server. Like inetd, but for WebSockets.
-*   [ReconnectingWebSocket](https://github.com/joewalnes/reconnecting-websocket) – Simplest way to add some robustness to your WebSocket connections.
-*   [Smoothie Charts](http://smoothiecharts.org/) – JavaScript charts for streaming data.
-*   Visit [The Igloo Lab](http://theigloolab.com/) to see and subscribe to other thingies I make.
