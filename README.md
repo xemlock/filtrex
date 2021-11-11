@@ -165,7 +165,8 @@ If you want to do some more magic with your filtrex, you can supply a custom fun
 function propFunction(
   propertyName: string, // name of the property being accessed
   get: (name: string) => obj[name], // safe getter that retrieves the property from obj
-  obj: any // the object passed to compiled expression
+  obj: any, // the object passed to compiled expression
+  type: 'unescaped' | 'single-quoted' // whether the symbol was unquoted or enclosed in single quotes
 )
 ```
 
