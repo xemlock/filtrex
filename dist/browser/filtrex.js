@@ -273,7 +273,7 @@ var filtrex = (function (exports) {
         "error": 2,
         "expressions": 3,
         "e": 4,
-        "EOF": 5,
+        "EndOfExpression": 5,
         "-": 6,
         "+": 7,
         "*": 8,
@@ -313,7 +313,7 @@ var filtrex = (function (exports) {
       },
       terminals_: {
         2: "error",
-        5: "EOF",
+        5: "EndOfExpression",
         6: "-",
         7: "+",
         8: "*",
@@ -2213,7 +2213,7 @@ var filtrex = (function (exports) {
             return ":";
 
           case 33:
-            return "EOF";
+            return "EndOfExpression";
         }
       };
 

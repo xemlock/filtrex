@@ -7,7 +7,7 @@ var _parser = (function() {
             "error": 2,
             "expressions": 3,
             "e": 4,
-            "EOF": 5,
+            "EndOfExpression": 5,
             "-": 6,
             "+": 7,
             "*": 8,
@@ -47,7 +47,7 @@ var _parser = (function() {
         },
         terminals_: {
             2: "error",
-            5: "EOF",
+            5: "EndOfExpression",
             6: "-",
             7: "+",
             8: "*",
@@ -1924,7 +1924,7 @@ var _parser = (function() {
                     return ":";
                     break;
                 case 33:
-                    return "EOF";
+                    return "EndOfExpression";
                     break;
             }
         };

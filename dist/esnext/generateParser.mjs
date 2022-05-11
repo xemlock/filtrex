@@ -68,7 +68,7 @@ const grammar = {
 
 
             // End
-            [_`$`, 'return "EOF";'],
+            [_`$`, 'return "EndOfExpression";'],
         ]
     },
     // Operator precedence - lowest precedence first.
@@ -93,7 +93,7 @@ const grammar = {
     // Grammar
     bnf: {
         expressions: [ // Entry point
-            ['e EOF', 'return $1;']
+            ['e EndOfExpression', 'return $1;']
         ],
         e: [
             ['- e'    , code`ops['-'](${2})`, {prec: 'UMINUS'}],
