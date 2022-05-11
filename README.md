@@ -78,7 +78,7 @@ Values                | Description
 43, -1.234            | Numbers
 "hello"               | String
 " \\" \\\\ "          | Escaping of double-quotes and blackslash in string
-foo, a.b.c, 'foo-bar' | External data variable defined by application (may be numbers or strings)
+foo, a.b.c, 'foo-bar' | External data variable defined by application
 
 **BEWARE!** Strings must be double-quoted! Single quotes are for external variables. Also, `a.b.c` doesn't mean `data.a.b.c`, it means `data['a.b.c']`.
 
@@ -149,7 +149,7 @@ sqrt(x)            | Square root
 
 
 ## Errors
-Filtrex may throw during the compilation of an expression (for example if it's malformed, or when you supply invalid options). However, it will never throw during the execution of an expression – instead it will **return** the corresponding error. This is intentional: this way you don't have to be too cautious when executing user-defined filters even in critical code.
+Filtrex may throw during the compilation of an expression (for example if it's malformed, or when you supply invalid options). However, it will never throw during the execution of an expression – instead it will _return_ the corresponding error. It is intentional: this way you don't have to be too cautious when executing user-defined filters even in critical code.
 
 Error type           | Meaning
 -------------------- | --------
