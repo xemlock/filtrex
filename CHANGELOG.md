@@ -51,7 +51,7 @@
 
 ## [2.0.0](https://github.com/m93a/filtrex/releases/tag/v2.0.0)
 
- * **BREAKING CHANGe**: Changes the `compileExpression` method's call signature
+ * **BREAKING CHANGE**: Changes the `compileExpression` method's call signature
    * Previously the method had up to three parameters: `expression`, `extraFunctions` and `customProp`
    * Now the method has two parameters: `expression` and `options`, where `options = { extraFunctions, customProp }`
 
