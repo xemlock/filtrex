@@ -15,7 +15,7 @@ category == "meal" and (calories * weight > 2000.0 or subcategory in ("cake", "p
 
 ## Get it
 
-Filtrex is available as a NPM package via `yarn add filtrex` or `npm install filtrex`:
+Filtrex is available as an NPM package via `yarn add filtrex` or `npm install filtrex`:
 ```typescript
 import { compileExpression } from 'filtrex';
 const f = compileExpression(`category == "meal"`)
