@@ -7,7 +7,7 @@ import { babel, getBabelOutputPlugin } from '@rollup/plugin-babel'
 import Vinyl from 'vinyl'
 import beautify from 'gulp-beautify'
 import rename from 'gulp-rename'
-import del from 'del'
+import { deleteSync as del } from 'del'
 
 import gulp from 'gulp'
 const { src, dest } = gulp

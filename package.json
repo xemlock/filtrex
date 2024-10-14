@@ -22,26 +22,26 @@
     "debug": "mocha test --inspect-brk"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.10",
-    "@babel/preset-env": "^7.17.10",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@types/chai": "^4.3.1",
-    "@types/chai-arrays": "^2.0.0",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^17.0.32",
-    "chai": "^4.3.6",
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@types/chai": "^4.3.20",
+    "@types/chai-arrays": "^2.0.3",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "^22.7.5",
+    "chai": "^4.5.0",
     "chai-arrays": "^2.2.0",
-    "del": "^6.0.0",
-    "gulp": "^4.0.2",
+    "del": "^8.0.0",
+    "gulp": "^5.0.0",
     "gulp-beautify": "^3.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-uglify-es": "^3.0.0",
-    "mocha": "^10.0.0",
+    "mocha": "^10.7.3",
     "rollup": "^2.72.1",
-    "vinyl": "^2.2.1"
+    "vinyl": "^3.0.0"
   },
   "resolutions": {
-    "glob-parent": "^6.0.1"
+    "glob-parent": "^6.0.2"
   },
   "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
 }
