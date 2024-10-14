@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.0](https://github.com/cshaa/filtrex/releases/tag/v3.1.0)
+ * Change links to `github.com/m93a` to `github.com/cshaa` ([#62](https://github.com/cshaa/filtrex/pull/62))
+ * migrate from `yarn` to [`pnpm`](https://pnpm.io/)
+
 ## [3.0.0](https://github.com/cshaa/filtrex/releases/tag/v3.0.0)
 ### Breaking Changes
  * Trying to access properties that aren't present in the `data` object now produces an error ([#22](https://github.com/cshaa/filtrex/issues/22))

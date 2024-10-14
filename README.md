@@ -15,7 +15,7 @@ category == "meal" and (calories * weight > 2000.0 or subcategory in ("cake", "p
 
 ## Get it
 
-Filtrex is available as an NPM package via `yarn add filtrex` or `npm install filtrex`:
+Filtrex is available as an NPM package via `pnpm add filtrex` or `npm install filtrex`:
 ```typescript
 import { compileExpression } from 'filtrex';
 const f = compileExpression(`category == "meal"`)
@@ -49,17 +49,17 @@ Filtrex defines a really simple expression language that should be familiar to a
 ```typescript
 import { compileExpression } from 'filtrex';
 
-// Input from user (e.g. search filter)
+// Input from the user (eg. search filter)
 const expression = `transactions <= 5 and abs(profit) > 20.5`;
 
-// Compile expression to executable function
+// Compile the expression to an executable function
 const myfilter = compileExpression(expression);
 
-// Execute function
-myfilter({transactions: 3, profit:-40.5}); // → true
-myfilter({transactions: 3, profit:-14.5}); // → false
+// Execute the function on real data
+myfilter({ transactions: 3, profit:-40.5 }); // → true
+myfilter({ transactions: 3, profit:-14.5 }); // → false
 ```
-[→ Try it!](https://runkit.com/embed/54j5n8oak7hj)
+[→ Try it!](https://codesandbox.io/p/devbox/xenodochial-albattani-gvl8jc?file=%2Findex.ts)
 
 <br />
 
@@ -133,16 +133,16 @@ x of y             | Property x of object y
 Built-in functions | Description
 ------------------ | ------------
 abs(x)             | Absolute value
-ceil(x)            | Round floating point up
+ceil(x)            | Round a fractional number to the nearest **greater** integer
 empty(x)           | True if _x_ is `undefined`, `null`, an empty array or an empty string
 exists(x)          | True unless _x_ is `undefined` or `null`
-floor(x)           | Round floating point down
+floor(x)           | Round a fractional number to the nearest **lesser** integer
 log(x)             | Natural logarithm
 log2(x)            | Logarithm base two
 log10(x)           | Logarithm base ten
 max(a, b, c...)    | Max value (variable length of args)
 min(a, b, c...)    | Min value (variable length of args)
-round(x)           | Round floating point
+round(x)           | Round a fractional number to the nearest integer
 sqrt(x)            | Square root
 
 <br />
