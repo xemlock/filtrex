@@ -3,8 +3,10 @@
 ## [3.1.0](https://github.com/cshaa/filtrex/releases/tag/v3.1.0)
 
 - Change links to `github.com/m93a` to `github.com/cshaa` ([#62](https://github.com/cshaa/filtrex/pull/62))
-- Migrate from `yarn` to [`pnpm`](https://pnpm.io/)
-- Update dependencies
+- Quality of life improvements in the codebase
+  - Migrate from `yarn` to [`pnpm`](https://pnpm.io/)
+  - Update dependencies
+  - Format everything using `prettier`
 
 ## [3.0.0](https://github.com/cshaa/filtrex/releases/tag/v3.0.0)
 
