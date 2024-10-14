@@ -1,122 +1,136 @@
 // the parser is dynamically generated from generateParser.js at compile time
-import { parser } from './parser.mjs'
-import { hasOwnProperty, bool, num, numstr, mod, arr, str, flatten, code } from './utils.mjs'
-import { UnknownFunctionError, UnknownPropertyError, UnknownOptionError, InternalError } from './errors.mjs'
+import { parser } from "./parser.mjs";
+import {
+  hasOwnProperty,
+  bool,
+  num,
+  numstr,
+  mod,
+  arr,
+  str,
+  flatten,
+  code,
+} from "./utils.mjs";
+import {
+  UnknownFunctionError,
+  UnknownPropertyError,
+  UnknownOptionError,
+  InternalError,
+} from "./errors.mjs";
 
 // Shared utility functions
-const std =
-{
+const std = {
+  isfn(fns, funcName) {
+    return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function";
+  },
 
-    isfn(fns, funcName) {
-        return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function"
-    },
+  unknown(funcName) {
+    throw new UnknownFunctionError(funcName);
+  },
 
-    unknown(funcName) {
-        throw new UnknownFunctionError(funcName)
-    },
+  coerceArray: arr,
+  coerceNumber: num,
+  coerceNumberOrString: numstr,
+  coerceBoolean: bool,
 
-    coerceArray: arr,
-    coerceNumber: num,
-    coerceNumberOrString: numstr,
-    coerceBoolean: bool,
+  isSubset(a, b) {
+    const A = arr(a);
+    const B = arr(b);
+    return A.every((val) => B.includes(val));
+  },
 
-    isSubset(a, b) {
-        const A = arr(a)
-        const B = arr(b)
-        return A.every( val => B.includes(val) )
-    },
+  warnDeprecated: (function () {
+    const warnMax = 3;
 
-    warnDeprecated: (function () {
-        const warnMax = 3
+    let warnedTimes = {
+      ternary: 0,
+      modulo: 0,
+    };
 
-        let warnedTimes = {
-            ternary: 0,
-            modulo: 0
-        }
+    return (cause, value) => {
+      switch (cause) {
+        case "ternary":
+          if (warnedTimes.ternary++ >= warnMax) break;
+          console.warn(
+            "The use of ? and : as conditional operators has been deprecated " +
+              "in Filtrex v3 in favor of the if..then..else ternary operator. " +
+              "See issue #34 for more information.",
+          );
+          break;
 
-        return (cause, value) => {
-            switch (cause) {
-                case 'ternary':
-                    if (warnedTimes.ternary++ >= warnMax) break
-                    console.warn(
-                        "The use of ? and : as conditional operators has been deprecated " +
-                        "in Filtrex v3 in favor of the if..then..else ternary operator. " +
-                        "See issue #34 for more information."
-                    )
-                    break
+        case "modulo":
+          if (warnedTimes.modulo++ >= warnMax) break;
+          console.warn(
+            "The use of '%' as a modulo operator has been deprecated in Filtrex v3 " +
+              "in favor of the 'mod' operator. You can use it like this: '3 mod 2 == 1'. " +
+              "See issue #48 for more information.",
+          );
+          break;
+      }
 
-                case 'modulo':
-                    if (warnedTimes.modulo++ >= warnMax) break
-                    console.warn(
-                        "The use of '%' as a modulo operator has been deprecated in Filtrex v3 " +
-                        "in favor of the 'mod' operator. You can use it like this: '3 mod 2 == 1'. " +
-                        "See issue #48 for more information."
-                    )
-                    break
-            }
+      return value;
+    };
+  })(),
 
-            return value
-        }
+  buildString(quote, literal) {
+    quote = String(quote)[0];
+    literal = String(literal);
+    let built = "";
 
-    })(),
+    if (literal[0] !== quote || literal[literal.length - 1] !== quote)
+      throw new InternalError(
+        `Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`,
+      );
 
-    buildString(quote, literal)
-    {
-        quote = String(quote)[0]
-        literal = String(literal)
-        let built = ''
+    for (let i = 1; i < literal.length - 1; i++) {
+      if (literal[i] === "\\") {
+        i++;
+        if (i >= literal.length - 1)
+          throw new InternalError(
+            `Unexpected internal error: Unescaped backslash at the end of string literal.`,
+          );
 
-        if (literal[0] !== quote || literal[literal.length-1] !== quote)
-            throw new InternalError(`Unexpected internal error: String literal doesn't begin/end with the right quotation mark.`)
+        if (literal[i] === "\\") built += "\\";
+        else if (literal[i] === quote) built += quote;
+        else
+          throw new InternalError(
+            `Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`,
+          );
+      } else if (literal[i] === quote) {
+        throw new InternalError(
+          `Unexpected internal error: String literal contains unescaped quotation mark.`,
+        );
+      } else {
+        built += literal[i];
+      }
+    }
 
-        for (let i = 1; i < literal.length - 1; i++)
-        {
-            if (literal[i] === "\\")
-            {
-                i++;
-                if (i >= literal.length - 1) throw new InternalError(`Unexpected internal error: Unescaped backslash at the end of string literal.`)
+    return built;
+  },
 
-                if (literal[i] === "\\") built += '\\'
-                else if (literal[i] === quote) built += quote
-                else throw new InternalError(`Unexpected internal error: Invalid escaped character in string literal: ${literal[i]}`)
-            }
-            else if (literal[i] === quote)
-            {
-                throw new InternalError(`Unexpected internal error: String literal contains unescaped quotation mark.`)
-            }
-            else
-            {
-                built += literal[i]
-            }
-        }
+  reduceRelation(arr) {
+    const declarations = [];
+    const comparisons = [];
 
-        return built
-    },
+    let previousExpression = flatten([arr[0]]).join("");
+    let j = 0;
 
-    reduceRelation(arr) {
+    for (let i = 1; i < arr.length - 1; i += 2) {
+      const expr = flatten([arr[i + 1]]).join("");
+      const tempVar = `tmp${j++}`;
 
-        const declarations = []
-        const comparisons = []
+      comparisons.push(
+        `ops["${arr[i]}"](${previousExpression}, ${tempVar} = ${expr})`,
+      );
+      previousExpression = tempVar;
+      declarations.push(tempVar);
+    }
 
-        let previousExpression = flatten([arr[0]]).join('')
-        let j = 0;
+    return `(function(){ var ${declarations.join(", ")}; return ${comparisons.join(" && ")};})()`;
+  },
+};
 
-        for (let i = 1; i < arr.length - 1; i += 2)
-        {
-            const expr = flatten([arr[i+1]]).join('')
-            const tempVar = `tmp${j++}`
-
-            comparisons.push( `ops["${arr[i]}"](${previousExpression}, ${tempVar} = ${expr})` )
-            previousExpression = tempVar
-            declarations.push(tempVar)
-        }
-
-        return `(function(){ var ${ declarations.join(', ')}; return ${ comparisons.join(' && ') };})()`
-    },
-}
-
-parser.yy = Object.create(std)
-
+parser.yy = Object.create(std);
 
 /**
  * A custom prop function which doesn't throw an UnknownPropertyError
@@ -140,10 +154,9 @@ parser.yy = Object.create(std)
  * ```
  */
 export function useOptionalChaining(name, get, obj, type) {
-    if (obj === null || obj === undefined)
-        return obj
+  if (obj === null || obj === undefined) return obj;
 
-    return get(name)
+  return get(name);
 }
 
 /**
@@ -168,23 +181,21 @@ export function useOptionalChaining(name, get, obj, type) {
  * ```
  */
 export function useDotAccessOperator(name, get, obj, type) {
-    // ignore dots inside escaped symbol
-    if (type === 'single-quoted')
-        return get(name)
+  // ignore dots inside escaped symbol
+  if (type === "single-quoted") return get(name);
 
-    const parts = name.split('.')
+  const parts = name.split(".");
 
-    for (const propertyName of parts) {
-        if (hasOwnProperty(obj ?? {}, propertyName)) {
-            obj = obj[propertyName]
-        } else {
-            throw new UnknownPropertyError(propertyName)
-        }
+  for (const propertyName of parts) {
+    if (hasOwnProperty(obj ?? {}, propertyName)) {
+      obj = obj[propertyName];
+    } else {
+      throw new UnknownPropertyError(propertyName);
     }
+  }
 
-    return obj
+  return obj;
 }
-
 
 /**
  * A custom prop function which combines `useOptionalChaining` and `useDotAccessOperator`.
@@ -205,27 +216,24 @@ export function useDotAccessOperator(name, get, obj, type) {
  * fn({ foo: null }) // → null
  * ```
  */
- export function useDotAccessOperatorAndOptionalChaining(name, get, obj, type) {
-    if (obj === null || obj === undefined)
-        return obj
+export function useDotAccessOperatorAndOptionalChaining(name, get, obj, type) {
+  if (obj === null || obj === undefined) return obj;
 
-    // ignore dots inside escaped symbol
-    if (type === 'single-quoted')
-        return get(name)
+  // ignore dots inside escaped symbol
+  if (type === "single-quoted") return get(name);
 
-    const parts = name.split('.')
+  const parts = name.split(".");
 
-    for (const propertyName of parts) {
-        if (obj === null || obj === undefined) {
-            return obj
-        } else {
-            obj = obj[propertyName]
-        }
+  for (const propertyName of parts) {
+    if (obj === null || obj === undefined) {
+      return obj;
+    } else {
+      obj = obj[propertyName];
     }
+  }
 
-    return obj
+  return obj;
 }
-
 
 /**
  * A simple, safe, JavaScript expression engine, allowing end-users to enter arbitrary expressions without p0wning you.
@@ -284,134 +292,132 @@ export function useDotAccessOperator(name, get, obj, type) {
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
  */
 export function compileExpression(expression, options) {
+  // Check and coerce arguments
 
-    // Check and coerce arguments
+  if (arguments.length > 2) throw new TypeError("Too many arguments.");
 
-    if (arguments.length > 2) throw new TypeError('Too many arguments.')
+  options = typeof options === "object" ? options : {};
 
-    options = typeof options === "object" ? options : {}
+  const knownOptions = [
+    "extraFunctions",
+    "constants",
+    "customProp",
+    "operators",
+  ];
+  let { extraFunctions, constants, customProp, operators } = options;
 
-    const knownOptions = ['extraFunctions', 'constants', 'customProp', 'operators']
-    let {extraFunctions, constants, customProp, operators} = options
+  for (const key of Object.keys(options))
+    if (!knownOptions.includes(key)) throw new UnknownOptionError(key);
 
-    for (const key of Object.keys(options))
-        if (!knownOptions.includes(key)) throw new UnknownOptionError(key)
+  // Functions available to the expression
 
+  let functions = {
+    abs: Math.abs,
+    ceil: Math.ceil,
+    floor: Math.floor,
+    log: Math.log,
+    log2: Math.log2,
+    log10: Math.log10,
+    max: Math.max,
+    min: Math.min,
+    round: Math.round,
+    sqrt: Math.sqrt,
+    exists: (v) => v !== undefined && v !== null,
+    empty: (v) =>
+      v === undefined ||
+      v === null ||
+      v === "" ||
+      (Array.isArray(v) && v.length === 0),
+  };
 
-
-    // Functions available to the expression
-
-    let functions = {
-        abs: Math.abs,
-        ceil: Math.ceil,
-        floor: Math.floor,
-        log: Math.log,
-        log2: Math.log2,
-        log10: Math.log10,
-        max: Math.max,
-        min: Math.min,
-        round: Math.round,
-        sqrt: Math.sqrt,
-        exists: (v) => v !== undefined && v !== null,
-        empty: (v) => v === undefined || v === null || v === '' || Array.isArray(v) && v.length === 0
+  if (extraFunctions) {
+    for (const name of Object.keys(extraFunctions)) {
+      functions[name] = extraFunctions[name];
     }
+  }
 
-    if (extraFunctions) {
-        for (const name of Object.keys(extraFunctions)) {
-            functions[name] = extraFunctions[name]
-        }
+  let defaultOperators = {
+    "+": (a, b) => numstr(a) + numstr(b),
+    "-": (a, b) => (b === undefined ? -num(a) : num(a) - num(b)),
+    "*": (a, b) => num(a) * num(b),
+    "/": (a, b) => num(a) / num(b),
+
+    "^": (a, b) => Math.pow(num(a), num(b)),
+    mod: (a, b) => mod(num(a), num(b)),
+
+    "==": (a, b) => a === b,
+    "!=": (a, b) => a !== b,
+
+    "<": (a, b) => num(a) < num(b),
+    "<=": (a, b) => num(a) <= num(b),
+    ">=": (a, b) => num(a) >= num(b),
+    ">": (a, b) => num(a) > num(b),
+
+    "~=": (a, b) => RegExp(str(b)).test(str(a)),
+  };
+
+  if (operators) {
+    for (const name of Object.keys(operators)) {
+      defaultOperators[name] = operators[name];
     }
+  }
 
-    let defaultOperators = {
-        '+': (a, b) => numstr(a) + numstr(b),
-        '-': (a, b) => b === undefined ? -num(a) : num(a) - num(b),
-        '*': (a, b) => num(a) * num(b),
-        '/': (a, b) => num(a) / num(b),
+  operators = defaultOperators;
 
-        '^': (a, b) => Math.pow(num(a), num(b)),
-        'mod': (a, b) => mod(num(a), num(b)),
+  constants = constants ?? {};
 
-        '==': (a, b) => a === b,
-        '!=': (a, b) => a !== b,
+  // Compile the expression
 
-        '<': (a, b) => num(a) < num(b),
-        '<=': (a, b) => num(a) <= num(b),
-        '>=': (a, b) => num(a) >= num(b),
-        '>': (a, b) => num(a) > num(b),
+  let js = flatten(parser.parse(expression));
+  js.unshift("return ");
+  js.push(";");
 
-        '~=': (a, b) => RegExp(str(b)).test(str(a))
-    }
+  // Metaprogramming functions
 
-    if (operators) {
-        for (const name of Object.keys(operators)) {
-            defaultOperators[name] = operators[name]
-        }
-    }
+  function nakedProp(name, obj, type) {
+    if (hasOwnProperty(obj ?? {}, name)) return obj[name];
 
-    operators = defaultOperators
+    throw new UnknownPropertyError(name);
+  }
 
-    constants = constants ?? {}
+  function safeGetter(obj) {
+    return function get(name) {
+      if (hasOwnProperty(obj ?? {}, name)) return obj[name];
 
-
-
-    // Compile the expression
-
-    let js = flatten( parser.parse(expression) )
-    js.unshift('return ')
-    js.push(';')
-
-
-    // Metaprogramming functions
-
-    function nakedProp(name, obj, type) {
-        if (hasOwnProperty(obj ?? {}, name))
-            return obj[name]
-
-        throw new UnknownPropertyError(name)
-    }
-
-    function safeGetter(obj) {
-        return function get(name) {
-            if (hasOwnProperty(obj ?? {}, name))
-                return obj[name]
-
-            throw new UnknownPropertyError(name)
-        }
-    }
-
-    if (typeof customProp === 'function') {
-        nakedProp = (name, obj, type) => customProp(name, safeGetter(obj), obj, type)
-    }
-
-    function createCall(fns) {
-        return function call({ name }, ...args) {
-            if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
-                return fns[name](...args)
-
-            throw new UnknownFunctionError(name)
-        }
-    }
-
-    function prop({ name, type }, obj) {
-        if (type === 'unescaped' && hasOwnProperty(constants, name))
-            return constants[name]
-
-        return nakedProp(name, obj, type)
-    }
-
-
-
-    // Patch together and return
-
-    let func = new Function('call', 'ops', 'std', 'prop', 'data', js.join(''))
-
-    return function(data) {
-        try {
-            return func(createCall(functions), operators, std, prop, data)
-        }
-        catch (e)
-        {
-            return e
-        }
+      throw new UnknownPropertyError(name);
     };
+  }
+
+  if (typeof customProp === "function") {
+    nakedProp = (name, obj, type) =>
+      customProp(name, safeGetter(obj), obj, type);
+  }
+
+  function createCall(fns) {
+    return function call({ name }, ...args) {
+      if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
+        return fns[name](...args);
+
+      throw new UnknownFunctionError(name);
+    };
+  }
+
+  function prop({ name, type }, obj) {
+    if (type === "unescaped" && hasOwnProperty(constants, name))
+      return constants[name];
+
+    return nakedProp(name, obj, type);
+  }
+
+  // Patch together and return
+
+  let func = new Function("call", "ops", "std", "prop", "data", js.join(""));
+
+  return function (data) {
+    try {
+      return func(createCall(functions), operators, std, prop, data);
+    } catch (e) {
+      return e;
+    }
+  };
 }

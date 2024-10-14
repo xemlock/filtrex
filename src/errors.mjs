@@ -6,14 +6,13 @@
  * @prop {string} functionName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_FUNCTION'`
  */
-export class UnknownFunctionError
-extends ReferenceError {
-    I18N_STRING = 'UNKNOWN_FUNCTION'
+export class UnknownFunctionError extends ReferenceError {
+  I18N_STRING = "UNKNOWN_FUNCTION";
 
-    constructor (funcName) {
-        super(`Unknown function: ${funcName}()`)
-        this.functionName = funcName
-    }
+  constructor(funcName) {
+    super(`Unknown function: ${funcName}()`);
+    this.functionName = funcName;
+  }
 }
 
 /**
@@ -26,14 +25,13 @@ extends ReferenceError {
  * @prop {string} propertyName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_PROPERTY'`
  */
-export class UnknownPropertyError
-extends ReferenceError {
-    I18N_STRING = 'UNKNOWN_PROPERTY'
+export class UnknownPropertyError extends ReferenceError {
+  I18N_STRING = "UNKNOWN_PROPERTY";
 
-    constructor (propName) {
-        super(`Property “${propName}” does not exist.`)
-        this.propertyName = propName
-    }
+  constructor(propName) {
+    super(`Property “${propName}” does not exist.`);
+    this.propertyName = propName;
+  }
 }
 
 /**
@@ -44,14 +42,13 @@ extends ReferenceError {
  * @prop {string} keyName
  * @prop {string} I18N_STRING has the value `'UNKNOWN_OPTION'`
  */
-export class UnknownOptionError
-extends TypeError {
-    I18N_STRING = 'UNKNOWN_OPTION'
+export class UnknownOptionError extends TypeError {
+  I18N_STRING = "UNKNOWN_OPTION";
 
-    constructor (key) {
-        super(`Unknown option: ${key}`)
-        this.keyName = key
-    }
+  constructor(key) {
+    super(`Unknown option: ${key}`);
+    this.keyName = key;
+  }
 }
 
 /**
@@ -67,16 +64,15 @@ extends TypeError {
  * @prop {string} recievedType
  * @prop {string} I18N_STRING has the value `'UNEXPECTED_TYPE'`
  */
-export class UnexpectedTypeError
-extends TypeError {
-    I18N_STRING = 'UNEXPECTED_TYPE'
+export class UnexpectedTypeError extends TypeError {
+  I18N_STRING = "UNEXPECTED_TYPE";
 
-    constructor (expected, got) {
-        super(`Expected a ${expected}, but got a ${got} instead.`)
+  constructor(expected, got) {
+    super(`Expected a ${expected}, but got a ${got} instead.`);
 
-        this.expectedType = expected
-        this.recievedType = got
-    }
+    this.expectedType = expected;
+    this.recievedType = got;
+  }
 }
 
 /**
@@ -85,11 +81,10 @@ extends TypeError {
  *
  * @prop {string} I18N_STRING has the value `'INTERNAL'`
  */
-export class InternalError
-extends Error {
-    I18N_STRING = 'INTERNAL'
+export class InternalError extends Error {
+  I18N_STRING = "INTERNAL";
 
-    constructor (message) {
-        super(message)
-    }
+  constructor(message) {
+    super(message);
+  }
 }

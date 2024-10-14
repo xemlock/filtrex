@@ -1,9 +1,8 @@
 function main() {
-  buildTable($('.data tbody'), createRandomData(20));
+  buildTable($(".data tbody"), createRandomData(20));
 
   updateExpression();
-  $('.expression').keyup(updateExpression)
-    .focus();
+  $(".expression").keyup(updateExpression).focus();
 }
 
 /**
@@ -16,7 +15,7 @@ function createRandomData(count) {
   }
   var result = [];
   for (var i = 0; i < count; i++) {
-    result.push({price:rnd(), weight:rnd(), taste:rnd()});
+    result.push({ price: rnd(), weight: rnd(), taste: rnd() });
   }
   return result;
 }
@@ -26,15 +25,15 @@ function createRandomData(count) {
  */
 function buildTable(tbody, data) {
   tbody.empty();
-  data.forEach(function(item) {
-    var row = $('<tr>').appendTo(tbody);
-    $('<td>').appendTo(row).text(item.price);
-    $('<td>').appendTo(row).text(item.weight);
-    $('<td>').appendTo(row).text(item.taste);
+  data.forEach(function (item) {
+    var row = $("<tr>").appendTo(tbody);
+    $("<td>").appendTo(row).text(item.price);
+    $("<td>").appendTo(row).text(item.weight);
+    $("<td>").appendTo(row).text(item.taste);
 
     // Associate underlying data with row node so we can access it later
     // for filtering.
-    row.data('item', item);
+    row.data("item", item);
   });
 }
 
@@ -44,9 +43,11 @@ function buildTable(tbody, data) {
  */
 function updateExpression() {
   // Default highlighter will not highlight anything
-  var nullHighlighter = function(item) { return false; }
+  var nullHighlighter = function (item) {
+    return false;
+  };
 
-  var input = $('.expression');
+  var input = $(".expression");
   var expression = input.val();
 
   var highlighter;
@@ -54,16 +55,16 @@ function updateExpression() {
   if (!expression) {
     // No expression specified. Don't highlight anything.
     highlighter = nullHighlighter;
-    input.css('background-color', '#fff');
+    input.css("background-color", "#fff");
   } else {
     try {
       // Build highlighter from user's expression
       highlighter = filtrex.compileExpression(expression); // <-- Filtrex!
-      input.css('background-color', '#dfd');
+      input.css("background-color", "#dfd");
     } catch (e) {
       // Failed to parse expression. Don't highlight anything.
       highlighter = nullHighlighter;
-      input.css('background-color', '#fdd');
+      input.css("background-color", "#fdd");
     }
   }
 
@@ -75,11 +76,11 @@ function updateExpression() {
  * determine if it needs to be highlighted.
  */
 function highlightRows(highlighter) {
-  $('.data > tbody > tr').each(function(i, rowEl) {
+  $(".data > tbody > tr").each(function (i, rowEl) {
     var row = $(rowEl);
-    var item = row.data('item');
+    var item = row.data("item");
     var shouldHighlight = highlighter(item); // <-- Compiled function from Filtrex!
-    row.css('background-color', shouldHighlight ? '#ff5' : '#fff');
+    row.css("background-color", shouldHighlight ? "#ff5" : "#fff");
   });
 }
 

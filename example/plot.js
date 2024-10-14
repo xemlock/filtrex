@@ -1,6 +1,5 @@
 function main() {
-  $('.expression').keyup(updateExpression)
-    .focus();
+  $(".expression").keyup(updateExpression).focus();
   updateExpression();
 }
 
@@ -21,22 +20,24 @@ var extraFunctions = {
  * and colorize rows based on expression.
  */
 function updateExpression() {
-  var input = $('.expression');
+  var input = $(".expression");
   var expression = input.val();
-  $('.plot').hide();
+  $(".plot").hide();
 
   if (!expression) {
     // No expression specified. Don't plot.
-    input.css('background-color', '#fff');
+    input.css("background-color", "#fff");
     return;
   }
 
   try {
-    var plotFunction = filtrex.compileExpression(expression, { extraFunctions }); // <-- Filtrex!
-    input.css('background-color', '#dfd');
+    var plotFunction = filtrex.compileExpression(expression, {
+      extraFunctions,
+    }); // <-- Filtrex!
+    input.css("background-color", "#dfd");
   } catch (e) {
     // Failed to parse expression. Don't plot.
-    input.css('background-color', '#fdd');
+    input.css("background-color", "#fdd");
     return;
   }
 
@@ -48,12 +49,12 @@ function updateExpression() {
  */
 function render(plotFunction) {
   var data = [];
-  for (var x = -10; x <= 10; x+= 0.1) {
-    var y = plotFunction({x:x}); // <-- Execute Filtrex expression from user
+  for (var x = -10; x <= 10; x += 0.1) {
+    var y = plotFunction({ x: x }); // <-- Execute Filtrex expression from user
     data.push([x, y]);
   }
-  $.plot($('.plot'), [data], {});
-  $('.plot').show();
+  $.plot($(".plot"), [data], {});
+  $(".plot").show();
 }
 
 $(main);

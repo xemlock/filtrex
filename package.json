@@ -17,7 +17,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gulp",
+    "format": "prettier . --write",
+    "build": "gulp && pnpm format",
     "test": "pnpm build && mocha test",
     "debug": "mocha test --inspect-brk"
   },
@@ -37,6 +38,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-uglify-es": "^3.0.0",
     "mocha": "^10.7.3",
+    "prettier": "^3.3.3",
     "rollup": "^2.72.1",
     "vinyl": "^3.0.0"
   },

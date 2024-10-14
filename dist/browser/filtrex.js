@@ -1,5 +1,5 @@
 var filtrex = (function (exports) {
-  'use strict';
+  "use strict";
 
   function _arrayLikeToArray(r, a) {
     (null == a || a > r.length) && (a = r.length);
@@ -10,17 +10,30 @@ var filtrex = (function (exports) {
     if (Array.isArray(r)) return _arrayLikeToArray(r);
   }
   function _assertThisInitialized(e) {
-    if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    if (void 0 === e)
+      throw new ReferenceError(
+        "this hasn't been initialised - super() hasn't been called",
+      );
     return e;
   }
   function _callSuper(t, o, e) {
-    return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e));
+    return (
+      (o = _getPrototypeOf(o)),
+      _possibleConstructorReturn(
+        t,
+        _isNativeReflectConstruct()
+          ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor)
+          : o.apply(t, e),
+      )
+    );
   }
   function _classCallCheck(a, n) {
-    if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+    if (!(a instanceof n))
+      throw new TypeError("Cannot call a class as a function");
   }
   function _construct(t, e, r) {
-    if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments);
+    if (_isNativeReflectConstruct())
+      return Reflect.construct.apply(null, arguments);
     var o = [null];
     o.push.apply(o, e);
     var p = new (t.bind.apply(t, o))();
@@ -29,38 +42,55 @@ var filtrex = (function (exports) {
   function _defineProperties(e, r) {
     for (var t = 0; t < r.length; t++) {
       var o = r[t];
-      o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o);
+      (o.enumerable = o.enumerable || !1),
+        (o.configurable = !0),
+        "value" in o && (o.writable = !0),
+        Object.defineProperty(e, _toPropertyKey(o.key), o);
     }
   }
   function _createClass(e, r, t) {
-    return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
-      writable: !1
-    }), e;
+    return (
+      r && _defineProperties(e.prototype, r),
+      t && _defineProperties(e, t),
+      Object.defineProperty(e, "prototype", {
+        writable: !1,
+      }),
+      e
+    );
   }
   function _createForOfIteratorHelper(r, e) {
-    var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
+    var t =
+      ("undefined" != typeof Symbol && r[Symbol.iterator]) || r["@@iterator"];
     if (!t) {
-      if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) {
+      if (
+        Array.isArray(r) ||
+        (t = _unsupportedIterableToArray(r)) ||
+        (e && r && "number" == typeof r.length)
+      ) {
         t && (r = t);
         var n = 0,
           F = function () {};
         return {
           s: F,
           n: function () {
-            return n >= r.length ? {
-              done: !0
-            } : {
-              done: !1,
-              value: r[n++]
-            };
+            return n >= r.length
+              ? {
+                  done: !0,
+                }
+              : {
+                  done: !1,
+                  value: r[n++],
+                };
           },
           e: function (r) {
             throw r;
           },
-          f: F
+          f: F,
         };
       }
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+      throw new TypeError(
+        "Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.",
+      );
     }
     var o,
       a = !0,
@@ -71,10 +101,10 @@ var filtrex = (function (exports) {
       },
       n: function () {
         var r = t.next();
-        return a = r.done, r;
+        return (a = r.done), r;
       },
       e: function (r) {
-        u = !0, o = r;
+        (u = !0), (o = r);
       },
       f: function () {
         try {
@@ -82,33 +112,46 @@ var filtrex = (function (exports) {
         } finally {
           if (u) throw o;
         }
-      }
+      },
     };
   }
   function _defineProperty(e, r, t) {
-    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-      value: t,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }) : e[r] = t, e;
+    return (
+      (r = _toPropertyKey(r)) in e
+        ? Object.defineProperty(e, r, {
+            value: t,
+            enumerable: !0,
+            configurable: !0,
+            writable: !0,
+          })
+        : (e[r] = t),
+      e
+    );
   }
   function _getPrototypeOf(t) {
-    return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) {
-      return t.__proto__ || Object.getPrototypeOf(t);
-    }, _getPrototypeOf(t);
+    return (
+      (_getPrototypeOf = Object.setPrototypeOf
+        ? Object.getPrototypeOf.bind()
+        : function (t) {
+            return t.__proto__ || Object.getPrototypeOf(t);
+          }),
+      _getPrototypeOf(t)
+    );
   }
   function _inherits(t, e) {
-    if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function");
-    t.prototype = Object.create(e && e.prototype, {
+    if ("function" != typeof e && null !== e)
+      throw new TypeError("Super expression must either be null or a function");
+    (t.prototype = Object.create(e && e.prototype, {
       constructor: {
         value: t,
         writable: !0,
-        configurable: !0
-      }
-    }), Object.defineProperty(t, "prototype", {
-      writable: !1
-    }), e && _setPrototypeOf(t, e);
+        configurable: !0,
+      },
+    })),
+      Object.defineProperty(t, "prototype", {
+        writable: !1,
+      }),
+      e && _setPrototypeOf(t, e);
   }
   function _isNativeFunction(t) {
     try {
@@ -119,30 +162,51 @@ var filtrex = (function (exports) {
   }
   function _isNativeReflectConstruct() {
     try {
-      var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+      var t = !Boolean.prototype.valueOf.call(
+        Reflect.construct(Boolean, [], function () {}),
+      );
     } catch (t) {}
     return (_isNativeReflectConstruct = function () {
       return !!t;
     })();
   }
   function _iterableToArray(r) {
-    if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
+    if (
+      ("undefined" != typeof Symbol && null != r[Symbol.iterator]) ||
+      null != r["@@iterator"]
+    )
+      return Array.from(r);
   }
   function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    throw new TypeError(
+      "Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.",
+    );
   }
   function _possibleConstructorReturn(t, e) {
     if (e && ("object" == typeof e || "function" == typeof e)) return e;
-    if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined");
+    if (void 0 !== e)
+      throw new TypeError(
+        "Derived constructors may only return object or undefined",
+      );
     return _assertThisInitialized(t);
   }
   function _setPrototypeOf(t, e) {
-    return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) {
-      return t.__proto__ = e, t;
-    }, _setPrototypeOf(t, e);
+    return (
+      (_setPrototypeOf = Object.setPrototypeOf
+        ? Object.setPrototypeOf.bind()
+        : function (t, e) {
+            return (t.__proto__ = e), t;
+          }),
+      _setPrototypeOf(t, e)
+    );
   }
   function _toConsumableArray(r) {
-    return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread();
+    return (
+      _arrayWithoutHoles(r) ||
+      _iterableToArray(r) ||
+      _unsupportedIterableToArray(r) ||
+      _nonIterableSpread()
+    );
   }
   function _toPrimitive(t, r) {
     if ("object" != typeof t || !t) return t;
@@ -161,79 +225,107 @@ var filtrex = (function (exports) {
   function _typeof(o) {
     "@babel/helpers - typeof";
 
-    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-      return typeof o;
-    } : function (o) {
-      return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-    }, _typeof(o);
+    return (
+      (_typeof =
+        "function" == typeof Symbol && "symbol" == typeof Symbol.iterator
+          ? function (o) {
+              return typeof o;
+            }
+          : function (o) {
+              return o &&
+                "function" == typeof Symbol &&
+                o.constructor === Symbol &&
+                o !== Symbol.prototype
+                ? "symbol"
+                : typeof o;
+            }),
+      _typeof(o)
+    );
   }
   function _unsupportedIterableToArray(r, a) {
     if (r) {
       if ("string" == typeof r) return _arrayLikeToArray(r, a);
       var t = {}.toString.call(r).slice(8, -1);
-      return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0;
+      return (
+        "Object" === t && r.constructor && (t = r.constructor.name),
+        "Map" === t || "Set" === t
+          ? Array.from(r)
+          : "Arguments" === t ||
+              /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)
+            ? _arrayLikeToArray(r, a)
+            : void 0
+      );
     }
   }
   function _wrapNativeSuper(t) {
     var r = "function" == typeof Map ? new Map() : void 0;
-    return _wrapNativeSuper = function (t) {
-      if (null === t || !_isNativeFunction(t)) return t;
-      if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function");
-      if (void 0 !== r) {
-        if (r.has(t)) return r.get(t);
-        r.set(t, Wrapper);
-      }
-      function Wrapper() {
-        return _construct(t, arguments, _getPrototypeOf(this).constructor);
-      }
-      return Wrapper.prototype = Object.create(t.prototype, {
-        constructor: {
-          value: Wrapper,
-          enumerable: !1,
-          writable: !0,
-          configurable: !0
+    return (
+      (_wrapNativeSuper = function (t) {
+        if (null === t || !_isNativeFunction(t)) return t;
+        if ("function" != typeof t)
+          throw new TypeError(
+            "Super expression must either be null or a function",
+          );
+        if (void 0 !== r) {
+          if (r.has(t)) return r.get(t);
+          r.set(t, Wrapper);
         }
-      }), _setPrototypeOf(Wrapper, t);
-    }, _wrapNativeSuper(t);
+        function Wrapper() {
+          return _construct(t, arguments, _getPrototypeOf(this).constructor);
+        }
+        return (
+          (Wrapper.prototype = Object.create(t.prototype, {
+            constructor: {
+              value: Wrapper,
+              enumerable: !1,
+              writable: !0,
+              configurable: !0,
+            },
+          })),
+          _setPrototypeOf(Wrapper, t)
+        );
+      }),
+      _wrapNativeSuper(t)
+    );
   }
 
   /* Jison generated parser */
-  var _parser = function () {
+  var _parser = (function () {
     var parser = {
       trace: function trace() {},
       yy: {},
       symbols_: {
-        "error": 2,
-        "expressions": 3,
-        "e": 4,
-        "EndOfExpression": 5,
+        error: 2,
+        expressions: 3,
+        e: 4,
+        EndOfExpression: 5,
         "-": 6,
         "+": 7,
         "*": 8,
         "/": 9,
         "^": 10,
-        "mod": 11,
-        "and": 12,
-        "or": 13,
-        "not": 14,
-        "if": 15,
-        "then": 16,
-        "else": 17,
-        "in": 18,
-        "notIn": 19,
+        mod: 11,
+        and: 12,
+        or: 13,
+        not: 14,
+        if: 15,
+        then: 16,
+        else: 17,
+        in: 18,
+        notIn: 19,
         "(": 20,
         ")": 21,
-        "Arguments": 22,
+        Arguments: 22,
         ",": 23,
-        "Number": 24,
-        "Symbol": 25,
-        "String": 26,
-        "of": 27,
-        "Relation": 28,
+        Number: 24,
+        Symbol: 25,
+        String: 26,
+        of: 27,
+        Relation: 28,
         "%": 29,
         "?": 30,
         ":": 31,
-        "RelationalOperator": 32,
+        RelationalOperator: 32,
         "==": 33,
         "!=": 34,
         "~=": 35,
@@ -241,8 +333,8 @@ var filtrex = (function (exports) {
         "<=": 37,
         ">=": 38,
         ">": 39,
-        "$accept": 0,
-        "$end": 1
+        $accept: 0,
+        $end: 1,
       },
       terminals_: {
         2: "error",
@@ -277,10 +369,56 @@ var filtrex = (function (exports) {
         36: "<",
         37: "<=",
         38: ">=",
-        39: ">"
+        39: ">",
       },
-      productions_: [0, [3, 2], [4, 2], [4, 3], [4, 3], [4, 3], [4, 3], [4, 3], [4, 3], [4, 3], [4, 3], [4, 2], [4, 6], [4, 3], [4, 3], [4, 3], [4, 5], [4, 1], [4, 1], [4, 1], [4, 3], [4, 3], [4, 4], [4, 1], [4, 3], [4, 5], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [32, 1], [28, 3], [28, 3], [22, 1], [22, 3]],
-      performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$) {
+      productions_: [
+        0,
+        [3, 2],
+        [4, 2],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 2],
+        [4, 6],
+        [4, 3],
+        [4, 3],
+        [4, 3],
+        [4, 5],
+        [4, 1],
+        [4, 1],
+        [4, 1],
+        [4, 3],
+        [4, 3],
+        [4, 4],
+        [4, 1],
+        [4, 3],
+        [4, 5],
+        [32, 1],
+        [32, 1],
+        [32, 1],
+        [32, 1],
+        [32, 1],
+        [32, 1],
+        [32, 1],
+        [28, 3],
+        [28, 3],
+        [22, 1],
+        [22, 3],
+      ],
+      performAction: function anonymous(
+        yytext,
+        yyleng,
+        yylineno,
+        yy,
+        yystate,
+        $$,
+        _$,
+      ) {
         var $0 = $$.length - 1;
         switch (yystate) {
           case 1:
@@ -289,40 +427,134 @@ var filtrex = (function (exports) {
             this.$ = ["(", "ops['-'](", $$[$0], ")", ")"];
             break;
           case 3:
-            this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "ops['",
+              $$[$0 - 1],
+              "'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 4:
-            this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "ops['",
+              $$[$0 - 1],
+              "'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 5:
-            this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "ops['",
+              $$[$0 - 1],
+              "'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 6:
-            this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "ops['",
+              $$[$0 - 1],
+              "'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 7:
-            this.$ = ["(", "ops['", $$[$0 - 1], "'](", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "ops['",
+              $$[$0 - 1],
+              "'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 8:
             this.$ = ["(", "ops.mod(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
             break;
           case 9:
-            this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") && ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "",
+              "std.coerceBoolean",
+              "(",
+              $$[$0 - 2],
+              ") && ",
+              "std.coerceBoolean",
+              "(",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 10:
-            this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 2], ") || ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "",
+              "std.coerceBoolean",
+              "(",
+              $$[$0 - 2],
+              ") || ",
+              "std.coerceBoolean",
+              "(",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 11:
             this.$ = ["(", "! ", "std.coerceBoolean", "(", $$[$0], ")", ")"];
             break;
           case 12:
-            this.$ = ["(", "", "std.coerceBoolean", "(", $$[$0 - 4], ") ? ", $$[$0 - 2], " : ", $$[$0], "", ")"];
+            this.$ = [
+              "(",
+              "",
+              "std.coerceBoolean",
+              "(",
+              $$[$0 - 4],
+              ") ? ",
+              $$[$0 - 2],
+              " : ",
+              $$[$0],
+              "",
+              ")",
+            ];
             break;
           case 13:
             this.$ = ["(", "std.isSubset(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
             break;
           case 14:
-            this.$ = ["(", "!std.isSubset(", $$[$0 - 2], ", ", $$[$0], ")", ")"];
+            this.$ = [
+              "(",
+              "!std.isSubset(",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              ")",
+              ")",
+            ];
             break;
           case 15:
             this.$ = ["(", "", $$[$0 - 1], "", ")"];
@@ -352,10 +584,26 @@ var filtrex = (function (exports) {
             this.$ = yy.reduceRelation($$[$0]);
             break;
           case 24:
-            this.$ = ["std.warnDeprecated('modulo', ops['mod'](", $$[$0 - 2], ", ", $$[$0], "))"];
+            this.$ = [
+              "std.warnDeprecated('modulo', ops['mod'](",
+              $$[$0 - 2],
+              ", ",
+              $$[$0],
+              "))",
+            ];
             break;
           case 25:
-            this.$ = ["std.warnDeprecated('ternary', ", "std.coerceBoolean", "(", $$[$0 - 4], ") ? ", $$[$0 - 2], " : ", $$[$0], ")"];
+            this.$ = [
+              "std.warnDeprecated('ternary', ",
+              "std.coerceBoolean",
+              "(",
+              $$[$0 - 4],
+              ") ? ",
+              $$[$0 - 2],
+              " : ",
+              $$[$0],
+              ")",
+            ];
             break;
           case 26:
             this.$ = ["=="];
@@ -379,7 +627,9 @@ var filtrex = (function (exports) {
             this.$ = [">"];
             break;
           case 33:
-            this.$ = [$$[$0 - 2], $$[$0 - 1]].concat(_toConsumableArray($$[$0]));
+            this.$ = [$$[$0 - 2], $$[$0 - 1]].concat(
+              _toConsumableArray($$[$0]),
+            );
             break;
           case 34:
             this.$ = [$$[$0 - 2], $$[$0 - 1], $$[$0]];
@@ -392,1203 +642,1274 @@ var filtrex = (function (exports) {
             break;
         }
       },
-      table: [{
-        3: 1,
-        4: 2,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        1: [3]
-      }, {
-        5: [1, 11],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        4: 32,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 33,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 34,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 35,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        22: 36,
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 17],
-        6: [2, 17],
-        7: [2, 17],
-        8: [2, 17],
-        9: [2, 17],
-        10: [2, 17],
-        11: [2, 17],
-        12: [2, 17],
-        13: [2, 17],
-        16: [2, 17],
-        17: [2, 17],
-        18: [2, 17],
-        19: [2, 17],
-        21: [2, 17],
-        23: [2, 17],
-        29: [2, 17],
-        30: [2, 17],
-        31: [2, 17],
-        33: [2, 17],
-        34: [2, 17],
-        35: [2, 17],
-        36: [2, 17],
-        37: [2, 17],
-        38: [2, 17],
-        39: [2, 17]
-      }, {
-        5: [2, 18],
-        6: [2, 18],
-        7: [2, 18],
-        8: [2, 18],
-        9: [2, 18],
-        10: [2, 18],
-        11: [2, 18],
-        12: [2, 18],
-        13: [2, 18],
-        16: [2, 18],
-        17: [2, 18],
-        18: [2, 18],
-        19: [2, 18],
-        20: [1, 38],
-        21: [2, 18],
-        23: [2, 18],
-        27: [1, 37],
-        29: [2, 18],
-        30: [2, 18],
-        31: [2, 18],
-        33: [2, 18],
-        34: [2, 18],
-        35: [2, 18],
-        36: [2, 18],
-        37: [2, 18],
-        38: [2, 18],
-        39: [2, 18]
-      }, {
-        5: [2, 19],
-        6: [2, 19],
-        7: [2, 19],
-        8: [2, 19],
-        9: [2, 19],
-        10: [2, 19],
-        11: [2, 19],
-        12: [2, 19],
-        13: [2, 19],
-        16: [2, 19],
-        17: [2, 19],
-        18: [2, 19],
-        19: [2, 19],
-        21: [2, 19],
-        23: [2, 19],
-        29: [2, 19],
-        30: [2, 19],
-        31: [2, 19],
-        33: [2, 19],
-        34: [2, 19],
-        35: [2, 19],
-        36: [2, 19],
-        37: [2, 19],
-        38: [2, 19],
-        39: [2, 19]
-      }, {
-        5: [2, 23],
-        6: [2, 23],
-        7: [2, 23],
-        8: [2, 23],
-        9: [2, 23],
-        10: [2, 23],
-        11: [2, 23],
-        12: [2, 23],
-        13: [2, 23],
-        16: [2, 23],
-        17: [2, 23],
-        18: [2, 23],
-        19: [2, 23],
-        21: [2, 23],
-        23: [2, 23],
-        29: [2, 23],
-        30: [2, 23],
-        31: [2, 23],
-        33: [2, 23],
-        34: [2, 23],
-        35: [2, 23],
-        36: [2, 23],
-        37: [2, 23],
-        38: [2, 23],
-        39: [2, 23]
-      }, {
-        1: [2, 1]
-      }, {
-        4: 39,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 40,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 41,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 42,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 43,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 44,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 45,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 46,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 47,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 48,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 49,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 50,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 52,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 51
-      }, {
-        6: [2, 26],
-        14: [2, 26],
-        15: [2, 26],
-        20: [2, 26],
-        24: [2, 26],
-        25: [2, 26],
-        26: [2, 26]
-      }, {
-        6: [2, 27],
-        14: [2, 27],
-        15: [2, 27],
-        20: [2, 27],
-        24: [2, 27],
-        25: [2, 27],
-        26: [2, 27]
-      }, {
-        6: [2, 28],
-        14: [2, 28],
-        15: [2, 28],
-        20: [2, 28],
-        24: [2, 28],
-        25: [2, 28],
-        26: [2, 28]
-      }, {
-        6: [2, 29],
-        14: [2, 29],
-        15: [2, 29],
-        20: [2, 29],
-        24: [2, 29],
-        25: [2, 29],
-        26: [2, 29]
-      }, {
-        6: [2, 30],
-        14: [2, 30],
-        15: [2, 30],
-        20: [2, 30],
-        24: [2, 30],
-        25: [2, 30],
-        26: [2, 30]
-      }, {
-        6: [2, 31],
-        14: [2, 31],
-        15: [2, 31],
-        20: [2, 31],
-        24: [2, 31],
-        25: [2, 31],
-        26: [2, 31]
-      }, {
-        6: [2, 32],
-        14: [2, 32],
-        15: [2, 32],
-        20: [2, 32],
-        24: [2, 32],
-        25: [2, 32],
-        26: [2, 32]
-      }, {
-        5: [2, 2],
-        6: [2, 2],
-        7: [2, 2],
-        8: [2, 2],
-        9: [2, 2],
-        10: [1, 16],
-        11: [2, 2],
-        12: [2, 2],
-        13: [2, 2],
-        16: [2, 2],
-        17: [2, 2],
-        18: [2, 2],
-        19: [2, 2],
-        21: [2, 2],
-        23: [2, 2],
-        29: [2, 2],
-        30: [2, 2],
-        31: [2, 2],
-        32: 24,
-        33: [2, 2],
-        34: [2, 2],
-        35: [2, 2],
-        36: [2, 2],
-        37: [2, 2],
-        38: [2, 2],
-        39: [2, 2]
-      }, {
-        5: [2, 11],
-        6: [2, 11],
-        7: [2, 11],
-        8: [2, 11],
-        9: [2, 11],
-        10: [1, 16],
-        11: [2, 11],
-        12: [2, 11],
-        13: [2, 11],
-        16: [2, 11],
-        17: [2, 11],
-        18: [2, 11],
-        19: [2, 11],
-        21: [2, 11],
-        23: [2, 11],
-        29: [2, 11],
-        30: [2, 11],
-        31: [2, 11],
-        32: 24,
-        33: [2, 11],
-        34: [2, 11],
-        35: [2, 11],
-        36: [2, 11],
-        37: [2, 11],
-        38: [2, 11],
-        39: [2, 11]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        16: [1, 53],
-        18: [1, 20],
-        19: [1, 21],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        21: [1, 54],
-        23: [2, 35],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        23: [1, 55]
-      }, {
-        4: 56,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        4: 59,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        21: [1, 57],
-        22: 58,
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 3],
-        6: [2, 3],
-        7: [2, 3],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 3],
-        13: [2, 3],
-        16: [2, 3],
-        17: [2, 3],
-        18: [2, 3],
-        19: [2, 3],
-        21: [2, 3],
-        23: [2, 3],
-        29: [1, 22],
-        30: [2, 3],
-        31: [2, 3],
-        32: 24,
-        33: [2, 3],
-        34: [2, 3],
-        35: [2, 3],
-        36: [2, 3],
-        37: [2, 3],
-        38: [2, 3],
-        39: [2, 3]
-      }, {
-        5: [2, 4],
-        6: [2, 4],
-        7: [2, 4],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 4],
-        13: [2, 4],
-        16: [2, 4],
-        17: [2, 4],
-        18: [2, 4],
-        19: [2, 4],
-        21: [2, 4],
-        23: [2, 4],
-        29: [1, 22],
-        30: [2, 4],
-        31: [2, 4],
-        32: 24,
-        33: [2, 4],
-        34: [2, 4],
-        35: [2, 4],
-        36: [2, 4],
-        37: [2, 4],
-        38: [2, 4],
-        39: [2, 4]
-      }, {
-        5: [2, 5],
-        6: [2, 5],
-        7: [2, 5],
-        8: [2, 5],
-        9: [2, 5],
-        10: [1, 16],
-        11: [2, 5],
-        12: [2, 5],
-        13: [2, 5],
-        16: [2, 5],
-        17: [2, 5],
-        18: [2, 5],
-        19: [2, 5],
-        21: [2, 5],
-        23: [2, 5],
-        29: [2, 5],
-        30: [2, 5],
-        31: [2, 5],
-        32: 24,
-        33: [2, 5],
-        34: [2, 5],
-        35: [2, 5],
-        36: [2, 5],
-        37: [2, 5],
-        38: [2, 5],
-        39: [2, 5]
-      }, {
-        5: [2, 6],
-        6: [2, 6],
-        7: [2, 6],
-        8: [2, 6],
-        9: [2, 6],
-        10: [1, 16],
-        11: [2, 6],
-        12: [2, 6],
-        13: [2, 6],
-        16: [2, 6],
-        17: [2, 6],
-        18: [2, 6],
-        19: [2, 6],
-        21: [2, 6],
-        23: [2, 6],
-        29: [2, 6],
-        30: [2, 6],
-        31: [2, 6],
-        32: 24,
-        33: [2, 6],
-        34: [2, 6],
-        35: [2, 6],
-        36: [2, 6],
-        37: [2, 6],
-        38: [2, 6],
-        39: [2, 6]
-      }, {
-        5: [2, 7],
-        6: [2, 7],
-        7: [2, 7],
-        8: [2, 7],
-        9: [2, 7],
-        10: [1, 16],
-        11: [2, 7],
-        12: [2, 7],
-        13: [2, 7],
-        16: [2, 7],
-        17: [2, 7],
-        18: [2, 7],
-        19: [2, 7],
-        21: [2, 7],
-        23: [2, 7],
-        29: [2, 7],
-        30: [2, 7],
-        31: [2, 7],
-        32: 24,
-        33: [2, 7],
-        34: [2, 7],
-        35: [2, 7],
-        36: [2, 7],
-        37: [2, 7],
-        38: [2, 7],
-        39: [2, 7]
-      }, {
-        5: [2, 8],
-        6: [2, 8],
-        7: [2, 8],
-        8: [2, 8],
-        9: [2, 8],
-        10: [1, 16],
-        11: [2, 8],
-        12: [2, 8],
-        13: [2, 8],
-        16: [2, 8],
-        17: [2, 8],
-        18: [2, 8],
-        19: [2, 8],
-        21: [2, 8],
-        23: [2, 8],
-        29: [2, 8],
-        30: [2, 8],
-        31: [2, 8],
-        32: 24,
-        33: [2, 8],
-        34: [2, 8],
-        35: [2, 8],
-        36: [2, 8],
-        37: [2, 8],
-        38: [2, 8],
-        39: [2, 8]
-      }, {
-        5: [2, 9],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 9],
-        13: [2, 9],
-        16: [2, 9],
-        17: [2, 9],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 9],
-        23: [2, 9],
-        29: [1, 22],
-        30: [2, 9],
-        31: [2, 9],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 10],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [2, 10],
-        16: [2, 10],
-        17: [2, 10],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 10],
-        23: [2, 10],
-        29: [1, 22],
-        30: [2, 10],
-        31: [2, 10],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 13],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 13],
-        13: [2, 13],
-        16: [2, 13],
-        17: [2, 13],
-        18: [2, 13],
-        19: [2, 13],
-        21: [2, 13],
-        23: [2, 13],
-        29: [1, 22],
-        30: [2, 13],
-        31: [2, 13],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 14],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 14],
-        13: [2, 14],
-        16: [2, 14],
-        17: [2, 14],
-        18: [2, 14],
-        19: [2, 14],
-        21: [2, 14],
-        23: [2, 14],
-        29: [1, 22],
-        30: [2, 14],
-        31: [2, 14],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 24],
-        6: [2, 24],
-        7: [2, 24],
-        8: [2, 24],
-        9: [2, 24],
-        10: [1, 16],
-        11: [2, 24],
-        12: [2, 24],
-        13: [2, 24],
-        16: [2, 24],
-        17: [2, 24],
-        18: [2, 24],
-        19: [2, 24],
-        21: [2, 24],
-        23: [2, 24],
-        29: [2, 24],
-        30: [2, 24],
-        31: [2, 24],
-        32: 24,
-        33: [2, 24],
-        34: [2, 24],
-        35: [2, 24],
-        36: [2, 24],
-        37: [2, 24],
-        38: [2, 24],
-        39: [2, 24]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        29: [1, 22],
-        30: [1, 23],
-        31: [1, 60],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 33],
-        6: [2, 33],
-        7: [2, 33],
-        8: [2, 33],
-        9: [2, 33],
-        10: [2, 33],
-        11: [2, 33],
-        12: [2, 33],
-        13: [2, 33],
-        16: [2, 33],
-        17: [2, 33],
-        18: [2, 33],
-        19: [2, 33],
-        21: [2, 33],
-        23: [2, 33],
-        29: [2, 33],
-        30: [2, 33],
-        31: [2, 33],
-        33: [2, 33],
-        34: [2, 33],
-        35: [2, 33],
-        36: [2, 33],
-        37: [2, 33],
-        38: [2, 33],
-        39: [2, 33]
-      }, {
-        5: [2, 34],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [2, 34],
-        13: [2, 34],
-        16: [2, 34],
-        17: [2, 34],
-        18: [2, 34],
-        19: [2, 34],
-        21: [2, 34],
-        23: [2, 34],
-        29: [1, 22],
-        30: [2, 34],
-        31: [2, 34],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        4: 61,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 15],
-        6: [2, 15],
-        7: [2, 15],
-        8: [2, 15],
-        9: [2, 15],
-        10: [2, 15],
-        11: [2, 15],
-        12: [2, 15],
-        13: [2, 15],
-        16: [2, 15],
-        17: [2, 15],
-        18: [2, 15],
-        19: [2, 15],
-        21: [2, 15],
-        23: [2, 15],
-        29: [2, 15],
-        30: [2, 15],
-        31: [2, 15],
-        33: [2, 15],
-        34: [2, 15],
-        35: [2, 15],
-        36: [2, 15],
-        37: [2, 15],
-        38: [2, 15],
-        39: [2, 15]
-      }, {
-        4: 62,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 20],
-        6: [2, 20],
-        7: [2, 20],
-        8: [2, 20],
-        9: [2, 20],
-        10: [2, 20],
-        11: [2, 20],
-        12: [2, 20],
-        13: [2, 20],
-        16: [2, 20],
-        17: [2, 20],
-        18: [2, 20],
-        19: [2, 20],
-        21: [2, 20],
-        23: [2, 20],
-        29: [2, 20],
-        30: [2, 20],
-        31: [2, 20],
-        32: 24,
-        33: [2, 20],
-        34: [2, 20],
-        35: [2, 20],
-        36: [2, 20],
-        37: [2, 20],
-        38: [2, 20],
-        39: [2, 20]
-      }, {
-        5: [2, 21],
-        6: [2, 21],
-        7: [2, 21],
-        8: [2, 21],
-        9: [2, 21],
-        10: [2, 21],
-        11: [2, 21],
-        12: [2, 21],
-        13: [2, 21],
-        16: [2, 21],
-        17: [2, 21],
-        18: [2, 21],
-        19: [2, 21],
-        21: [2, 21],
-        23: [2, 21],
-        29: [2, 21],
-        30: [2, 21],
-        31: [2, 21],
-        33: [2, 21],
-        34: [2, 21],
-        35: [2, 21],
-        36: [2, 21],
-        37: [2, 21],
-        38: [2, 21],
-        39: [2, 21]
-      }, {
-        21: [1, 63],
-        23: [1, 64]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 35],
-        23: [2, 35],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        4: 65,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        17: [1, 66],
-        18: [1, 20],
-        19: [1, 21],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        21: [1, 67],
-        23: [2, 36],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 22],
-        6: [2, 22],
-        7: [2, 22],
-        8: [2, 22],
-        9: [2, 22],
-        10: [2, 22],
-        11: [2, 22],
-        12: [2, 22],
-        13: [2, 22],
-        16: [2, 22],
-        17: [2, 22],
-        18: [2, 22],
-        19: [2, 22],
-        21: [2, 22],
-        23: [2, 22],
-        29: [2, 22],
-        30: [2, 22],
-        31: [2, 22],
-        33: [2, 22],
-        34: [2, 22],
-        35: [2, 22],
-        36: [2, 22],
-        37: [2, 22],
-        38: [2, 22],
-        39: [2, 22]
-      }, {
-        4: 68,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 25],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        16: [2, 25],
-        17: [2, 25],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 25],
-        23: [2, 25],
-        29: [1, 22],
-        30: [1, 23],
-        31: [2, 25],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        4: 69,
-        6: [1, 3],
-        14: [1, 4],
-        15: [1, 5],
-        20: [1, 6],
-        24: [1, 7],
-        25: [1, 8],
-        26: [1, 9],
-        28: 10
-      }, {
-        5: [2, 16],
-        6: [2, 16],
-        7: [2, 16],
-        8: [2, 16],
-        9: [2, 16],
-        10: [2, 16],
-        11: [2, 16],
-        12: [2, 16],
-        13: [2, 16],
-        16: [2, 16],
-        17: [2, 16],
-        18: [2, 16],
-        19: [2, 16],
-        21: [2, 16],
-        23: [2, 16],
-        29: [2, 16],
-        30: [2, 16],
-        31: [2, 16],
-        33: [2, 16],
-        34: [2, 16],
-        35: [2, 16],
-        36: [2, 16],
-        37: [2, 16],
-        38: [2, 16],
-        39: [2, 16]
-      }, {
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 36],
-        23: [2, 36],
-        29: [1, 22],
-        30: [1, 23],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }, {
-        5: [2, 12],
-        6: [1, 13],
-        7: [1, 12],
-        8: [1, 14],
-        9: [1, 15],
-        10: [1, 16],
-        11: [1, 17],
-        12: [1, 18],
-        13: [1, 19],
-        16: [2, 12],
-        17: [2, 12],
-        18: [1, 20],
-        19: [1, 21],
-        21: [2, 12],
-        23: [2, 12],
-        29: [1, 22],
-        30: [1, 23],
-        31: [2, 12],
-        32: 24,
-        33: [1, 25],
-        34: [1, 26],
-        35: [1, 27],
-        36: [1, 28],
-        37: [1, 29],
-        38: [1, 30],
-        39: [1, 31]
-      }],
+      table: [
+        {
+          3: 1,
+          4: 2,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          1: [3],
+        },
+        {
+          5: [1, 11],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          4: 32,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 33,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 34,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 35,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          22: 36,
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 17],
+          6: [2, 17],
+          7: [2, 17],
+          8: [2, 17],
+          9: [2, 17],
+          10: [2, 17],
+          11: [2, 17],
+          12: [2, 17],
+          13: [2, 17],
+          16: [2, 17],
+          17: [2, 17],
+          18: [2, 17],
+          19: [2, 17],
+          21: [2, 17],
+          23: [2, 17],
+          29: [2, 17],
+          30: [2, 17],
+          31: [2, 17],
+          33: [2, 17],
+          34: [2, 17],
+          35: [2, 17],
+          36: [2, 17],
+          37: [2, 17],
+          38: [2, 17],
+          39: [2, 17],
+        },
+        {
+          5: [2, 18],
+          6: [2, 18],
+          7: [2, 18],
+          8: [2, 18],
+          9: [2, 18],
+          10: [2, 18],
+          11: [2, 18],
+          12: [2, 18],
+          13: [2, 18],
+          16: [2, 18],
+          17: [2, 18],
+          18: [2, 18],
+          19: [2, 18],
+          20: [1, 38],
+          21: [2, 18],
+          23: [2, 18],
+          27: [1, 37],
+          29: [2, 18],
+          30: [2, 18],
+          31: [2, 18],
+          33: [2, 18],
+          34: [2, 18],
+          35: [2, 18],
+          36: [2, 18],
+          37: [2, 18],
+          38: [2, 18],
+          39: [2, 18],
+        },
+        {
+          5: [2, 19],
+          6: [2, 19],
+          7: [2, 19],
+          8: [2, 19],
+          9: [2, 19],
+          10: [2, 19],
+          11: [2, 19],
+          12: [2, 19],
+          13: [2, 19],
+          16: [2, 19],
+          17: [2, 19],
+          18: [2, 19],
+          19: [2, 19],
+          21: [2, 19],
+          23: [2, 19],
+          29: [2, 19],
+          30: [2, 19],
+          31: [2, 19],
+          33: [2, 19],
+          34: [2, 19],
+          35: [2, 19],
+          36: [2, 19],
+          37: [2, 19],
+          38: [2, 19],
+          39: [2, 19],
+        },
+        {
+          5: [2, 23],
+          6: [2, 23],
+          7: [2, 23],
+          8: [2, 23],
+          9: [2, 23],
+          10: [2, 23],
+          11: [2, 23],
+          12: [2, 23],
+          13: [2, 23],
+          16: [2, 23],
+          17: [2, 23],
+          18: [2, 23],
+          19: [2, 23],
+          21: [2, 23],
+          23: [2, 23],
+          29: [2, 23],
+          30: [2, 23],
+          31: [2, 23],
+          33: [2, 23],
+          34: [2, 23],
+          35: [2, 23],
+          36: [2, 23],
+          37: [2, 23],
+          38: [2, 23],
+          39: [2, 23],
+        },
+        {
+          1: [2, 1],
+        },
+        {
+          4: 39,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 40,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 41,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 42,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 43,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 44,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 45,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 46,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 47,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 48,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 49,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 50,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 52,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 51,
+        },
+        {
+          6: [2, 26],
+          14: [2, 26],
+          15: [2, 26],
+          20: [2, 26],
+          24: [2, 26],
+          25: [2, 26],
+          26: [2, 26],
+        },
+        {
+          6: [2, 27],
+          14: [2, 27],
+          15: [2, 27],
+          20: [2, 27],
+          24: [2, 27],
+          25: [2, 27],
+          26: [2, 27],
+        },
+        {
+          6: [2, 28],
+          14: [2, 28],
+          15: [2, 28],
+          20: [2, 28],
+          24: [2, 28],
+          25: [2, 28],
+          26: [2, 28],
+        },
+        {
+          6: [2, 29],
+          14: [2, 29],
+          15: [2, 29],
+          20: [2, 29],
+          24: [2, 29],
+          25: [2, 29],
+          26: [2, 29],
+        },
+        {
+          6: [2, 30],
+          14: [2, 30],
+          15: [2, 30],
+          20: [2, 30],
+          24: [2, 30],
+          25: [2, 30],
+          26: [2, 30],
+        },
+        {
+          6: [2, 31],
+          14: [2, 31],
+          15: [2, 31],
+          20: [2, 31],
+          24: [2, 31],
+          25: [2, 31],
+          26: [2, 31],
+        },
+        {
+          6: [2, 32],
+          14: [2, 32],
+          15: [2, 32],
+          20: [2, 32],
+          24: [2, 32],
+          25: [2, 32],
+          26: [2, 32],
+        },
+        {
+          5: [2, 2],
+          6: [2, 2],
+          7: [2, 2],
+          8: [2, 2],
+          9: [2, 2],
+          10: [1, 16],
+          11: [2, 2],
+          12: [2, 2],
+          13: [2, 2],
+          16: [2, 2],
+          17: [2, 2],
+          18: [2, 2],
+          19: [2, 2],
+          21: [2, 2],
+          23: [2, 2],
+          29: [2, 2],
+          30: [2, 2],
+          31: [2, 2],
+          32: 24,
+          33: [2, 2],
+          34: [2, 2],
+          35: [2, 2],
+          36: [2, 2],
+          37: [2, 2],
+          38: [2, 2],
+          39: [2, 2],
+        },
+        {
+          5: [2, 11],
+          6: [2, 11],
+          7: [2, 11],
+          8: [2, 11],
+          9: [2, 11],
+          10: [1, 16],
+          11: [2, 11],
+          12: [2, 11],
+          13: [2, 11],
+          16: [2, 11],
+          17: [2, 11],
+          18: [2, 11],
+          19: [2, 11],
+          21: [2, 11],
+          23: [2, 11],
+          29: [2, 11],
+          30: [2, 11],
+          31: [2, 11],
+          32: 24,
+          33: [2, 11],
+          34: [2, 11],
+          35: [2, 11],
+          36: [2, 11],
+          37: [2, 11],
+          38: [2, 11],
+          39: [2, 11],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          16: [1, 53],
+          18: [1, 20],
+          19: [1, 21],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          21: [1, 54],
+          23: [2, 35],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          23: [1, 55],
+        },
+        {
+          4: 56,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          4: 59,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          21: [1, 57],
+          22: 58,
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 3],
+          6: [2, 3],
+          7: [2, 3],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 3],
+          13: [2, 3],
+          16: [2, 3],
+          17: [2, 3],
+          18: [2, 3],
+          19: [2, 3],
+          21: [2, 3],
+          23: [2, 3],
+          29: [1, 22],
+          30: [2, 3],
+          31: [2, 3],
+          32: 24,
+          33: [2, 3],
+          34: [2, 3],
+          35: [2, 3],
+          36: [2, 3],
+          37: [2, 3],
+          38: [2, 3],
+          39: [2, 3],
+        },
+        {
+          5: [2, 4],
+          6: [2, 4],
+          7: [2, 4],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 4],
+          13: [2, 4],
+          16: [2, 4],
+          17: [2, 4],
+          18: [2, 4],
+          19: [2, 4],
+          21: [2, 4],
+          23: [2, 4],
+          29: [1, 22],
+          30: [2, 4],
+          31: [2, 4],
+          32: 24,
+          33: [2, 4],
+          34: [2, 4],
+          35: [2, 4],
+          36: [2, 4],
+          37: [2, 4],
+          38: [2, 4],
+          39: [2, 4],
+        },
+        {
+          5: [2, 5],
+          6: [2, 5],
+          7: [2, 5],
+          8: [2, 5],
+          9: [2, 5],
+          10: [1, 16],
+          11: [2, 5],
+          12: [2, 5],
+          13: [2, 5],
+          16: [2, 5],
+          17: [2, 5],
+          18: [2, 5],
+          19: [2, 5],
+          21: [2, 5],
+          23: [2, 5],
+          29: [2, 5],
+          30: [2, 5],
+          31: [2, 5],
+          32: 24,
+          33: [2, 5],
+          34: [2, 5],
+          35: [2, 5],
+          36: [2, 5],
+          37: [2, 5],
+          38: [2, 5],
+          39: [2, 5],
+        },
+        {
+          5: [2, 6],
+          6: [2, 6],
+          7: [2, 6],
+          8: [2, 6],
+          9: [2, 6],
+          10: [1, 16],
+          11: [2, 6],
+          12: [2, 6],
+          13: [2, 6],
+          16: [2, 6],
+          17: [2, 6],
+          18: [2, 6],
+          19: [2, 6],
+          21: [2, 6],
+          23: [2, 6],
+          29: [2, 6],
+          30: [2, 6],
+          31: [2, 6],
+          32: 24,
+          33: [2, 6],
+          34: [2, 6],
+          35: [2, 6],
+          36: [2, 6],
+          37: [2, 6],
+          38: [2, 6],
+          39: [2, 6],
+        },
+        {
+          5: [2, 7],
+          6: [2, 7],
+          7: [2, 7],
+          8: [2, 7],
+          9: [2, 7],
+          10: [1, 16],
+          11: [2, 7],
+          12: [2, 7],
+          13: [2, 7],
+          16: [2, 7],
+          17: [2, 7],
+          18: [2, 7],
+          19: [2, 7],
+          21: [2, 7],
+          23: [2, 7],
+          29: [2, 7],
+          30: [2, 7],
+          31: [2, 7],
+          32: 24,
+          33: [2, 7],
+          34: [2, 7],
+          35: [2, 7],
+          36: [2, 7],
+          37: [2, 7],
+          38: [2, 7],
+          39: [2, 7],
+        },
+        {
+          5: [2, 8],
+          6: [2, 8],
+          7: [2, 8],
+          8: [2, 8],
+          9: [2, 8],
+          10: [1, 16],
+          11: [2, 8],
+          12: [2, 8],
+          13: [2, 8],
+          16: [2, 8],
+          17: [2, 8],
+          18: [2, 8],
+          19: [2, 8],
+          21: [2, 8],
+          23: [2, 8],
+          29: [2, 8],
+          30: [2, 8],
+          31: [2, 8],
+          32: 24,
+          33: [2, 8],
+          34: [2, 8],
+          35: [2, 8],
+          36: [2, 8],
+          37: [2, 8],
+          38: [2, 8],
+          39: [2, 8],
+        },
+        {
+          5: [2, 9],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 9],
+          13: [2, 9],
+          16: [2, 9],
+          17: [2, 9],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 9],
+          23: [2, 9],
+          29: [1, 22],
+          30: [2, 9],
+          31: [2, 9],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 10],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [2, 10],
+          16: [2, 10],
+          17: [2, 10],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 10],
+          23: [2, 10],
+          29: [1, 22],
+          30: [2, 10],
+          31: [2, 10],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 13],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 13],
+          13: [2, 13],
+          16: [2, 13],
+          17: [2, 13],
+          18: [2, 13],
+          19: [2, 13],
+          21: [2, 13],
+          23: [2, 13],
+          29: [1, 22],
+          30: [2, 13],
+          31: [2, 13],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 14],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 14],
+          13: [2, 14],
+          16: [2, 14],
+          17: [2, 14],
+          18: [2, 14],
+          19: [2, 14],
+          21: [2, 14],
+          23: [2, 14],
+          29: [1, 22],
+          30: [2, 14],
+          31: [2, 14],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 24],
+          6: [2, 24],
+          7: [2, 24],
+          8: [2, 24],
+          9: [2, 24],
+          10: [1, 16],
+          11: [2, 24],
+          12: [2, 24],
+          13: [2, 24],
+          16: [2, 24],
+          17: [2, 24],
+          18: [2, 24],
+          19: [2, 24],
+          21: [2, 24],
+          23: [2, 24],
+          29: [2, 24],
+          30: [2, 24],
+          31: [2, 24],
+          32: 24,
+          33: [2, 24],
+          34: [2, 24],
+          35: [2, 24],
+          36: [2, 24],
+          37: [2, 24],
+          38: [2, 24],
+          39: [2, 24],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          29: [1, 22],
+          30: [1, 23],
+          31: [1, 60],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 33],
+          6: [2, 33],
+          7: [2, 33],
+          8: [2, 33],
+          9: [2, 33],
+          10: [2, 33],
+          11: [2, 33],
+          12: [2, 33],
+          13: [2, 33],
+          16: [2, 33],
+          17: [2, 33],
+          18: [2, 33],
+          19: [2, 33],
+          21: [2, 33],
+          23: [2, 33],
+          29: [2, 33],
+          30: [2, 33],
+          31: [2, 33],
+          33: [2, 33],
+          34: [2, 33],
+          35: [2, 33],
+          36: [2, 33],
+          37: [2, 33],
+          38: [2, 33],
+          39: [2, 33],
+        },
+        {
+          5: [2, 34],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [2, 34],
+          13: [2, 34],
+          16: [2, 34],
+          17: [2, 34],
+          18: [2, 34],
+          19: [2, 34],
+          21: [2, 34],
+          23: [2, 34],
+          29: [1, 22],
+          30: [2, 34],
+          31: [2, 34],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          4: 61,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 15],
+          6: [2, 15],
+          7: [2, 15],
+          8: [2, 15],
+          9: [2, 15],
+          10: [2, 15],
+          11: [2, 15],
+          12: [2, 15],
+          13: [2, 15],
+          16: [2, 15],
+          17: [2, 15],
+          18: [2, 15],
+          19: [2, 15],
+          21: [2, 15],
+          23: [2, 15],
+          29: [2, 15],
+          30: [2, 15],
+          31: [2, 15],
+          33: [2, 15],
+          34: [2, 15],
+          35: [2, 15],
+          36: [2, 15],
+          37: [2, 15],
+          38: [2, 15],
+          39: [2, 15],
+        },
+        {
+          4: 62,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 20],
+          6: [2, 20],
+          7: [2, 20],
+          8: [2, 20],
+          9: [2, 20],
+          10: [2, 20],
+          11: [2, 20],
+          12: [2, 20],
+          13: [2, 20],
+          16: [2, 20],
+          17: [2, 20],
+          18: [2, 20],
+          19: [2, 20],
+          21: [2, 20],
+          23: [2, 20],
+          29: [2, 20],
+          30: [2, 20],
+          31: [2, 20],
+          32: 24,
+          33: [2, 20],
+          34: [2, 20],
+          35: [2, 20],
+          36: [2, 20],
+          37: [2, 20],
+          38: [2, 20],
+          39: [2, 20],
+        },
+        {
+          5: [2, 21],
+          6: [2, 21],
+          7: [2, 21],
+          8: [2, 21],
+          9: [2, 21],
+          10: [2, 21],
+          11: [2, 21],
+          12: [2, 21],
+          13: [2, 21],
+          16: [2, 21],
+          17: [2, 21],
+          18: [2, 21],
+          19: [2, 21],
+          21: [2, 21],
+          23: [2, 21],
+          29: [2, 21],
+          30: [2, 21],
+          31: [2, 21],
+          33: [2, 21],
+          34: [2, 21],
+          35: [2, 21],
+          36: [2, 21],
+          37: [2, 21],
+          38: [2, 21],
+          39: [2, 21],
+        },
+        {
+          21: [1, 63],
+          23: [1, 64],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 35],
+          23: [2, 35],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          4: 65,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          17: [1, 66],
+          18: [1, 20],
+          19: [1, 21],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          21: [1, 67],
+          23: [2, 36],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 22],
+          6: [2, 22],
+          7: [2, 22],
+          8: [2, 22],
+          9: [2, 22],
+          10: [2, 22],
+          11: [2, 22],
+          12: [2, 22],
+          13: [2, 22],
+          16: [2, 22],
+          17: [2, 22],
+          18: [2, 22],
+          19: [2, 22],
+          21: [2, 22],
+          23: [2, 22],
+          29: [2, 22],
+          30: [2, 22],
+          31: [2, 22],
+          33: [2, 22],
+          34: [2, 22],
+          35: [2, 22],
+          36: [2, 22],
+          37: [2, 22],
+          38: [2, 22],
+          39: [2, 22],
+        },
+        {
+          4: 68,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 25],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          16: [2, 25],
+          17: [2, 25],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 25],
+          23: [2, 25],
+          29: [1, 22],
+          30: [1, 23],
+          31: [2, 25],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          4: 69,
+          6: [1, 3],
+          14: [1, 4],
+          15: [1, 5],
+          20: [1, 6],
+          24: [1, 7],
+          25: [1, 8],
+          26: [1, 9],
+          28: 10,
+        },
+        {
+          5: [2, 16],
+          6: [2, 16],
+          7: [2, 16],
+          8: [2, 16],
+          9: [2, 16],
+          10: [2, 16],
+          11: [2, 16],
+          12: [2, 16],
+          13: [2, 16],
+          16: [2, 16],
+          17: [2, 16],
+          18: [2, 16],
+          19: [2, 16],
+          21: [2, 16],
+          23: [2, 16],
+          29: [2, 16],
+          30: [2, 16],
+          31: [2, 16],
+          33: [2, 16],
+          34: [2, 16],
+          35: [2, 16],
+          36: [2, 16],
+          37: [2, 16],
+          38: [2, 16],
+          39: [2, 16],
+        },
+        {
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 36],
+          23: [2, 36],
+          29: [1, 22],
+          30: [1, 23],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+        {
+          5: [2, 12],
+          6: [1, 13],
+          7: [1, 12],
+          8: [1, 14],
+          9: [1, 15],
+          10: [1, 16],
+          11: [1, 17],
+          12: [1, 18],
+          13: [1, 19],
+          16: [2, 12],
+          17: [2, 12],
+          18: [1, 20],
+          19: [1, 21],
+          21: [2, 12],
+          23: [2, 12],
+          29: [1, 22],
+          30: [1, 23],
+          31: [2, 12],
+          32: 24,
+          33: [1, 25],
+          34: [1, 26],
+          35: [1, 27],
+          36: [1, 28],
+          37: [1, 29],
+          38: [1, 30],
+          39: [1, 31],
+        },
+      ],
       defaultActions: {
-        11: [2, 1]
+        11: [2, 1],
       },
       parseError: function parseError(str, hash) {
         throw new Error(str);
@@ -1601,7 +1922,7 @@ var filtrex = (function (exports) {
           lstack = [],
           // location stack
           table = this.table,
-          yytext = '',
+          yytext = "",
           yylineno = 0,
           yyleng = 0,
           recovering = 0,
@@ -1614,11 +1935,12 @@ var filtrex = (function (exports) {
         this.lexer.yy = this.yy;
         this.yy.lexer = this.lexer;
         this.yy.parser = this;
-        if (typeof this.lexer.yylloc == 'undefined') this.lexer.yylloc = {};
+        if (typeof this.lexer.yylloc == "undefined") this.lexer.yylloc = {};
         var yyloc = this.lexer.yylloc;
         lstack.push(yyloc);
         var ranges = this.lexer.options && this.lexer.options.ranges;
-        if (typeof this.yy.parseError === 'function') this.parseError = this.yy.parseError;
+        if (typeof this.yy.parseError === "function")
+          this.parseError = this.yy.parseError;
         function popStack(n) {
           stack.length = stack.length - 2 * n;
           vstack.length = vstack.length - n;
@@ -1628,7 +1950,7 @@ var filtrex = (function (exports) {
           var token;
           token = self.lexer.lex() || 1; // $end = 1
           // if token isn't its numeric value, convert
-          if (typeof token !== 'number') {
+          if (typeof token !== "number") {
             token = self.symbols_[token] || token;
           }
           return token;
@@ -1651,7 +1973,7 @@ var filtrex = (function (exports) {
           if (this.defaultActions[state]) {
             action = this.defaultActions[state];
           } else {
-            if (symbol === null || typeof symbol == 'undefined') {
+            if (symbol === null || typeof symbol == "undefined") {
               symbol = lex();
             }
             // read action for current state and first input
@@ -1659,32 +1981,48 @@ var filtrex = (function (exports) {
           }
 
           // handle parse error
-          if (typeof action === 'undefined' || !action.length || !action[0]) {
-            var errStr = '';
+          if (typeof action === "undefined" || !action.length || !action[0]) {
+            var errStr = "";
             if (!recovering) {
               // Report error
               expected = [];
-              for (p in table[state]) if (this.terminals_[p] && p > 2) {
-                expected.push("'" + this.terminals_[p] + "'");
-              }
+              for (p in table[state])
+                if (this.terminals_[p] && p > 2) {
+                  expected.push("'" + this.terminals_[p] + "'");
+                }
               if (this.lexer.showPosition) {
-                errStr = 'Parse error on line ' + (yylineno + 1) + ":\n" + this.lexer.showPosition() + "\nExpecting " + expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol) + "'";
+                errStr =
+                  "Parse error on line " +
+                  (yylineno + 1) +
+                  ":\n" +
+                  this.lexer.showPosition() +
+                  "\nExpecting " +
+                  expected.join(", ") +
+                  ", got '" +
+                  (this.terminals_[symbol] || symbol) +
+                  "'";
               } else {
-                errStr = 'Parse error on line ' + (yylineno + 1) + ": Unexpected " + (symbol == 1 /*EOF*/ ? "end of input" : "'" + (this.terminals_[symbol] || symbol) + "'");
+                errStr =
+                  "Parse error on line " +
+                  (yylineno + 1) +
+                  ": Unexpected " +
+                  (symbol == 1 /*EOF*/
+                    ? "end of input"
+                    : "'" + (this.terminals_[symbol] || symbol) + "'");
               }
               this.parseError(errStr, {
                 text: this.lexer.match,
                 token: this.terminals_[symbol] || symbol,
                 line: this.lexer.yylineno,
                 loc: yyloc,
-                expected: expected
+                expected: expected,
               });
             }
 
             // just recovered from another error
             if (recovering == 3) {
               if (symbol == EOF) {
-                throw new Error(errStr || 'Parsing halted.');
+                throw new Error(errStr || "Parsing halted.");
               }
 
               // discard current lookahead and grab another
@@ -1702,7 +2040,7 @@ var filtrex = (function (exports) {
                 break;
               }
               if (state === 0) {
-                throw new Error(errStr || 'Parsing halted.');
+                throw new Error(errStr || "Parsing halted.");
               }
               popStack(1);
               state = stack[stack.length - 1];
@@ -1716,7 +2054,12 @@ var filtrex = (function (exports) {
 
           // this shouldn't happen, unless resolve defaults are off
           if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+            throw new Error(
+              "Parse Error: multiple actions possible at state: " +
+                state +
+                ", token: " +
+                symbol,
+            );
           }
           switch (action[0]) {
             case 1:
@@ -1754,13 +2097,25 @@ var filtrex = (function (exports) {
                 first_line: lstack[lstack.length - (len || 1)].first_line,
                 last_line: lstack[lstack.length - 1].last_line,
                 first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
+                last_column: lstack[lstack.length - 1].last_column,
               };
               if (ranges) {
-                yyval._$.range = [lstack[lstack.length - (len || 1)].range[0], lstack[lstack.length - 1].range[1]];
+                yyval._$.range = [
+                  lstack[lstack.length - (len || 1)].range[0],
+                  lstack[lstack.length - 1].range[1],
+                ];
               }
-              r = this.performAction.call(yyval, yytext, yyleng, yylineno, this.yy, action[1], vstack, lstack);
-              if (typeof r !== 'undefined') {
+              r = this.performAction.call(
+                yyval,
+                yytext,
+                yyleng,
+                yylineno,
+                this.yy,
+                action[1],
+                vstack,
+                lstack,
+              );
+              if (typeof r !== "undefined") {
                 return r;
               }
 
@@ -1774,7 +2129,8 @@ var filtrex = (function (exports) {
               vstack.push(yyval.$);
               lstack.push(yyval._$);
               // goto new state = table[STATE][NONTERMINAL]
-              newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+              newState =
+                table[stack[stack.length - 2]][stack[stack.length - 1]];
               stack.push(newState);
               break;
             case 3:
@@ -1783,9 +2139,9 @@ var filtrex = (function (exports) {
           }
         }
         return true;
-      }
+      },
     };
-    var lexer = function () {
+    var lexer = (function () {
       var lexer = {
         EOF: 1,
         parseError: function parseError(str, hash) {
@@ -1799,13 +2155,13 @@ var filtrex = (function (exports) {
           this._input = input;
           this._more = this._less = this.done = false;
           this.yylineno = this.yyleng = 0;
-          this.yytext = this.matched = this.match = '';
-          this.conditionStack = ['INITIAL'];
+          this.yytext = this.matched = this.match = "";
+          this.conditionStack = ["INITIAL"];
           this.yylloc = {
             first_line: 1,
             first_column: 0,
             last_line: 1,
-            last_column: 0
+            last_column: 0,
           };
           if (this.options.ranges) this.yylloc.range = [0, 0];
           this.offset = 0;
@@ -1845,7 +2201,13 @@ var filtrex = (function (exports) {
             first_line: this.yylloc.first_line,
             last_line: this.yylineno + 1,
             first_column: this.yylloc.first_column,
-            last_column: lines ? (lines.length === oldLines.length ? this.yylloc.first_column : 0) + oldLines[oldLines.length - lines.length].length - lines[0].length : this.yylloc.first_column - len
+            last_column: lines
+              ? (lines.length === oldLines.length
+                  ? this.yylloc.first_column
+                  : 0) +
+                oldLines[oldLines.length - lines.length].length -
+                lines[0].length
+              : this.yylloc.first_column - len,
           };
           if (this.options.ranges) {
             this.yylloc.range = [r[0], r[0] + this.yyleng - len];
@@ -1860,15 +2222,24 @@ var filtrex = (function (exports) {
           this.unput(this.match.slice(n));
         },
         pastInput: function pastInput() {
-          var past = this.matched.substr(0, this.matched.length - this.match.length);
-          return (past.length > 20 ? '...' : '') + past.substr(-20).replace(/\n/g, "");
+          var past = this.matched.substr(
+            0,
+            this.matched.length - this.match.length,
+          );
+          return (
+            (past.length > 20 ? "..." : "") +
+            past.substr(-20).replace(/\n/g, "")
+          );
         },
         upcomingInput: function upcomingInput() {
           var next = this.match;
           if (next.length < 20) {
             next += this._input.substr(0, 20 - next.length);
           }
-          return (next.substr(0, 20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+          return (next.substr(0, 20) + (next.length > 20 ? "..." : "")).replace(
+            /\n/g,
+            "",
+          );
         },
         showPosition: function showPosition() {
           var pre = this.pastInput();
@@ -1882,13 +2253,16 @@ var filtrex = (function (exports) {
           if (!this._input) this.done = true;
           var token, match, tempMatch, index, lines;
           if (!this._more) {
-            this.yytext = '';
-            this.match = '';
+            this.yytext = "";
+            this.match = "";
           }
           var rules = this._currentRules();
           for (var i = 0; i < rules.length; i++) {
             tempMatch = this._input.match(this.rules[rules[i]]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+            if (
+              tempMatch &&
+              (!match || tempMatch[0].length > match[0].length)
+            ) {
               match = tempMatch;
               index = i;
               if (!this.options.flex) break;
@@ -1901,35 +2275,51 @@ var filtrex = (function (exports) {
               first_line: this.yylloc.last_line,
               last_line: this.yylineno + 1,
               first_column: this.yylloc.last_column,
-              last_column: lines ? lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length : this.yylloc.last_column + match[0].length
+              last_column: lines
+                ? lines[lines.length - 1].length -
+                  lines[lines.length - 1].match(/\r?\n?/)[0].length
+                : this.yylloc.last_column + match[0].length,
             };
             this.yytext += match[0];
             this.match += match[0];
             this.matches = match;
             this.yyleng = this.yytext.length;
             if (this.options.ranges) {
-              this.yylloc.range = [this.offset, this.offset += this.yyleng];
+              this.yylloc.range = [this.offset, (this.offset += this.yyleng)];
             }
             this._more = false;
             this._input = this._input.slice(match[0].length);
             this.matched += match[0];
-            token = this.performAction.call(this, this.yy, this, rules[index], this.conditionStack[this.conditionStack.length - 1]);
+            token = this.performAction.call(
+              this,
+              this.yy,
+              this,
+              rules[index],
+              this.conditionStack[this.conditionStack.length - 1],
+            );
             if (this.done && this._input) this.done = false;
-            if (token) return token;else return;
+            if (token) return token;
+            else return;
           }
           if (this._input === "") {
             return this.EOF;
           } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
-              text: "",
-              token: null,
-              line: this.yylineno
-            });
+            return this.parseError(
+              "Lexical error on line " +
+                (this.yylineno + 1) +
+                ". Unrecognized text.\n" +
+                this.showPosition(),
+              {
+                text: "",
+                token: null,
+                line: this.yylineno,
+              },
+            );
           }
         },
         lex: function lex() {
           var r = this.next();
-          if (typeof r !== 'undefined') {
+          if (typeof r !== "undefined") {
             return r;
           } else {
             return this.lex();
@@ -1942,17 +2332,24 @@ var filtrex = (function (exports) {
           return this.conditionStack.pop();
         },
         _currentRules: function _currentRules() {
-          return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+          return this.conditions[
+            this.conditionStack[this.conditionStack.length - 1]
+          ].rules;
         },
         topState: function topState() {
           return this.conditionStack[this.conditionStack.length - 2];
         },
         pushState: function begin(condition) {
           this.begin(condition);
-        }
+        },
       };
       lexer.options = {};
-      lexer.performAction = function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
+      lexer.performAction = function anonymous(
+        yy,
+        yy_,
+        $avoiding_name_collisions,
+        YY_START,
+      ) {
         switch ($avoiding_name_collisions) {
           case 0:
             return "*";
@@ -2011,13 +2408,13 @@ var filtrex = (function (exports) {
           case 27:
             yy_.yytext = JSON.stringify({
               name: yy_.yytext,
-              type: 'unescaped'
+              type: "unescaped",
             });
             return "Symbol";
           case 28:
             yy_.yytext = JSON.stringify({
               name: yy.buildString("'", yy_.yytext),
-              type: 'single-quoted'
+              type: "single-quoted",
             });
             return "Symbol";
           case 29:
@@ -2033,15 +2430,53 @@ var filtrex = (function (exports) {
             return "EndOfExpression";
         }
       };
-      lexer.rules = [/^(?:\*)/, /^(?:\/)/, /^(?:-)/, /^(?:\+)/, /^(?:\^)/, /^(?:\()/, /^(?:\))/, /^(?:\,)/, /^(?:==)/, /^(?:\!=)/, /^(?:\~=)/, /^(?:>=)/, /^(?:<=)/, /^(?:<)/, /^(?:>)/, /^(?:not\s+in[^\w])/, /^(?:and[^\w])/, /^(?:or[^\w])/, /^(?:not[^\w])/, /^(?:in[^\w])/, /^(?:of[^\w])/, /^(?:if[^\w])/, /^(?:then[^\w])/, /^(?:else[^\w])/, /^(?:mod[^\w])/, /^(?:\s+)/, /^(?:[0-9]+(?:\.[0-9]+)?(?![0-9\.]))/, /^(?:[a-zA-Z$_][\.a-zA-Z0-9$_]*)/, /^(?:'(?:\\'|\\\\|[^'\\])*')/, /^(?:"(?:\\"|\\\\|[^"\\])*")/, /^(?:\%)/, /^(?:\?)/, /^(?::)/, /^(?:$)/];
+      lexer.rules = [
+        /^(?:\*)/,
+        /^(?:\/)/,
+        /^(?:-)/,
+        /^(?:\+)/,
+        /^(?:\^)/,
+        /^(?:\()/,
+        /^(?:\))/,
+        /^(?:\,)/,
+        /^(?:==)/,
+        /^(?:\!=)/,
+        /^(?:\~=)/,
+        /^(?:>=)/,
+        /^(?:<=)/,
+        /^(?:<)/,
+        /^(?:>)/,
+        /^(?:not\s+in[^\w])/,
+        /^(?:and[^\w])/,
+        /^(?:or[^\w])/,
+        /^(?:not[^\w])/,
+        /^(?:in[^\w])/,
+        /^(?:of[^\w])/,
+        /^(?:if[^\w])/,
+        /^(?:then[^\w])/,
+        /^(?:else[^\w])/,
+        /^(?:mod[^\w])/,
+        /^(?:\s+)/,
+        /^(?:[0-9]+(?:\.[0-9]+)?(?![0-9\.]))/,
+        /^(?:[a-zA-Z$_][\.a-zA-Z0-9$_]*)/,
+        /^(?:'(?:\\'|\\\\|[^'\\])*')/,
+        /^(?:"(?:\\"|\\\\|[^"\\])*")/,
+        /^(?:\%)/,
+        /^(?:\?)/,
+        /^(?::)/,
+        /^(?:$)/,
+      ];
       lexer.conditions = {
-        "INITIAL": {
-          "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
-          "inclusive": true
-        }
+        INITIAL: {
+          rules: [
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
+          ],
+          inclusive: true,
+        },
       };
       return lexer;
-    }();
+    })();
     parser.lexer = lexer;
     function Parser() {
       this.yy = {};
@@ -2049,7 +2484,7 @@ var filtrex = (function (exports) {
     Parser.prototype = parser;
     parser.Parser = Parser;
     return new Parser();
-  }();
+  })();
   var parser = _parser;
   _parser.Parser;
 
@@ -2061,18 +2496,20 @@ var filtrex = (function (exports) {
    * @prop {string} functionName
    * @prop {string} I18N_STRING has the value `'UNKNOWN_FUNCTION'`
    */
-  var UnknownFunctionError = /*#__PURE__*/function (_ReferenceError) {
+  var UnknownFunctionError = /*#__PURE__*/ (function (_ReferenceError) {
     function UnknownFunctionError(funcName) {
       var _this;
       _classCallCheck(this, UnknownFunctionError);
-      _this = _callSuper(this, UnknownFunctionError, ["Unknown function: ".concat(funcName, "()")]);
-      _defineProperty(_this, "I18N_STRING", 'UNKNOWN_FUNCTION');
+      _this = _callSuper(this, UnknownFunctionError, [
+        "Unknown function: ".concat(funcName, "()"),
+      ]);
+      _defineProperty(_this, "I18N_STRING", "UNKNOWN_FUNCTION");
       _this.functionName = funcName;
       return _this;
     }
     _inherits(UnknownFunctionError, _ReferenceError);
     return _createClass(UnknownFunctionError);
-  }(/*#__PURE__*/_wrapNativeSuper(ReferenceError));
+  })(/*#__PURE__*/ _wrapNativeSuper(ReferenceError));
 
   /**
    * Runtime error – user attempted to access a property which
@@ -2084,18 +2521,20 @@ var filtrex = (function (exports) {
    * @prop {string} propertyName
    * @prop {string} I18N_STRING has the value `'UNKNOWN_PROPERTY'`
    */
-  var UnknownPropertyError = /*#__PURE__*/function (_ReferenceError2) {
+  var UnknownPropertyError = /*#__PURE__*/ (function (_ReferenceError2) {
     function UnknownPropertyError(propName) {
       var _this2;
       _classCallCheck(this, UnknownPropertyError);
-      _this2 = _callSuper(this, UnknownPropertyError, ["Property \u201C".concat(propName, "\u201D does not exist.")]);
-      _defineProperty(_this2, "I18N_STRING", 'UNKNOWN_PROPERTY');
+      _this2 = _callSuper(this, UnknownPropertyError, [
+        "Property \u201C".concat(propName, "\u201D does not exist."),
+      ]);
+      _defineProperty(_this2, "I18N_STRING", "UNKNOWN_PROPERTY");
       _this2.propertyName = propName;
       return _this2;
     }
     _inherits(UnknownPropertyError, _ReferenceError2);
     return _createClass(UnknownPropertyError);
-  }(/*#__PURE__*/_wrapNativeSuper(ReferenceError));
+  })(/*#__PURE__*/ _wrapNativeSuper(ReferenceError));
 
   /**
    * Compile time error – you specified an option which
@@ -2105,18 +2544,20 @@ var filtrex = (function (exports) {
    * @prop {string} keyName
    * @prop {string} I18N_STRING has the value `'UNKNOWN_OPTION'`
    */
-  var UnknownOptionError = /*#__PURE__*/function (_TypeError) {
+  var UnknownOptionError = /*#__PURE__*/ (function (_TypeError) {
     function UnknownOptionError(key) {
       var _this3;
       _classCallCheck(this, UnknownOptionError);
-      _this3 = _callSuper(this, UnknownOptionError, ["Unknown option: ".concat(key)]);
-      _defineProperty(_this3, "I18N_STRING", 'UNKNOWN_OPTION');
+      _this3 = _callSuper(this, UnknownOptionError, [
+        "Unknown option: ".concat(key),
+      ]);
+      _defineProperty(_this3, "I18N_STRING", "UNKNOWN_OPTION");
       _this3.keyName = key;
       return _this3;
     }
     _inherits(UnknownOptionError, _TypeError);
     return _createClass(UnknownOptionError);
-  }(/*#__PURE__*/_wrapNativeSuper(TypeError));
+  })(/*#__PURE__*/ _wrapNativeSuper(TypeError));
 
   /**
    * Runtime error – user passed a different type than the one
@@ -2131,19 +2572,21 @@ var filtrex = (function (exports) {
    * @prop {string} recievedType
    * @prop {string} I18N_STRING has the value `'UNEXPECTED_TYPE'`
    */
-  var UnexpectedTypeError = /*#__PURE__*/function (_TypeError2) {
+  var UnexpectedTypeError = /*#__PURE__*/ (function (_TypeError2) {
     function UnexpectedTypeError(expected, got) {
       var _this4;
       _classCallCheck(this, UnexpectedTypeError);
-      _this4 = _callSuper(this, UnexpectedTypeError, ["Expected a ".concat(expected, ", but got a ").concat(got, " instead.")]);
-      _defineProperty(_this4, "I18N_STRING", 'UNEXPECTED_TYPE');
+      _this4 = _callSuper(this, UnexpectedTypeError, [
+        "Expected a ".concat(expected, ", but got a ").concat(got, " instead."),
+      ]);
+      _defineProperty(_this4, "I18N_STRING", "UNEXPECTED_TYPE");
       _this4.expectedType = expected;
       _this4.recievedType = got;
       return _this4;
     }
     _inherits(UnexpectedTypeError, _TypeError2);
     return _createClass(UnexpectedTypeError);
-  }(/*#__PURE__*/_wrapNativeSuper(TypeError));
+  })(/*#__PURE__*/ _wrapNativeSuper(TypeError));
 
   /**
    * An internal error. This was not meant to happen, please report
@@ -2151,17 +2594,17 @@ var filtrex = (function (exports) {
    *
    * @prop {string} I18N_STRING has the value `'INTERNAL'`
    */
-  var InternalError = /*#__PURE__*/function (_Error) {
+  var InternalError = /*#__PURE__*/ (function (_Error) {
     function InternalError(message) {
       var _this5;
       _classCallCheck(this, InternalError);
       _this5 = _callSuper(this, InternalError, [message]);
-      _defineProperty(_this5, "I18N_STRING", 'INTERNAL');
+      _defineProperty(_this5, "I18N_STRING", "INTERNAL");
       return _this5;
     }
     _inherits(InternalError, _Error);
     return _createClass(InternalError);
-  }(/*#__PURE__*/_wrapNativeSuper(Error));
+  })(/*#__PURE__*/ _wrapNativeSuper(Error));
 
   /**
    * Determines whether an object has a property with the specified name.
@@ -2182,15 +2625,20 @@ var filtrex = (function (exports) {
    * @returns {number}
    */
   function mod(a, b) {
-    return (a % b + b) % b;
+    return ((a % b) + b) % b;
   }
 
   /**
    * Converts instances of Number, String and Boolean to primitives
    */
   function unbox(value) {
-    if (_typeof(value) !== 'object') return value;
-    if (value instanceof Number || value instanceof String || value instanceof Boolean) return value.valueOf();
+    if (_typeof(value) !== "object") return value;
+    if (
+      value instanceof Number ||
+      value instanceof String ||
+      value instanceof Boolean
+    )
+      return value.valueOf();
   }
 
   /**
@@ -2206,42 +2654,46 @@ var filtrex = (function (exports) {
    */
   function prettyType(value) {
     value = unwrap(value);
-    if (value === undefined) return 'undefined';
-    if (value === null) return 'null';
-    if (value === true) return 'true';
-    if (value === false) return 'false';
-    if (typeof value === 'number') return 'number';
-    if (typeof value === 'string') return 'text';
-    if (_typeof(value) !== 'object' && typeof value !== 'function') return 'unknown type';
-    if (Array.isArray(value)) return 'list';
-    return 'object';
+    if (value === undefined) return "undefined";
+    if (value === null) return "null";
+    if (value === true) return "true";
+    if (value === false) return "false";
+    if (typeof value === "number") return "number";
+    if (typeof value === "string") return "text";
+    if (_typeof(value) !== "object" && typeof value !== "function")
+      return "unknown type";
+    if (Array.isArray(value)) return "list";
+    return "object";
   }
 
   // Type assertions/coertions
 
   function num(value) {
     value = unwrap(value);
-    if (typeof value === 'number') return value;
-    throw new UnexpectedTypeError('number', prettyType(value));
+    if (typeof value === "number") return value;
+    throw new UnexpectedTypeError("number", prettyType(value));
   }
   function str(value) {
     value = unwrap(value);
-    if (typeof value === 'string') return value;
-    throw new UnexpectedTypeError('text', prettyType(value));
+    if (typeof value === "string") return value;
+    throw new UnexpectedTypeError("text", prettyType(value));
   }
   function numstr(value) {
     value = unwrap(value);
-    if (typeof value === 'string' || typeof value === 'number') return value;
-    throw new UnexpectedTypeError('text or number', prettyType(value));
+    if (typeof value === "string" || typeof value === "number") return value;
+    throw new UnexpectedTypeError("text or number", prettyType(value));
   }
   function bool(value) {
     value = unwrap(value);
-    if (typeof value === 'boolean') return value;
-    throw new UnexpectedTypeError('logical value (“true” or “false”)', prettyType(value));
+    if (typeof value === "boolean") return value;
+    throw new UnexpectedTypeError(
+      "logical value (“true” or “false”)",
+      prettyType(value),
+    );
   }
   function arr(value) {
     if (value === undefined || value === null) {
-      throw new UnexpectedTypeError('list', prettyType(value));
+      throw new UnexpectedTypeError("list", prettyType(value));
     }
     if (Array.isArray(value)) {
       return value;
@@ -2273,7 +2725,9 @@ var filtrex = (function (exports) {
   // Shared utility functions
   var std = {
     isfn: function isfn(fns, funcName) {
-      return hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function";
+      return (
+        hasOwnProperty(fns, funcName) && typeof fns[funcName] === "function"
+      );
     },
     unknown: function unknown(funcName) {
       throw new UnknownFunctionError(funcName);
@@ -2289,38 +2743,61 @@ var filtrex = (function (exports) {
         return B.includes(val);
       });
     },
-    warnDeprecated: function () {
+    warnDeprecated: (function () {
       var warnMax = 3;
       var warnedTimes = {
         ternary: 0,
-        modulo: 0
+        modulo: 0,
       };
       return function (cause, value) {
         switch (cause) {
-          case 'ternary':
+          case "ternary":
             if (warnedTimes.ternary++ >= warnMax) break;
-            console.warn("The use of ? and : as conditional operators has been deprecated " + "in Filtrex v3 in favor of the if..then..else ternary operator. " + "See issue #34 for more information.");
+            console.warn(
+              "The use of ? and : as conditional operators has been deprecated " +
+                "in Filtrex v3 in favor of the if..then..else ternary operator. " +
+                "See issue #34 for more information.",
+            );
             break;
-          case 'modulo':
+          case "modulo":
             if (warnedTimes.modulo++ >= warnMax) break;
-            console.warn("The use of '%' as a modulo operator has been deprecated in Filtrex v3 " + "in favor of the 'mod' operator. You can use it like this: '3 mod 2 == 1'. " + "See issue #48 for more information.");
+            console.warn(
+              "The use of '%' as a modulo operator has been deprecated in Filtrex v3 " +
+                "in favor of the 'mod' operator. You can use it like this: '3 mod 2 == 1'. " +
+                "See issue #48 for more information.",
+            );
             break;
         }
         return value;
       };
-    }(),
+    })(),
     buildString: function buildString(quote, literal) {
       quote = String(quote)[0];
       literal = String(literal);
-      var built = '';
-      if (literal[0] !== quote || literal[literal.length - 1] !== quote) throw new InternalError("Unexpected internal error: String literal doesn't begin/end with the right quotation mark.");
+      var built = "";
+      if (literal[0] !== quote || literal[literal.length - 1] !== quote)
+        throw new InternalError(
+          "Unexpected internal error: String literal doesn't begin/end with the right quotation mark.",
+        );
       for (var i = 1; i < literal.length - 1; i++) {
         if (literal[i] === "\\") {
           i++;
-          if (i >= literal.length - 1) throw new InternalError("Unexpected internal error: Unescaped backslash at the end of string literal.");
-          if (literal[i] === "\\") built += '\\';else if (literal[i] === quote) built += quote;else throw new InternalError("Unexpected internal error: Invalid escaped character in string literal: ".concat(literal[i]));
+          if (i >= literal.length - 1)
+            throw new InternalError(
+              "Unexpected internal error: Unescaped backslash at the end of string literal.",
+            );
+          if (literal[i] === "\\") built += "\\";
+          else if (literal[i] === quote) built += quote;
+          else
+            throw new InternalError(
+              "Unexpected internal error: Invalid escaped character in string literal: ".concat(
+                literal[i],
+              ),
+            );
         } else if (literal[i] === quote) {
-          throw new InternalError("Unexpected internal error: String literal contains unescaped quotation mark.");
+          throw new InternalError(
+            "Unexpected internal error: String literal contains unescaped quotation mark.",
+          );
         } else {
           built += literal[i];
         }
@@ -2330,17 +2807,25 @@ var filtrex = (function (exports) {
     reduceRelation: function reduceRelation(arr) {
       var declarations = [];
       var comparisons = [];
-      var previousExpression = flatten([arr[0]]).join('');
+      var previousExpression = flatten([arr[0]]).join("");
       var j = 0;
       for (var i = 1; i < arr.length - 1; i += 2) {
-        var expr = flatten([arr[i + 1]]).join('');
+        var expr = flatten([arr[i + 1]]).join("");
         var tempVar = "tmp".concat(j++);
-        comparisons.push("ops[\"".concat(arr[i], "\"](").concat(previousExpression, ", ").concat(tempVar, " = ").concat(expr, ")"));
+        comparisons.push(
+          'ops["'
+            .concat(arr[i], '"](')
+            .concat(previousExpression, ", ")
+            .concat(tempVar, " = ")
+            .concat(expr, ")"),
+        );
         previousExpression = tempVar;
         declarations.push(tempVar);
       }
-      return "(function(){ var ".concat(declarations.join(', '), "; return ").concat(comparisons.join(' && '), ";})()");
-    }
+      return "(function(){ var "
+        .concat(declarations.join(", "), "; return ")
+        .concat(comparisons.join(" && "), ";})()");
+    },
   };
   parser.yy = Object.create(std);
 
@@ -2393,15 +2878,20 @@ var filtrex = (function (exports) {
    */
   function useDotAccessOperator(name, get, obj, type) {
     // ignore dots inside escaped symbol
-    if (type === 'single-quoted') return get(name);
-    var parts = name.split('.');
+    if (type === "single-quoted") return get(name);
+    var parts = name.split(".");
     var _iterator = _createForOfIteratorHelper(parts),
       _step;
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      for (_iterator.s(); !(_step = _iterator.n()).done; ) {
         var _obj;
         var propertyName = _step.value;
-        if (hasOwnProperty((_obj = obj) !== null && _obj !== void 0 ? _obj : {}, propertyName)) {
+        if (
+          hasOwnProperty(
+            (_obj = obj) !== null && _obj !== void 0 ? _obj : {},
+            propertyName,
+          )
+        ) {
           obj = obj[propertyName];
         } else {
           throw new UnknownPropertyError(propertyName);
@@ -2438,12 +2928,12 @@ var filtrex = (function (exports) {
     if (obj === null || obj === undefined) return obj;
 
     // ignore dots inside escaped symbol
-    if (type === 'single-quoted') return get(name);
-    var parts = name.split('.');
+    if (type === "single-quoted") return get(name);
+    var parts = name.split(".");
     var _iterator2 = _createForOfIteratorHelper(parts),
       _step2;
     try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done; ) {
         var propertyName = _step2.value;
         if (obj === null || obj === undefined) {
           return obj;
@@ -2519,15 +3009,24 @@ var filtrex = (function (exports) {
     var _constants;
     // Check and coerce arguments
 
-    if (arguments.length > 2) throw new TypeError('Too many arguments.');
+    if (arguments.length > 2) throw new TypeError("Too many arguments.");
     options = _typeof(options) === "object" ? options : {};
-    var knownOptions = ['extraFunctions', 'constants', 'customProp', 'operators'];
+    var knownOptions = [
+      "extraFunctions",
+      "constants",
+      "customProp",
+      "operators",
+    ];
     var _options = options,
       extraFunctions = _options.extraFunctions,
       constants = _options.constants,
       customProp = _options.customProp,
       operators = _options.operators;
-    for (var _i = 0, _Object$keys = Object.keys(options); _i < _Object$keys.length; _i++) {
+    for (
+      var _i = 0, _Object$keys = Object.keys(options);
+      _i < _Object$keys.length;
+      _i++
+    ) {
       var key = _Object$keys[_i];
       if (!knownOptions.includes(key)) throw new UnknownOptionError(key);
     }
@@ -2549,84 +3048,102 @@ var filtrex = (function (exports) {
         return v !== undefined && v !== null;
       },
       empty: function empty(v) {
-        return v === undefined || v === null || v === '' || Array.isArray(v) && v.length === 0;
-      }
+        return (
+          v === undefined ||
+          v === null ||
+          v === "" ||
+          (Array.isArray(v) && v.length === 0)
+        );
+      },
     };
     if (extraFunctions) {
-      for (var _i2 = 0, _Object$keys2 = Object.keys(extraFunctions); _i2 < _Object$keys2.length; _i2++) {
+      for (
+        var _i2 = 0, _Object$keys2 = Object.keys(extraFunctions);
+        _i2 < _Object$keys2.length;
+        _i2++
+      ) {
         var name = _Object$keys2[_i2];
         functions[name] = extraFunctions[name];
       }
     }
     var defaultOperators = {
-      '+': function _(a, b) {
+      "+": function _(a, b) {
         return numstr(a) + numstr(b);
       },
-      '-': function _(a, b) {
+      "-": function _(a, b) {
         return b === undefined ? -num(a) : num(a) - num(b);
       },
-      '*': function _(a, b) {
+      "*": function _(a, b) {
         return num(a) * num(b);
       },
-      '/': function _(a, b) {
+      "/": function _(a, b) {
         return num(a) / num(b);
       },
-      '^': function _(a, b) {
+      "^": function _(a, b) {
         return Math.pow(num(a), num(b));
       },
-      'mod': function mod$1(a, b) {
+      mod: function mod$1(a, b) {
         return mod(num(a), num(b));
       },
-      '==': function _(a, b) {
+      "==": function _(a, b) {
         return a === b;
       },
-      '!=': function _(a, b) {
+      "!=": function _(a, b) {
         return a !== b;
       },
-      '<': function _(a, b) {
+      "<": function _(a, b) {
         return num(a) < num(b);
       },
-      '<=': function _(a, b) {
+      "<=": function _(a, b) {
         return num(a) <= num(b);
       },
-      '>=': function _(a, b) {
+      ">=": function _(a, b) {
         return num(a) >= num(b);
       },
-      '>': function _(a, b) {
+      ">": function _(a, b) {
         return num(a) > num(b);
       },
-      '~=': function _(a, b) {
+      "~=": function _(a, b) {
         return RegExp(str(b)).test(str(a));
-      }
+      },
     };
     if (operators) {
-      for (var _i3 = 0, _Object$keys3 = Object.keys(operators); _i3 < _Object$keys3.length; _i3++) {
+      for (
+        var _i3 = 0, _Object$keys3 = Object.keys(operators);
+        _i3 < _Object$keys3.length;
+        _i3++
+      ) {
         var _name = _Object$keys3[_i3];
         defaultOperators[_name] = operators[_name];
       }
     }
     operators = defaultOperators;
-    constants = (_constants = constants) !== null && _constants !== void 0 ? _constants : {};
+    constants =
+      (_constants = constants) !== null && _constants !== void 0
+        ? _constants
+        : {};
 
     // Compile the expression
 
     var js = flatten(parser.parse(expression));
-    js.unshift('return ');
-    js.push(';');
+    js.unshift("return ");
+    js.push(";");
 
     // Metaprogramming functions
 
     function nakedProp(name, obj, type) {
-      if (hasOwnProperty(obj !== null && obj !== void 0 ? obj : {}, name)) return obj[name];
+      if (hasOwnProperty(obj !== null && obj !== void 0 ? obj : {}, name))
+        return obj[name];
       throw new UnknownPropertyError(name);
     }
     function safeGetter(obj) {
       return function get(name) {
-        if (hasOwnProperty(obj !== null && obj !== void 0 ? obj : {}, name)) return obj[name];
+        if (hasOwnProperty(obj !== null && obj !== void 0 ? obj : {}, name))
+          return obj[name];
         throw new UnknownPropertyError(name);
       };
     }
-    if (typeof customProp === 'function') {
+    if (typeof customProp === "function") {
       nakedProp = function nakedProp(name, obj, type) {
         return customProp(name, safeGetter(obj), obj, type);
       };
@@ -2634,23 +3151,31 @@ var filtrex = (function (exports) {
     function createCall(fns) {
       return function call(_ref) {
         var name = _ref.name;
-        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        for (
+          var _len = arguments.length,
+            args = new Array(_len > 1 ? _len - 1 : 0),
+            _key = 1;
+          _key < _len;
+          _key++
+        ) {
           args[_key - 1] = arguments[_key];
         }
-        if (hasOwnProperty(fns, name) && typeof fns[name] === "function") return fns[name].apply(fns, args);
+        if (hasOwnProperty(fns, name) && typeof fns[name] === "function")
+          return fns[name].apply(fns, args);
         throw new UnknownFunctionError(name);
       };
     }
     function prop(_ref2, obj) {
       var name = _ref2.name,
         type = _ref2.type;
-      if (type === 'unescaped' && hasOwnProperty(constants, name)) return constants[name];
+      if (type === "unescaped" && hasOwnProperty(constants, name))
+        return constants[name];
       return nakedProp(name, obj, type);
     }
 
     // Patch together and return
 
-    var func = new Function('call', 'ops', 'std', 'prop', 'data', js.join(''));
+    var func = new Function("call", "ops", "std", "prop", "data", js.join(""));
     return function (data) {
       try {
         return func(createCall(functions), operators, std, prop, data);
@@ -2662,11 +3187,11 @@ var filtrex = (function (exports) {
 
   exports.compileExpression = compileExpression;
   exports.useDotAccessOperator = useDotAccessOperator;
-  exports.useDotAccessOperatorAndOptionalChaining = useDotAccessOperatorAndOptionalChaining;
+  exports.useDotAccessOperatorAndOptionalChaining =
+    useDotAccessOperatorAndOptionalChaining;
   exports.useOptionalChaining = useOptionalChaining;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
+  Object.defineProperty(exports, "__esModule", { value: true });
 
   return exports;
-
 })({});

@@ -55,89 +55,87 @@
  *  * `myFooBarFunction(x)` Custom function defined in `options.extraFunctions`
  */
 export function compileExpression(
-    expression: string,
-    options?: Options
-): (obj: any) => any
+  expression: string,
+  options?: Options,
+): (obj: any) => any;
 
+export interface Options {
+  /**
+   * When integrating in to your application, you can add your own custom functions.
+   * These functions will be available in the expression in the same way as `sqrt(x)` and `round(x)`.
+   */
+  extraFunctions?: {
+    [T: string]: Function;
+  };
 
-export interface Options
-{
-    /**
-     * When integrating in to your application, you can add your own custom functions.
-     * These functions will be available in the expression in the same way as `sqrt(x)` and `round(x)`.
-     */
-    extraFunctions?: {
-        [T: string]: Function
-    }
+  /**
+   * Pass constants like `pi` or `true` to the expression without having to modify data.
+   * These constants will shadow identically named properties on the data object. In order
+   * to access `data.pi` instead of `constants.pi`, for example, use a single-quoted
+   * symbol in your expression, ie. `'pi'` instead of just `pi`.
+   */
+  constants?: {
+    [T: string]: any;
+  };
 
-    /**
-     * Pass constants like `pi` or `true` to the expression without having to modify data.
-     * These constants will shadow identically named properties on the data object. In order
-     * to access `data.pi` instead of `constants.pi`, for example, use a single-quoted
-     * symbol in your expression, ie. `'pi'` instead of just `pi`.
-     */
-    constants?: {
-        [T: string]: any
-    }
+  /**
+   * If you want to do some more magic with your expression, you can supply a custom function
+   * that will resolve the identifiers used in the expression and assign them a value yourself.
+   *
+   * **Safety note**: The `get` function returns `undefined` for properties that are defined on
+   * the object's prototype, not on the object itself. This is important, because otherwise the user
+   * could access things like `toString.constructor` and maybe do some nasty things with it. Bear
+   * this in mind if you decide not to use `get` and access the properties yourself.
+   *
+   * @param name - name of the property being accessed
+   * @param get - safe getter that retrieves the property from obj
+   * @param obj - the object passed to compiled expression
+   *
+   * @example
+   * function containsWord(string, word) {
+   *   // your optimized code
+   * }
+   *
+   * let myfilter = compileExpression(
+   *   'Bob and Alice or Cecil', {},
+   *   (word, _, string) => containsWord(string, word)
+   * );
+   *
+   * myfilter("Bob is boring"); // returns false
+   * myfilter("Bob met Alice"); // returns true
+   * myfilter("Cecil is cool"); // returns true
+   */
+  customProp?: (
+    name: string,
+    get: (name: string) => any,
+    object: any,
+    type: "unescaped" | "single-quoted",
+  ) => any;
 
-    /**
-     * If you want to do some more magic with your expression, you can supply a custom function
-     * that will resolve the identifiers used in the expression and assign them a value yourself.
-     *
-     * **Safety note**: The `get` function returns `undefined` for properties that are defined on
-     * the object's prototype, not on the object itself. This is important, because otherwise the user
-     * could access things like `toString.constructor` and maybe do some nasty things with it. Bear
-     * this in mind if you decide not to use `get` and access the properties yourself.
-     *
-     * @param name - name of the property being accessed
-     * @param get - safe getter that retrieves the property from obj
-     * @param obj - the object passed to compiled expression
-     *
-     * @example
-     * function containsWord(string, word) {
-     *   // your optimized code
-     * }
-     *
-     * let myfilter = compileExpression(
-     *   'Bob and Alice or Cecil', {},
-     *   (word, _, string) => containsWord(string, word)
-     * );
-     *
-     * myfilter("Bob is boring"); // returns false
-     * myfilter("Bob met Alice"); // returns true
-     * myfilter("Cecil is cool"); // returns true
-     */
-    customProp?: (
-        name: string,
-        get: (name: string) => any,
-        object: any,
-        type: 'unescaped' | 'single-quoted'
-    ) => any
-
-    /**
-     * This option lets you override operators like `+` and `>=` with custom functions.
-     */
-    operators?: Operators
+  /**
+   * This option lets you override operators like `+` and `>=` with custom functions.
+   */
+  operators?: Operators;
 }
 
 export interface Operators {
-    '+'?: (a: any, b: any) => any
-    '-'?: (a: any, b?: any) => any
-    '*'?: (a: any, b: any) => any
-    '/'?: (a: any, b: any) => any
+  "+"?: (a: any, b: any) => any;
+  "-"?: (a: any, b?: any) => any;
+  "*"?: (a: any, b: any) => any;
+  "/"?: (a: any, b: any) => any;
 
-    '%'?: (a: any, b: any) => any
-    '^'?: (a: any, b: any) => any
+  "%"?: (a: any, b: any) => any;
+  "^"?: (a: any, b: any) => any;
 
-    '==': (a: any, b: any) => boolean
-    '!=': (a: any, b: any) => boolean
+  "==": (a: any, b: any) => boolean;
+  "!=": (a: any, b: any) => boolean;
 
-    '<'?: (a: any, b: any) => boolean
-    '>='?: (a: any, b: any) => boolean
-    '<='?: (a: any, b: any) => boolean
-    '>'?: (a: any, b: any) => boolean
+  "<"?: (a: any, b: any) => boolean;
+  ">="?: (a: any, b: any) => boolean;
+  "<="?: (a: any, b: any) => boolean;
+  ">"?: (a: any, b: any) => boolean;
 
-    '~='?: (a: any, b: any) => boolean
+  "~="?: (a: any, b: any) => boolean;
 }
 
 /**
@@ -162,11 +160,11 @@ export interface Operators {
  * ```
  */
 export function useOptionalChaining(
-    name: string,
-    get: (name: string) => any,
-    object: any,
-    type: 'unescaped' | 'single-quoted'
-)
+  name: string,
+  get: (name: string) => any,
+  object: any,
+  type: "unescaped" | "single-quoted",
+);
 
 /**
  * A custom prop function which treats dots inside a symbol
@@ -190,11 +188,11 @@ export function useOptionalChaining(
  * ```
  */
 export function useDotAccessOperator(
-    name: string,
-    get: (name: string) => any,
-    object: any,
-    type: 'unescaped' | 'single-quoted'
-)
+  name: string,
+  get: (name: string) => any,
+  object: any,
+  type: "unescaped" | "single-quoted",
+);
 
 /**
  * A custom prop function which combines `useOptionalChaining` and `useDotAccessOperator`.
@@ -216,8 +214,8 @@ export function useDotAccessOperator(
  * ```
  */
 export function useDotAccessOperatorAndOptionalChaining(
-    name: string,
-    get: (name: string) => any,
-    object: any,
-    type: 'unescaped' | 'single-quoted'
-)
+  name: string,
+  get: (name: string) => any,
+  object: any,
+  type: "unescaped" | "single-quoted",
+);
