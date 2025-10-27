@@ -33,7 +33,14 @@ const std = {
   coerceNumberOrString: numstr,
   coerceBoolean: bool,
 
+  /**
+   * Checks whether `a` is a subset of `b`. If both `a` and `b` are strings,
+   * checks whether `a` is a substring of `b`.
+   */
   isSubset(a, b) {
+    if (typeof a === "string" && typeof b === "string") {
+      return b.includes(a);
+    }
     const A = arr(a);
     const B = arr(b);
     return A.every((val) => B.includes(val));

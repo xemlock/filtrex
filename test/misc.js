@@ -48,6 +48,10 @@ describe("Various other things", () => {
     expect(eval('foo not in ("aa", "bb")', { foo: "aa" })).equals(false);
     expect(eval('foo not in ("aa", "bb")', { foo: "cc" })).equals(true);
 
+    expect(eval('foo in "aa"', { foo: "a" })).equals(true);
+    expect(eval('foo in ("aa")', { foo: "a" })).equals(true);
+    expect(eval('foo in ("aa", )', { foo: "a" })).equals(false);
+
     expect(eval(`"\n"`)).equals("\n");
     expect(eval(`"\u0000"`)).equals("\u0000");
     expect(eval(`"\uD800"`)).equals("\uD800");
@@ -63,6 +67,8 @@ describe("Various other things", () => {
 
     expect(arr).is.array();
     expect(arr).to.be.equalTo([42, "fifty", Math.PI]);
+
+    expect(eval("(42,)")).is.array();
   });
 
   it("ternary operator", () => {

@@ -128,6 +128,7 @@ There are 5 types in Filtrex: numbers, strings, booleans and arrays & objects of
 | Objects and arrays | Description                    |
 | ------------------ | ------------------------------ |
 | (a, b, c)          | Array                          |
+| (a, )              | Single-item array              |
 | a in b             | Array a is a subset of array b |
 | x of y             | Property x of object y         |
 
