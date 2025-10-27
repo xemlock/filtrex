@@ -2394,6 +2394,12 @@ function arr(value) {
     return [value];
   }
 }
+function len(value) {
+  if (typeof value === "string" || Array.isArray(value)) {
+    return value.length;
+  }
+  throw new UnexpectedTypeError("text or list", prettyType(value));
+}
 
 /**
  * Array.flat polyfill from MDN
@@ -2705,6 +2711,9 @@ function compileExpression(expression, options) {
       v === null ||
       v === "" ||
       (Array.isArray(v) && v.length === 0),
+    len,
+    lower: (v) => str(v).toLocaleLowerCase(),
+    upper: (v) => str(v).toLocaleUpperCase(),
   };
   if (extraFunctions) {
     for (const name of Object.keys(extraFunctions)) {

@@ -2733,6 +2733,12 @@ var filtrex = (function (exports) {
       return [value];
     }
   }
+  function len(value) {
+    if (typeof value === "string" || Array.isArray(value)) {
+      return value.length;
+    }
+    throw new UnexpectedTypeError("text or list", prettyType(value));
+  }
 
   /**
    * Array.flat polyfill from MDN
@@ -3093,6 +3099,13 @@ var filtrex = (function (exports) {
           v === "" ||
           (Array.isArray(v) && v.length === 0)
         );
+      },
+      len: len,
+      lower: function lower(v) {
+        return str(v).toLocaleLowerCase();
+      },
+      upper: function upper(v) {
+        return str(v).toLocaleUpperCase();
       },
     };
     if (extraFunctions) {

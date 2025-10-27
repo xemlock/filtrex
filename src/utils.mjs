@@ -113,6 +113,13 @@ export function arr(value) {
   }
 }
 
+export function len(value) {
+  if (typeof value === "string" || Array.isArray(value)) {
+    return value.length;
+  }
+  throw new UnexpectedTypeError("text or list", prettyType(value));
+}
+
 /**
  * Array.flat polyfill from MDN
  */

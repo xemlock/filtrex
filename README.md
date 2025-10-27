@@ -151,6 +151,12 @@ There are 5 types in Filtrex: numbers, strings, booleans and arrays & objects of
 
 <br />
 
+| String functions | Description                             |
+| ---------------- | --------------------------------------- |
+| len(x)           | Return number of characters in a string |
+| lower(x)         | Convert string to lowercase             |
+| upper(x)         | Convert string to uppercase             |
+
 ## Errors
 
 Filtrex may throw during the compilation of an expression (for example if it's malformed, or when you supply invalid options). However, it will never throw during the execution of an expression – instead it will _return_ the corresponding error. It is intentional: this way you don't have to be too cautious when executing user-defined filters even in critical code.

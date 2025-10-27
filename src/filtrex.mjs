@@ -9,6 +9,7 @@ import {
   arr,
   str,
   flatten,
+  len,
   code,
 } from "./utils.mjs";
 import {
@@ -335,6 +336,9 @@ export function compileExpression(expression, options) {
       v === null ||
       v === "" ||
       (Array.isArray(v) && v.length === 0),
+    len,
+    lower: (v) => str(v).toLocaleLowerCase(),
+    upper: (v) => str(v).toLocaleUpperCase(),
   };
 
   if (extraFunctions) {
