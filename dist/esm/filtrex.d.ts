@@ -164,7 +164,7 @@ export function useOptionalChaining(
   get: (name: string) => any,
   object: any,
   type: "unescaped" | "single-quoted",
-);
+): any;
 
 /**
  * A custom prop function which treats dots inside a symbol
@@ -192,7 +192,7 @@ export function useDotAccessOperator(
   get: (name: string) => any,
   object: any,
   type: "unescaped" | "single-quoted",
-);
+): any;
 
 /**
  * A custom prop function which combines `useOptionalChaining` and `useDotAccessOperator`.
@@ -218,4 +218,4 @@ export function useDotAccessOperatorAndOptionalChaining(
   get: (name: string) => any,
   object: any,
   type: "unescaped" | "single-quoted",
-);
+): any;
